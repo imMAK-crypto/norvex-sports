@@ -8,10 +8,10 @@ import { siteUrl } from '@/lib/settings';
 
 type Params = { params: { slug: string } };
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
     const items = await prisma.newsPost.findMany({ where: { isPublished: true }, select: { slug: true } });
-    return items.map((i) => ({ slug: i.slug }));
+    return items.map((i: { slug: string }) => ({ slug: i.slug }));
   } catch {
     return [];
   }
@@ -37,8 +37,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function NewsDetail({ params }: Params) {
-  const post = await prisma.newsPost.findUnique({ where: { slug: params.slug } });
-  if (!post || !post.isPublished) notFound();
+  const found = await prisma.newsPost.findUnique({ where: { slug: params.slug } });
+  if (!found || !found.isPublished) return notFound();
+  const post = found;
 
   const ld = {
     '@context': 'https://schema.org',
@@ -76,7 +77,7 @@ export default async function NewsDetail({ params }: Params) {
             </div>
           )}
           <div className="prose-norvex">
-            {post.body.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}
+            {post.body.split(/\n\s*\n/).map((p: string, i: number) => <p key={i}>{p}</p>)}
           </div>
         </article>
       </Section>

@@ -1,7 +1,9 @@
 'use server';
 
+import { headers } from 'next/headers';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
+import { clientKey, rateLimit } from '@/lib/rate-limit';
 
 const schema = z.object({
   name: z.string().min(2, 'Please enter your name').max(120),
@@ -14,6 +16,10 @@ const schema = z.object({
 });
 
 export async function submitContact(formData: FormData) {
+  const rl = rateLimit(clientKey({ headers: headers() }, 'contact'), { max: 5, windowMs: 60 * 60 * 1000 });
+  if (!rl.ok) {
+    return { ok: false as const, message: `Too many requests — try again in ${rl.retryAfterSec}s.` };
+  }
   const data = {
     name: String(formData.get('name') ?? ''),
     age: String(formData.get('age') ?? ''),

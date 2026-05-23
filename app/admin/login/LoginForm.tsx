@@ -1,18 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { LogIn } from 'lucide-react';
 import { loginAction } from './actions';
 
 export function LoginForm({ next, initialError }: { next?: string; initialError?: string }) {
-  const [error, setError] = useState<string | null>(initialError ?? null);
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (initialError) toast.error(initialError);
+  }, [initialError]);
 
   async function action(formData: FormData) {
     setPending(true);
-    setError(null);
     const res = await loginAction(formData);
     setPending(false);
-    if (!res.ok) setError(res.message);
+    if (res && !res.ok) toast.error(res.message);
   }
 
   return (
@@ -27,9 +31,8 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
         <input id="password" name="password" type="password" required autoComplete="current-password" className="input" />
       </div>
       <button type="submit" disabled={pending} className="btn-primary w-full disabled:opacity-50">
-        {pending ? 'Signing in…' : 'Sign in'}
+        {pending ? 'Signing in…' : (<>Sign in <LogIn className="ml-2 h-4 w-4" /></>)}
       </button>
-      {error && <p className="text-sm text-red-400">{error}</p>}
     </form>
   );
 }

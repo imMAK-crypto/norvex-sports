@@ -9,10 +9,10 @@ import { siteUrl } from '@/lib/settings';
 
 type Params = { params: { slug: string } };
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
     const items = await prisma.service.findMany({ where: { isActive: true }, select: { slug: true } });
-    return items.map((i) => ({ slug: i.slug }));
+    return items.map((i: { slug: string }) => ({ slug: i.slug }));
   } catch {
     return [];
   }
@@ -36,8 +36,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function ServiceDetail({ params }: Params) {
-  const s = await prisma.service.findUnique({ where: { slug: params.slug } });
-  if (!s || !s.isActive) notFound();
+  const service = await prisma.service.findUnique({ where: { slug: params.slug } });
+  if (!service || !service.isActive) return notFound();
+  const s = service;
 
   const related = await prisma.service.findMany({
     where: { isActive: true, NOT: { id: s.id } },
@@ -81,7 +82,7 @@ export default async function ServiceDetail({ params }: Params) {
               </div>
             )}
             <div className="prose-norvex">
-              {s.longDesc.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}
+              {s.longDesc.split(/\n\s*\n/).map((p: string, i: number) => <p key={i}>{p}</p>)}
             </div>
           </div>
           <aside className="card h-fit">

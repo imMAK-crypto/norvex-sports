@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { prisma, safeQuery } from '@/lib/prisma';
+import { prisma, safeQuery, type NewsPostModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 
 export const metadata: Metadata = {
@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function NewsPage() {
-  const posts = await safeQuery(
+  const posts = await safeQuery<NewsPostModel[]>(
     () => prisma.newsPost.findMany({
       where: { isPublished: true },
       orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     }),
-    [] as Awaited<ReturnType<typeof prisma.newsPost.findMany>>,
+    [],
   );
 
   return (

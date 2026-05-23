@@ -1,4 +1,13 @@
 import { PrismaClient } from '@prisma/client';
+import type {
+  Event as EventModel,
+  NewsPost as NewsPostModel,
+  Service as ServiceModel,
+  GalleryItem as GalleryItemModel,
+  TeamMember as TeamMemberModel,
+} from '@prisma/client';
+
+export type { EventModel, NewsPostModel, ServiceModel, GalleryItemModel, TeamMemberModel };
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 

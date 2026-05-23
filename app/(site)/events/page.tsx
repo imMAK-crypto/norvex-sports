@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { prisma, safeQuery } from '@/lib/prisma';
+import { prisma, safeQuery, type EventModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 
 export const metadata: Metadata = {
@@ -17,12 +17,12 @@ function fmtDate(d: Date | null) {
 }
 
 export default async function EventsPage() {
-  const events = await safeQuery(
+  const events = await safeQuery<EventModel[]>(
     () => prisma.event.findMany({
       where: { isActive: true },
       orderBy: [{ isFeatured: 'desc' }, { date: 'desc' }, { createdAt: 'desc' }],
     }),
-    [] as Awaited<ReturnType<typeof prisma.event.findMany>>,
+    [],
   );
 
   return (

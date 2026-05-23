@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { prisma, safeQuery } from '@/lib/prisma';
+import { prisma, safeQuery, type GalleryItemModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 
 export const metadata: Metadata = {
@@ -10,20 +10,20 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function GalleryPage({ searchParams }: { searchParams?: { cat?: string } }) {
-  const items = await safeQuery(
+  const items = await safeQuery<GalleryItemModel[]>(
     () => prisma.galleryItem.findMany({
       where: { isActive: true, ...(searchParams?.cat ? { category: searchParams.cat } : {}) },
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
     }),
-    [] as Awaited<ReturnType<typeof prisma.galleryItem.findMany>>,
+    [],
   );
-  const allCategories = await safeQuery(
+  const allCategories = await safeQuery<Array<{ category: string }>>(
     () => prisma.galleryItem.findMany({
       where: { isActive: true },
       select: { category: true },
       distinct: ['category'],
     }),
-    [] as Array<{ category: string }>,
+    [],
   );
   const categories = ['All', ...allCategories.map((c) => c.category).filter(Boolean)];
   const selected = searchParams?.cat ?? 'All';

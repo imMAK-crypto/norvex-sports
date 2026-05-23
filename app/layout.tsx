@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 import { siteUrl } from '@/lib/settings';
+import { AppToaster } from '@/components/Toaster';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const bebas = Bebas_Neue({ subsets: ['latin'], weight: '400', variable: '--font-bebas', display: 'swap' });
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${bebas.variable}`}>
       <body>
         {children}
+        <AppToaster />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>
             <script

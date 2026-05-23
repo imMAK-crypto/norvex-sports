@@ -8,10 +8,10 @@ import { siteUrl } from '@/lib/settings';
 
 type Params = { params: { slug: string } };
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
     const items = await prisma.event.findMany({ where: { isActive: true }, select: { slug: true } });
-    return items.map((i) => ({ slug: i.slug }));
+    return items.map((i: { slug: string }) => ({ slug: i.slug }));
   } catch {
     return [];
   }
@@ -35,8 +35,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function EventDetail({ params }: Params) {
-  const e = await prisma.event.findUnique({ where: { slug: params.slug } });
-  if (!e || !e.isActive) notFound();
+  const event = await prisma.event.findUnique({ where: { slug: params.slug } });
+  if (!event || !event.isActive) return notFound();
+  const e = event;
 
   const ld = {
     '@context': 'https://schema.org',
@@ -85,11 +86,11 @@ export default async function EventDetail({ params }: Params) {
               </div>
             )}
             <div className="prose-norvex">
-              {e.description.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}
+              {e.description.split(/\n\s*\n/).map((p: string, i: number) => <p key={i}>{p}</p>)}
             </div>
             {e.galleryUrls && e.galleryUrls.length > 0 && (
               <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-3">
-                {e.galleryUrls.map((u, i) => (
+                {e.galleryUrls.map((u: string, i: number) => (
                   <img key={i} src={u} alt={`${e.title} ${i + 1}`} className="aspect-square w-full rounded-xl object-cover" />
                 ))}
               </div>

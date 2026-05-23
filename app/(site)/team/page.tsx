@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { prisma, safeQuery } from '@/lib/prisma';
+import { prisma, safeQuery, type TeamMemberModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 
 export const metadata: Metadata = {
@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function TeamPage() {
-  const team = await safeQuery(
+  const team = await safeQuery<TeamMemberModel[]>(
     () => prisma.teamMember.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }),
-    [] as Awaited<ReturnType<typeof prisma.teamMember.findMany>>,
+    [],
   );
 
   return (

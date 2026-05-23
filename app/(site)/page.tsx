@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { prisma, safeQuery } from '@/lib/prisma';
+import { prisma, safeQuery, type EventModel, type NewsPostModel, type ServiceModel } from '@/lib/prisma';
 import { getSiteContent } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { Icon } from '@/components/Icon';
@@ -9,9 +9,9 @@ export const revalidate = 60;
 export default async function HomePage() {
   const c = await getSiteContent();
   const [services, events, news] = await Promise.all([
-    safeQuery(() => prisma.service.findMany({ where: { isActive: true }, orderBy: { order: 'asc' }, take: 6 }), [] as never[]),
-    safeQuery(() => prisma.event.findMany({ where: { isActive: true }, orderBy: { createdAt: 'desc' }, take: 3 }), [] as never[]),
-    safeQuery(() => prisma.newsPost.findMany({ where: { isPublished: true }, orderBy: { publishedAt: 'desc' }, take: 3 }), [] as never[]),
+    safeQuery<ServiceModel[]>(() => prisma.service.findMany({ where: { isActive: true }, orderBy: { order: 'asc' }, take: 6 }), []),
+    safeQuery<EventModel[]>(() => prisma.event.findMany({ where: { isActive: true }, orderBy: { createdAt: 'desc' }, take: 3 }), []),
+    safeQuery<NewsPostModel[]>(() => prisma.newsPost.findMany({ where: { isPublished: true }, orderBy: { publishedAt: 'desc' }, take: 3 }), []),
   ]);
 
   return (

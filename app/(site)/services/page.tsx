@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { prisma, safeQuery } from '@/lib/prisma';
+import { prisma, safeQuery, type ServiceModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { Icon } from '@/components/Icon';
 import { JsonLd } from '@/components/JsonLd';
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function ServicesPage() {
-  const services = await safeQuery(
+  const services = await safeQuery<ServiceModel[]>(
     () => prisma.service.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }),
-    [] as Awaited<ReturnType<typeof prisma.service.findMany>>,
+    [],
   );
 
   const url = siteUrl();
