@@ -1,0 +1,12 @@
+{
+  "name": "Norvex Sports",
+  "short_name": "Norvex",
+  "description": "Professional football development in Hyderabad.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050807",
+  "theme_color": "#050807",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

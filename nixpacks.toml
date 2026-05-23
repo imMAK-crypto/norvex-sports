@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_20", "openssl"]
+
+[phases.install]
+cmds = ["corepack enable", "corepack prepare pnpm@9.12.3 --activate", "pnpm install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["pnpm prisma generate", "pnpm build"]
+
+[start]
+cmd = "pnpm prisma migrate deploy && pnpm db:seed && pnpm start"
