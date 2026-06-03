@@ -8,7 +8,7 @@ import { ContactForm } from '@/components/ContactForm';
 
 export const revalidate = 60;
 
-const HERO_IMG = '/uploads/hero.jpg';
+const HERO_IMG = '/images/home_hero.png';
 const HERO_BLUR =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiA5Ij48cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iOSIgZmlsbD0iIzBkMGQwZCIvPjwvc3ZnPg==';
 
@@ -100,7 +100,7 @@ export default async function HomePage() {
           </div>
           <div className="relative aspect-[4/3] overflow-hidden border border-ink-500">
             <Image
-              src="/uploads/more-than-training.jpg"
+              src="/images/home_more_than_training.png"
               alt="Norvex Sports training session"
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"

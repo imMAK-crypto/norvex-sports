@@ -43,7 +43,7 @@ export default async function AboutPage() {
           <aside className="space-y-4">
             <div className="relative aspect-[4/3] overflow-hidden border border-ink-500">
               <Image
-                src="/uploads/about.jpg"
+                src="/images/about_page.png"
                 alt="Norvex training"
                 fill
                 sizes="(min-width: 1024px) 35vw, 100vw"

@@ -1,37 +1,39 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-// Keep services 01 + 02; replace 03–08.
+// Excluded (keep as-is):
+//  - Service: football-development-program
+//  - Service: one-to-one-coaching (One-to-One & Community Coaching)
+//  - Event:   football-themed-birthday-parties
 const SERVICE_MAP: Record<string, string> = {
-  'advanced-player-development':   '/uploads/advanced-development.jpg',
-  'adult-football-training':       '/uploads/more-than-training.jpg',
-  'tournament-event-organization': '/uploads/banner-bw.webp',
-  'school-college-coaching':       '/uploads/school-college.jpg',
-  'fitness-conditioning':          '/uploads/advanced-development.jpg',
-  'talent-identification-trials':  '/uploads/trials.png',
+  'advanced-player-development':   '/images/service_advanced_player_development.png',
+  'adult-football-training':       '/images/service_adult_football_training.png',
+  'tournament-event-organization': '/images/service_tournament_event_organization.png',
+  'school-college-coaching':       '/images/service_school_college_coaching.png',
+  'fitness-conditioning':          '/images/service_fitness_conditioning.png',
+  'talent-identification-trials':  '/images/service_talent_identification_trials.png',
 };
 
 const EVENT_MAP: Record<string, string> = {
-  'football-themed-birthday-parties':     '/uploads/birthday-parties.png',
-  'friendly-matches-seasonal-tournaments':'/uploads/training-1.jpg',
-  'talent-identification-trials':         '/uploads/trials.png',
-  'football-development-clinics':         '/uploads/training-2.jpg',
-  'norvex-youth-league':                  '/uploads/banner-bw.webp',
+  'norvex-youth-league':                   '/images/event_norvex_youth_league.png',
+  'friendly-matches-seasonal-tournaments': '/images/event_friendly_matches_tournaments.png',
+  'talent-identification-trials':          '/images/event_talent_identification_trials.png',
+  'football-development-clinics':          '/images/event_football_development_clinics.png',
 };
 
 const NEWS_MAP: Record<string, string> = {
-  'welcome-to-norvex-sports':     '/uploads/training-1.jpg',
-  'open-trials-announcement':     '/uploads/trials.png',
-  'norvex-youth-league-kick-off': '/uploads/banner-bw.webp',
+  'welcome-to-norvex-sports':     '/images/news_welcome_to_norvex.png',
+  'open-trials-announcement':     '/images/news_open_trials_announcement.png',
+  'norvex-youth-league-kick-off': '/images/news_youth_league_kickoff.png',
 };
 
 async function main() {
-  console.log('--- Services (skipping 01 & 02) ---');
+  console.log('--- Services (excluding football-development-program & one-to-one-coaching) ---');
   for (const [slug, url] of Object.entries(SERVICE_MAP)) {
     const r = await prisma.service.updateMany({ where: { slug }, data: { imageUrl: url } });
     console.log(`  ${slug}  -> ${url}  (${r.count} row)`);
   }
-  console.log('\n--- Events ---');
+  console.log('\n--- Events (excluding football-themed-birthday-parties) ---');
   for (const [slug, url] of Object.entries(EVENT_MAP)) {
     const r = await prisma.event.updateMany({ where: { slug }, data: { imageUrl: url } });
     console.log(`  ${slug}  -> ${url}  (${r.count} row)`);
@@ -46,8 +48,15 @@ async function main() {
     where: { slug: { in: ['football-development-program', 'one-to-one-coaching'] } },
     select: { slug: true, imageUrl: true },
   });
-  console.log('\n--- Kept (unchanged) ---');
+  console.log('\n--- Kept services (unchanged) ---');
   kept.forEach(k => console.log(`  ${k.slug}  -> ${k.imageUrl}`));
+
+  const keptEvent = await prisma.event.findMany({
+    where: { slug: 'football-themed-birthday-parties' },
+    select: { slug: true, imageUrl: true },
+  });
+  console.log('\n--- Kept events (unchanged) ---');
+  keptEvent.forEach(k => console.log(`  ${k.slug}  -> ${k.imageUrl}`));
 }
 
 main().catch(e => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());
