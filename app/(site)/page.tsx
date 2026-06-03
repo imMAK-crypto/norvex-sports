@@ -51,7 +51,7 @@ export default async function HomePage() {
           <div className="absolute inset-0 flex items-end md:items-center">
             <div className="container-x pb-12 md:pb-0">
               <div className="max-w-2xl">
-                <div className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.35em] text-brand-500">
+                <div className="font-sans text-sm sm:text-base md:text-lg uppercase tracking-[0.35em] text-silver-100">
                   Hyderabad's Premier Football Academy
                 </div>
                 <h1 className="headline mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-silver-100 leading-[0.95]">
@@ -79,10 +79,10 @@ export default async function HomePage() {
       {/* 2 — STATS BAR */}
       <StatsBar
         stats={[
-          { num: '500+', label: 'Players Trained' },
           { num: '8+', label: 'Programs' },
+          { num: '10+', label: 'Events' },
+          { num: '500', label: 'Players Trained' },
           { num: '4', label: 'Expert Coaches' },
-          { num: '10+', label: 'Events Hosted' },
         ]}
       />
 
