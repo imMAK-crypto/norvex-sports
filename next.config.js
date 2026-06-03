@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-// CSP allows: Cloudinary + remote images, Google Fonts, Google Maps embed,
-// optional Google Analytics. Inline scripts/styles are permitted because
-// Next.js inlines hydration scripts and Tailwind injects styles. To go
-// stricter, generate nonces in middleware and remove 'unsafe-inline'.
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.cloudinary.com",
@@ -24,8 +20,27 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  productionBrowserSourceMaps: false,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'react-hot-toast'],
+    optimizeCss: true,
+    scrollRestoration: true,
+  },
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{ kebabCase member }}',
+      preventFullImport: true,
+    },
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000,
+    deviceSizes: [360, 640, 750, 828, 1080, 1200, 1600, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
@@ -47,6 +62,18 @@ const nextConfig = {
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
         ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/_next/image:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/:all*(svg|jpg|jpeg|png|webp|avif|gif|ico|woff|woff2|ttf|otf)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
     ];
   },

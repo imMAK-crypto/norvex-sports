@@ -19,11 +19,15 @@ Open http://localhost:3000
 Admin panel: http://localhost:3000/admin  
 Default admin: the email and password from `.env` (defaults `admin@norvexsports.com` / `ChangeMe!2026`). **Change immediately** via `/admin/settings`.
 
-## Deploy to Railway
+## Deploy to Vercel (production)
 
-1. **Create the project** on Railway and connect this repo.
-2. **Add the PostgreSQL plugin** — Railway will inject `DATABASE_URL`.
-3. **Set environment variables** (Variables tab):
+The project is deployed on **Vercel** — Next.js's native platform. ISR, image
+optimization, edge OG, and middleware all run with zero config.
+
+1. **Create the project** on [vercel.com](https://vercel.com) and connect this repo
+   (or run `vercel link` locally).
+2. **Set environment variables** (Project Settings → Environment Variables):
+   - `DATABASE_URL` — Neon Postgres connection string
    - `NEXT_PUBLIC_SITE_URL` — your production URL (e.g. `https://norvexsports.com`)
    - `SESSION_SECRET` — a long random string (`openssl rand -base64 32`)
    - `ADMIN_EMAIL` and `ADMIN_PASSWORD` — bootstrap admin credentials
@@ -31,9 +35,12 @@ Default admin: the email and password from `.env` (defaults `admin@norvexsports.
    - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — optional, enables in-admin image upload
    - `NEXT_PUBLIC_GA_ID` — optional Google Analytics
    - `GOOGLE_SITE_VERIFICATION` — optional Search Console
-4. Railway uses `nixpacks.toml` / `railway.toml` automatically. The start command runs migrations + seed + Next start.
-5. Add a custom domain in Railway → Networking and point your DNS at it.
-6. Submit your sitemap to Google Search Console: `https://yourdomain.com/sitemap.xml`.
+3. Vercel reads `vercel.json` — build command runs `prisma generate && next build`,
+   serverless functions are pinned to the `bom1` (Mumbai) region.
+4. Add a custom domain in Vercel → Domains and point DNS (CNAME → `cname.vercel-dns.com`).
+5. Submit your sitemap to Google Search Console: `https://yourdomain.com/sitemap.xml`.
+
+Production URL: https://norvex-sports.vercel.app
 
 ## What's editable from the admin panel
 

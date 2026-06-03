@@ -15,6 +15,7 @@ export type SiteContent = {
   social: {
     instagram: string;
     facebook: string;
+    linkedin: string;
     youtube: string;
   };
 };
@@ -28,16 +29,17 @@ const DEFAULTS: SiteContent = {
   projectStatement:
     'At Norvex Sports, our project is to create a structured and professional environment where athletes can develop their skills, confidence, and overall performance.',
   contact: {
-    phone: '+91 00000 00000',
-    email: 'info@norvexsports.com',
-    whatsapp: '919000000000',
+    phone: '+91 80899 20562',
+    email: 'support@norvexsports.in',
+    whatsapp: '918089920562',
     location: 'Hyderabad, Telangana, India',
-    careersEmail: 'careers@norvexsports.com',
+    careersEmail: 'careers@norvexsports.in',
   },
   social: {
-    instagram: 'https://instagram.com/norvexsports',
-    facebook: 'https://facebook.com/norvexsports',
-    youtube: 'https://youtube.com/@norvexsports',
+    instagram: 'https://www.instagram.com/norvexsports?igsh=MXVtOXEwdmFwb3B2YQ==',
+    facebook: 'https://www.facebook.com/share/1B2MxrehXu/',
+    linkedin: 'https://www.linkedin.com/company/norvex-sports/',
+    youtube: '',
   },
 };
 
@@ -61,6 +63,7 @@ export async function getSiteContent(): Promise<SiteContent> {
       social: {
         instagram: get('social.instagram', DEFAULTS.social.instagram),
         facebook: get('social.facebook', DEFAULTS.social.facebook),
+        linkedin: get('social.linkedin', DEFAULTS.social.linkedin),
         youtube: get('social.youtube', DEFAULTS.social.youtube),
       },
     };

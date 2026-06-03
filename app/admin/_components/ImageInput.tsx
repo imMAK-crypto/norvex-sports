@@ -57,8 +57,8 @@ export function ImageInput({
           className="input"
         />
         <div className="flex items-center gap-3">
-          <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className="text-xs text-white/60 file:mr-2 file:rounded file:border-0 file:bg-brand-500 file:px-3 file:py-1.5 file:text-black" />
-          {uploading && <span className="text-xs text-white/60">Uploading…</span>}
+          <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className="text-xs text-silver-100/60 file:mr-2 file:rounded file:border-0 file:bg-brand-500 file:px-3 file:py-1.5 file:text-black" />
+          {uploading && <span className="text-xs text-silver-100/60">Uploading…</span>}
         </div>
         {error && <p className="text-xs text-red-400">{error}</p>}
       </div>

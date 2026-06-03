@@ -19,7 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="flex h-14 items-center justify-between px-4 lg:px-8">
               <Link href="/admin" className="font-display text-lg">Norvex Admin</Link>
               <form action="/api/admin/logout" method="POST">
-                <button type="submit" className="text-xs text-white/60 hover:text-white">Sign out</button>
+                <button type="submit" className="text-xs text-silver-100/60 hover:text-silver-100">Sign out</button>
               </form>
             </div>
           </header>

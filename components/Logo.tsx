@@ -1,16 +1,29 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
-export function Logo({ className = '' }: { className?: string }) {
+export function Logo({ className = '', compact = false }: { className?: string; compact?: boolean }) {
   return (
-    <Link href="/" className={`group inline-flex items-center gap-2 ${className}`} aria-label="Norvex Sports — home">
-      <span className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-brand-400 to-brand-700 shadow-lg shadow-brand-700/30">
-        <span className="font-display text-xl leading-none text-black">N</span>
-        <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent_60%)]" />
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-xl tracking-[0.08em] text-white">NORVEX</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-400">Sports</span>
-      </span>
+    <Link
+      href="/"
+      className={`group inline-flex items-center gap-3 ${className}`}
+      aria-label="Norvex Sports — home"
+    >
+      <Image
+        src="/norvex_sports_logo.png"
+        alt="Norvex Sports"
+        width={755}
+        height={364}
+        priority
+        className={`${compact ? 'h-10' : 'h-14 md:h-16'} w-auto transition-transform duration-300 group-hover:scale-[1.03]`}
+      />
     </Link>
+  );
+}
+
+export function LogoMark({ className = '' }: { className?: string }) {
+  return (
+    <span className={`font-display text-2xl font-bold uppercase tracking-[0.15em] text-brand-600 ${className}`}>
+      NORVEX
+    </span>
   );
 }

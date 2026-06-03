@@ -65,7 +65,7 @@ export function ServiceForm({ action, initial }: { action: (fd: FormData) => Pro
       </div>
 
       <details className="rounded-lg border border-white/10 p-4">
-        <summary className="cursor-pointer text-sm text-white/70">SEO overrides</summary>
+        <summary className="cursor-pointer text-sm text-silver-100/70">SEO overrides</summary>
         <div className="mt-4 space-y-4">
           <div>
             <label className="label" htmlFor="metaTitle">Meta title</label>

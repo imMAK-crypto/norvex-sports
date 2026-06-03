@@ -7,7 +7,7 @@ export default async function ContentAdminPage() {
     <div className="space-y-6">
       <header>
         <h1 className="font-display text-3xl">Site content</h1>
-        <p className="text-sm text-white/60 mt-1">About, project statement, contact details, social links.</p>
+        <p className="text-sm text-silver-100/60 mt-1">About, project statement, contact details, social links.</p>
       </header>
       <form action={saveSiteContent} className="admin-card space-y-6">
         <Field name="site.tagline" label="Tagline" defaultValue={c.tagline} />
@@ -27,10 +27,11 @@ export default async function ContentAdminPage() {
 
         <hr className="border-white/10" />
         <h2 className="font-display text-xl">Social</h2>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2">
           <Field name="social.instagram" label="Instagram URL" defaultValue={c.social.instagram} />
           <Field name="social.facebook" label="Facebook URL" defaultValue={c.social.facebook} />
-          <Field name="social.youtube" label="YouTube URL" defaultValue={c.social.youtube} />
+          <Field name="social.linkedin" label="LinkedIn URL" defaultValue={c.social.linkedin} />
+          <Field name="social.youtube" label="YouTube URL (leave blank to hide)" defaultValue={c.social.youtube} />
         </div>
 
         <div className="pt-2">

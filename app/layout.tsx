@@ -61,14 +61,14 @@ export const metadata: Metadata = {
     ? { google: process.env.GOOGLE_SITE_VERIFICATION }
     : undefined,
   icons: {
-    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    icon: [{ url: '/favicon.svg?v=2', type: 'image/svg+xml' }],
   },
   manifest: '/site.webmanifest',
   category: 'sports',
 };
 
 export const viewport: Viewport = {
-  themeColor: '#050807',
+  themeColor: '#0d0d0d',
   width: 'device-width',
   initialScale: 1,
 };
@@ -76,6 +76,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${bebas.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+      </head>
       <body>
         {children}
         <AppToaster />

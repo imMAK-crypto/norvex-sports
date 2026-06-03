@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Calendar, MapPin, Tag, ArrowRight } from 'lucide-react';
 import { prisma, safeQuery, type EventModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
+import { PageHeader } from '@/components/PageHeader';
 
 export const metadata: Metadata = {
   title: 'Events & Programs',
@@ -18,47 +21,92 @@ function fmtDate(d: Date | null) {
 
 export default async function EventsPage() {
   const events = await safeQuery<EventModel[]>(
-    () => prisma.event.findMany({
-      where: { isActive: true },
-      orderBy: [{ isFeatured: 'desc' }, { date: 'desc' }, { createdAt: 'desc' }],
-    }),
+    () =>
+      prisma.event.findMany({
+        where: { isActive: true },
+        orderBy: [{ isFeatured: 'desc' }, { date: 'desc' }, { createdAt: 'desc' }],
+      }),
     [],
   );
 
   return (
     <>
-      <header className="grid-bg">
-        <div className="container-x py-20 md:py-28">
-          <span className="eyebrow">Events & programs</span>
-          <h1 className="headline mt-3 text-5xl md:text-6xl">Compete. Showcase. Celebrate.</h1>
-          <p className="mt-4 max-w-2xl text-white/70">
-            Stay tuned for upcoming events and registrations. Real match experience, competitive exposure, and the
-            kind of nights every young player remembers.
-          </p>
+      <PageHeader
+        eyebrow="Events & programs"
+        title="Compete. Showcase. Celebrate."
+        intro="Real match experience, competitive exposure, and the kind of moments every young player remembers."
+      />
+
+      {/* Sticky banner */}
+      <div className="sticky top-16 md:top-20 z-30 border-b border-brand-600/40 bg-brand-600/15 backdrop-blur-sm">
+        <div className="container-x py-3 flex items-center justify-center gap-2 text-center">
+          <span className="font-sans text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
+            ✦ Stay tuned for upcoming events and registrations
+          </span>
         </div>
-      </header>
+      </div>
 
       <Section>
         {events.length === 0 ? (
-          <p className="text-center text-white/60">Stay tuned for upcoming events and registrations.</p>
+          <p className="text-center text-silver-400 py-12">
+            New events drop in soon — bookmark this page or follow us on Instagram for the latest.
+          </p>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {events.map((e) => (
-              <Link key={e.id} href={`/events/${e.slug}`} className="card overflow-hidden p-0 group">
-                <div className="aspect-[16/10] bg-gradient-to-br from-brand-700/30 to-ink-900">
+              <Link
+                key={e.id}
+                href={`/events/${e.slug}`}
+                className="group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1"
+              >
+                {/* IMAGE + OVERLAY TITLE */}
+                <div className="relative aspect-[16/10] w-full bg-ink-700 overflow-hidden">
                   {e.imageUrl ? (
-                    <img src={e.imageUrl} alt={e.title} className="h-full w-full object-cover transition group-hover:scale-105" />
+                    <Image
+                      src={e.imageUrl}
+                      alt={e.title}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                    />
                   ) : (
-                    <div className="h-full w-full grid place-items-center text-brand-500/20 text-7xl font-display">N</div>
+                    <div className="grid h-full w-full place-items-center font-display text-9xl text-brand-600/30">N</div>
                   )}
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-3 text-xs">
-                    {e.category && <span className="eyebrow">{e.category}</span>}
-                    {fmtDate(e.date) && <span className="text-white/50">· {fmtDate(e.date)}</span>}
+                  {e.isFeatured && (
+                    <span className="absolute top-4 left-4 bg-brand-600 px-3 py-1 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-silver-100">
+                      Featured
+                    </span>
+                  )}
+                  {/* dark gradient for text readability */}
+                  <div
+                    className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none"
+                    style={{
+                      background:
+                        'linear-gradient(to top, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.7) 45%, transparent 100%)',
+                    }}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    {e.category && (
+                      <span className="inline-flex items-center gap-1 mb-2 font-sans text-[10px] uppercase tracking-[0.25em] text-brand-500 font-semibold">
+                        <Tag className="h-3 w-3" /> {e.category}
+                      </span>
+                    )}
+                    <h2 className="font-display text-xl md:text-2xl uppercase text-silver-100 leading-tight">
+                      {e.title}
+                    </h2>
                   </div>
-                  <h3 className="font-display text-2xl text-white mt-2">{e.title}</h3>
-                  <p className="mt-1 text-sm text-white/60 line-clamp-3">{e.summary}</p>
+                </div>
+                {/* BODY — no date displayed */}
+                <div className="p-5 flex flex-col flex-1">
+                  <p className="text-sm text-silver-200 leading-relaxed flex-1">{e.summary}</p>
+                  {e.location && (
+                    <p className="mt-3 inline-flex items-center gap-1 font-sans text-[11px] uppercase tracking-[0.15em] text-silver-500">
+                      <MapPin className="h-3 w-3" /> {e.location}
+                    </p>
+                  )}
+                  <span className="mt-4 inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-500 group-hover:text-brand-400 transition">
+                    Read More <ArrowRight className="h-3 w-3" />
+                  </span>
                 </div>
               </Link>
             ))}

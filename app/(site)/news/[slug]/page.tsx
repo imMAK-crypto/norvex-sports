@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { JsonLd } from '@/components/JsonLd';
@@ -11,7 +13,7 @@ type Params = { params: { slug: string } };
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
     const items = await prisma.newsPost.findMany({ where: { isPublished: true }, select: { slug: true } });
-    return items.map((i: { slug: string }) => ({ slug: i.slug }));
+    return items.map((i) => ({ slug: i.slug }));
   } catch {
     return [];
   }
@@ -56,29 +58,36 @@ export default async function NewsDetail({ params }: Params) {
   return (
     <>
       <JsonLd data={ld} />
-      <header className="grid-bg">
-        <div className="container-x py-20 md:py-28">
-          <Link href="/news" className="text-sm text-white/50 hover:text-brand-400">← All news</Link>
+      <header className="relative overflow-hidden border-b border-ink-500 bg-ink-900">
+        <div className="container-x py-16 md:py-20">
+          <Link href="/news" className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.18em] text-silver-500 hover:text-brand-500">
+            <ArrowLeft className="h-3 w-3" /> All News
+          </Link>
           {post.publishedAt && (
-            <time className="eyebrow mt-6 block text-white/50">
+            <time className="mt-6 block font-sans text-[11px] uppercase tracking-[0.2em] text-brand-600">
               {new Date(post.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
             </time>
           )}
-          <h1 className="headline mt-3 text-4xl md:text-5xl">{post.title}</h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/70">{post.excerpt}</p>
+          <h1 className="headline mt-3 text-4xl md:text-5xl text-silver-100 leading-tight">{post.title}</h1>
+          <p className="mt-4 max-w-2xl text-lg text-silver-300">{post.excerpt}</p>
         </div>
       </header>
 
       <Section>
         <article className="mx-auto max-w-3xl">
           {post.imageUrl && (
-            <div className="mb-8 overflow-hidden rounded-2xl border border-white/10">
-              <img src={post.imageUrl} alt={post.title} className="w-full" />
+            <div className="relative aspect-[16/9] mb-8 overflow-hidden border border-ink-500">
+              <Image src={post.imageUrl} alt={post.title} fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
             </div>
           )}
-          <div className="prose-norvex">
-            {post.body.split(/\n\s*\n/).map((p: string, i: number) => <p key={i}>{p}</p>)}
+          <div className="prose-norvex text-base md:text-lg">
+            {post.body.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}
           </div>
+          {post.author && (
+            <p className="mt-12 pt-6 border-t border-ink-500 font-sans text-sm text-silver-500">
+              — {post.author}
+            </p>
+          )}
         </article>
       </Section>
     </>

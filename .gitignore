@@ -13,3 +13,20 @@ dist
 prisma/dev.db
 prisma/dev.db-journal
 coverage
+
+# Local Netlify folder (legacy — project migrated to Vercel)
+.netlify
+
+# Vercel
+.vercel
+
+# Local Claude/agent state
+.claude/
+
+# Local-only assets and artifacts (not for production)
+image for web/
+deno.lock
+/norvex_sports_logo.png
+
+# Runtime user uploads (served from /uploads, not source-controlled)
+public/uploads/

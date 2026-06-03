@@ -9,7 +9,7 @@ export default async function TeamAdminPage() {
   return (
     <AdminListShell title="Team" newHref="/admin/team/new" newLabel="Add member">
       {team.length === 0 ? (
-        <p className="p-6 text-sm text-white/50">No team members yet.</p>
+        <p className="p-6 text-sm text-silver-100/50">No team members yet.</p>
       ) : (
         <ul>
           {team.map((m) => (
@@ -19,8 +19,8 @@ export default async function TeamAdminPage() {
                   {m.imageUrl ? <img src={m.imageUrl} alt="" className="h-full w-full object-cover" /> : m.name.charAt(0)}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium truncate">{m.name} {!m.isActive && <span className="text-xs text-white/40">(hidden)</span>}</p>
-                  <p className="text-xs text-white/50 truncate">{m.role}</p>
+                  <p className="font-medium truncate">{m.name} {!m.isActive && <span className="text-xs text-silver-100/40">(hidden)</span>}</p>
+                  <p className="text-xs text-silver-100/50 truncate">{m.role}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">

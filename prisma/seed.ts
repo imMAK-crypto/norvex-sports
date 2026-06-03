@@ -88,7 +88,7 @@ async function main() {
     const s = services[i];
     await prisma.service.upsert({
       where: { slug: s.slug },
-      update: {},
+      update: { /* keep editable copy untouched on reseed */ },
       create: { ...s, order: i, isActive: true },
     });
   }
@@ -140,7 +140,7 @@ async function main() {
   for (const e of events) {
     await prisma.event.upsert({
       where: { slug: e.slug },
-      update: {},
+      update: { /* keep editable copy untouched on reseed */ },
       create: { ...e, isActive: true },
     });
   }
@@ -225,15 +225,16 @@ async function main() {
     'site.aboutLong':
       "Founded in 2026 in Hyderabad, Norvex Sports is a professional football development platform dedicated to nurturing players through structured functional training and expert coaching. Built on a strong passion for the game, we aim to create an environment where players can continuously improve their skills, confidence, and overall performance through high intensive training.\n\nWhat began as a grassroots initiative with a small group of aspiring players has grown into a structured platform offering academy training, one-to-one coaching, and team building to achieve competitive opportunities. Our training approach combines technical development, physical conditioning, and game awareness to ensure complete player growth.\n\nAt Norvex Sports, we believe in discipline, consistency, and continuous improvement. Our goal is not just to train players, but to guide them throughout their journey — helping them unlock their full potential both on and off the field.",
     'site.projectStatement':
-      'At Norvex Sports, our project is to create a structured and professional environment where athletes can develop their skills, confidence, and overall performance through expert coaching and continuous development. Starting with football, we aim to build a strong sports development platform that supports athletes from grassroots to elite levels while expanding across multiple sports and cities in the future.',
-    'contact.phone': process.env.NEXT_PUBLIC_PHONE ?? '+91 00000 00000',
-    'contact.email': process.env.NEXT_PUBLIC_EMAIL ?? 'info@norvexsports.com',
-    'contact.whatsapp': process.env.NEXT_PUBLIC_WHATSAPP ?? '919000000000',
+      'At Norvex Sports, our project is to create a structured and professional environment where athletes can develop their skills, confidence, and overall performance through expert coaching and continuous development. Starting with football, we aim to build a strong sports development platform that supports athletes from grassroots to elite levels while expanding across multiple sports and cities in the future. Through discipline, consistency, and competitive exposure, we strive to create opportunities that help individuals grow both on and off the field.',
+    'contact.phone': process.env.NEXT_PUBLIC_PHONE ?? '+91 80899 20562',
+    'contact.email': process.env.NEXT_PUBLIC_EMAIL ?? 'support@norvexsports.in',
+    'contact.whatsapp': process.env.NEXT_PUBLIC_WHATSAPP ?? '918089920562',
     'contact.location': 'Hyderabad, Telangana, India',
-    'contact.careersEmail': 'careers@norvexsports.com',
-    'social.instagram': 'https://instagram.com/norvexsports',
-    'social.facebook': 'https://facebook.com/norvexsports',
-    'social.youtube': 'https://youtube.com/@norvexsports',
+    'contact.careersEmail': 'careers@norvexsports.in',
+    'social.instagram': 'https://www.instagram.com/norvexsports?igsh=MXVtOXEwdmFwb3B2YQ==',
+    'social.facebook': 'https://www.facebook.com/share/1B2MxrehXu/',
+    'social.linkedin': 'https://www.linkedin.com/company/norvex-sports/',
+    'social.youtube': '',
   };
 
   for (const [key, value] of Object.entries(settings)) {

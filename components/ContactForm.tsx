@@ -36,10 +36,10 @@ export function ContactForm() {
 
   if (done) {
     return (
-      <div className="rounded-2xl border border-brand-500/30 bg-brand-500/5 p-8 text-center">
-        <CheckCircle2 className="mx-auto h-12 w-12 text-brand-400" />
-        <h3 className="mt-4 font-display text-2xl">You're in.</h3>
-        <p className="mt-2 text-sm text-white/70">
+      <div className="border border-brand-600/40 bg-brand-600/10 p-8 text-center">
+        <CheckCircle2 className="mx-auto h-12 w-12 text-brand-600" />
+        <h3 className="mt-4 font-display text-2xl uppercase text-silver-100">You're in.</h3>
+        <p className="mt-2 text-sm text-silver-300">
           We'll get back to you on WhatsApp or phone within one working day.
         </p>
         <button type="button" onClick={() => setDone(false)} className="btn-outline mt-6">

@@ -16,7 +16,7 @@ export default async function OG() {
           width: '100%',
           height: '100%',
           padding: '64px',
-          background: 'linear-gradient(135deg, #050807 0%, #073d20 60%, #0f843a 100%)',
+          background: 'linear-gradient(135deg, #0d0d0d 0%, #1a0303 60%, #cc0000 130%)',
           color: 'white',
           fontFamily: 'sans-serif',
         }}
@@ -26,12 +26,11 @@ export default async function OG() {
             style={{
               width: 64,
               height: 64,
-              borderRadius: 14,
-              background: 'linear-gradient(135deg, #33bf63, #0b6630)',
+              background: '#cc0000',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#050807',
+              color: '#ffffff',
               fontWeight: 900,
               fontSize: 44,
             }}
@@ -39,24 +38,24 @@ export default async function OG() {
             N
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: 32, fontWeight: 800, letterSpacing: 3 }}>NORVEX</span>
-            <span style={{ fontSize: 14, letterSpacing: 6, color: '#5dd485', marginTop: -4 }}>SPORTS</span>
+            <span style={{ fontSize: 36, fontWeight: 900, letterSpacing: 6, color: '#ffffff' }}>NORVEX</span>
+            <span style={{ fontSize: 14, letterSpacing: 8, color: '#c0c0c0', marginTop: -4 }}>SPORTS</span>
           </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: 18, letterSpacing: 5, color: '#5dd485' }}>HYDERABAD · EST. 2026</span>
-          <span style={{ fontSize: 76, fontWeight: 900, lineHeight: 1.05, marginTop: 12 }}>
-            Football development,
+          <span style={{ fontSize: 18, letterSpacing: 5, color: '#cc0000', fontWeight: 700 }}>HYDERABAD · EST. 2026</span>
+          <span style={{ fontSize: 84, fontWeight: 900, lineHeight: 1, marginTop: 18, color: '#ffffff' }}>
+            BUILD YOUR GAME.
           </span>
-          <span style={{ fontSize: 76, fontWeight: 900, lineHeight: 1.05, color: '#33bf63' }}>
-            done professionally.
+          <span style={{ fontSize: 84, fontWeight: 900, lineHeight: 1, color: '#c0c0c0' }}>
+            BUILD YOUR FUTURE.
           </span>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <span style={{ fontSize: 20, color: '#9aa9a4' }}>norvexsports.com</span>
-          <span style={{ fontSize: 18, color: '#5dd485', letterSpacing: 3 }}>FREE TRIAL AVAILABLE</span>
+          <span style={{ fontSize: 20, color: '#c0c0c0' }}>norvexsports.com</span>
+          <span style={{ fontSize: 18, color: '#cc0000', letterSpacing: 3, fontWeight: 700 }}>FREE TRIAL AVAILABLE</span>
         </div>
       </div>
     ),

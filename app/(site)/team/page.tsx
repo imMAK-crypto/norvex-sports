@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { prisma, safeQuery, type TeamMemberModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
+import { PageHeader } from '@/components/PageHeader';
 
 export const metadata: Metadata = {
-  title: 'Our Team',
+  title: 'Core Team',
   description: 'Meet the Norvex Sports founding team — coaches and operators building football in Hyderabad.',
 };
 
@@ -17,41 +19,53 @@ export default async function TeamPage() {
 
   return (
     <>
-      <header className="grid-bg">
-        <div className="container-x py-20 md:py-28">
-          <span className="eyebrow">Our team</span>
-          <h1 className="headline mt-3 text-5xl md:text-6xl">The Norvex coaching team.</h1>
-          <p className="mt-4 max-w-2xl text-white/70">
-            Co-founders, coaches and operators building a structured football pathway from Hyderabad outward.
-          </p>
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="Core team"
+        title="The people behind Norvex."
+        intro="Co-founders, coaches and operators building a structured football pathway from Hyderabad outward."
+      />
 
       <Section>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
-          {team.map((m) => (
-            <article key={m.id} className="card flex gap-6">
-              <div className="h-28 w-28 flex-shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600/40 to-ink-800 grid place-items-center">
-                {m.imageUrl ? (
-                  <img src={m.imageUrl} alt={m.name} className="h-full w-full object-cover" />
-                ) : (
-                  <span className="font-display text-4xl text-brand-400">{m.name.charAt(0)}</span>
-                )}
-              </div>
-              <div className="min-w-0">
-                <h3 className="font-display text-2xl text-white">{m.name}</h3>
-                <p className="text-sm text-brand-400">{m.role}</p>
-                {m.bio && <p className="mt-3 text-sm text-white/70">{m.bio}</p>}
-                {(m.qualifications || m.experience) && (
-                  <div className="mt-3 text-xs text-white/50 space-y-1">
-                    {m.qualifications && <p><span className="text-white/70">Qualifications:</span> {m.qualifications}</p>}
-                    {m.experience && <p><span className="text-white/70">Experience:</span> {m.experience}</p>}
+        {team.length === 0 ? (
+          <p className="text-center text-silver-400">Team profiles coming soon.</p>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2">
+            {team.map((m) => (
+              <article key={m.id} className="border border-ink-500 bg-ink-800 overflow-hidden">
+                <div className="grid grid-cols-[140px_1fr] sm:grid-cols-[180px_1fr]">
+                  <div className="relative aspect-[3/4] bg-ink-700">
+                    {m.imageUrl ? (
+                      <Image src={m.imageUrl} alt={m.name} fill sizes="180px" className="object-cover" />
+                    ) : (
+                      <div className="grid h-full w-full place-items-center font-display text-5xl text-brand-600/40">
+                        {m.name.charAt(0)}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
+                  <div className="p-5 sm:p-6 flex flex-col">
+                    <h3 className="font-display text-2xl uppercase text-silver-100 tracking-wide">{m.name}</h3>
+                    <p className="mt-1 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">{m.role}</p>
+                    {m.bio && <p className="mt-3 text-sm text-silver-300 line-clamp-4">{m.bio}</p>}
+                    <dl className="mt-auto pt-4 space-y-1 text-xs">
+                      {m.qualifications && (
+                        <div className="flex gap-2">
+                          <dt className="text-silver-500 uppercase tracking-wider">Qualifications:</dt>
+                          <dd className="text-silver-300">{m.qualifications}</dd>
+                        </div>
+                      )}
+                      {m.experience && (
+                        <div className="flex gap-2">
+                          <dt className="text-silver-500 uppercase tracking-wider">Experience:</dt>
+                          <dd className="text-silver-300">{m.experience}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </Section>
     </>
   );

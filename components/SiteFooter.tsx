@@ -1,121 +1,153 @@
 import Link from 'next/link';
+import { Instagram, Facebook, Linkedin, Youtube, MapPin, Phone, Mail, ArrowRight } from 'lucide-react';
 import { getSiteContent } from '@/lib/settings';
-import { Logo } from './Logo';
+import { LogoMark } from './Logo';
 
 export async function SiteFooter() {
   const c = await getSiteContent();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-24 border-t border-white/10 bg-ink-950">
-      <div className="container-x py-16">
-        <div className="grid gap-12 lg:grid-cols-4">
-          <div>
-            <Logo />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
-              {c.aboutShort}
-            </p>
-            <div className="mt-6 flex gap-3">
+    <footer className="mt-24 border-t border-ink-500 bg-ink-950">
+      {/* SOCIAL STRIP */}
+      <div className="border-b border-ink-500 bg-ink-900">
+        <div className="container-x py-10 md:py-12">
+          <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+            <div>
+              <div className="font-sans text-[11px] font-semibold uppercase tracking-[0.3em] text-brand-500">
+                Follow us
+              </div>
+              <h3 className="mt-2 font-display text-2xl md:text-3xl uppercase tracking-wide text-silver-100">
+                Stay Connected with Norvex Sports
+              </h3>
+              <p className="mt-1 font-sans text-sm text-silver-200 max-w-xl">
+                Latest updates, training highlights, match moments and upcoming events.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
               <a
                 href={c.social.instagram}
                 target="_blank"
                 rel="noreferrer noopener"
-                aria-label="Instagram"
-                className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 transition hover:border-brand-400 hover:text-brand-400"
+                className="btn-primary"
               >
-                <SocialIcon name="instagram" />
+                <Instagram className="mr-2 h-4 w-4" /> Follow on Instagram
               </a>
               <a
-                href={c.social.facebook}
+                href={c.social.linkedin}
                 target="_blank"
                 rel="noreferrer noopener"
-                aria-label="Facebook"
-                className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 transition hover:border-brand-400 hover:text-brand-400"
+                className="btn-outline"
               >
-                <SocialIcon name="facebook" />
+                <Linkedin className="mr-2 h-4 w-4" /> Connect on LinkedIn
               </a>
-              <a
-                href={c.social.youtube}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label="YouTube"
-                className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 transition hover:border-brand-400 hover:text-brand-400"
-              >
-                <SocialIcon name="youtube" />
-              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container-x py-16">
+        <div className="grid gap-12 lg:grid-cols-4">
+          <div>
+            <LogoMark />
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-silver-200">
+              {c.aboutShort}
+            </p>
+            <div className="mt-6 flex gap-3">
+              <SocialLink href={c.social.instagram} label="Instagram (@norvexsports)" Icon={Instagram} />
+              <SocialLink href={c.social.facebook} label="Facebook (Norvex Sports)" Icon={Facebook} />
+              <SocialLink href={c.social.linkedin} label="LinkedIn (Norvex Sports)" Icon={Linkedin} />
+              {c.social.youtube && (
+                <SocialLink href={c.social.youtube} label="YouTube (Norvex Sports)" Icon={Youtube} />
+              )}
             </div>
           </div>
 
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Programs</h4>
-            <ul className="mt-4 space-y-2 text-sm text-white/80">
-              <li><Link href="/services" className="hover:text-brand-400">All Services</Link></li>
-              <li><Link href="/events" className="hover:text-brand-400">Events</Link></li>
-              <li><Link href="/contact#trial" className="hover:text-brand-400">Book a Trial</Link></li>
-              <li><Link href="/contact" className="hover:text-brand-400">Birthday Parties</Link></li>
+            <h4 className="font-display text-base uppercase tracking-[0.2em] text-silver-100">Quick Links</h4>
+            <ul className="mt-4 space-y-2 font-sans text-sm text-silver-200">
+              <li><Link href="/about" className="hover:text-brand-500">About</Link></li>
+              <li><Link href="/services" className="hover:text-brand-500">Services</Link></li>
+              <li><Link href="/events" className="hover:text-brand-500">Events</Link></li>
+              <li><Link href="/the-norvex-project" className="hover:text-brand-500">The Norvex Project</Link></li>
+              <li><Link href="/team" className="hover:text-brand-500">Team</Link></li>
+              <li><Link href="/gallery" className="hover:text-brand-500">Gallery</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Company</h4>
-            <ul className="mt-4 space-y-2 text-sm text-white/80">
-              <li><Link href="/about" className="hover:text-brand-400">About</Link></li>
-              <li><Link href="/team" className="hover:text-brand-400">Team</Link></li>
-              <li><Link href="/news" className="hover:text-brand-400">News</Link></li>
-              <li><Link href="/careers" className="hover:text-brand-400">Careers</Link></li>
-              <li><Link href="/location" className="hover:text-brand-400">Location</Link></li>
+            <h4 className="font-display text-base uppercase tracking-[0.2em] text-silver-100">Company</h4>
+            <ul className="mt-4 space-y-2 font-sans text-sm text-silver-200">
+              <li><Link href="/news" className="hover:text-brand-500">News</Link></li>
+              <li><Link href="/careers" className="hover:text-brand-500">Careers</Link></li>
+              <li><Link href="/location" className="hover:text-brand-500">Our Location</Link></li>
+              <li><Link href="/contact" className="hover:text-brand-500">Contact</Link></li>
             </ul>
+            <a
+              href={`mailto:${c.contact.careersEmail}`}
+              className="mt-5 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-500 hover:text-brand-400"
+            >
+              Apply: {c.contact.careersEmail} <ArrowRight className="h-3 w-3" />
+            </a>
           </div>
 
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Contact</h4>
-            <ul className="mt-4 space-y-2 text-sm text-white/80">
-              <li><a href={`tel:${c.contact.phone.replace(/\s/g, '')}`} className="hover:text-brand-400">{c.contact.phone}</a></li>
-              <li><a href={`mailto:${c.contact.email}`} className="hover:text-brand-400">{c.contact.email}</a></li>
-              <li>{c.contact.location}</li>
+            <h4 className="font-display text-base uppercase tracking-[0.2em] text-silver-100">Contact</h4>
+            <ul className="mt-4 space-y-3 font-sans text-sm text-silver-200">
+              <li className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 mt-0.5 text-brand-600 flex-shrink-0" />
+                <span>{c.contact.location}</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-brand-600 flex-shrink-0" />
+                <a href={`tel:${c.contact.phone.replace(/\s/g, '')}`} className="hover:text-brand-500">{c.contact.phone}</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-brand-600 flex-shrink-0" />
+                <a href={`mailto:${c.contact.email}`} className="hover:text-brand-500">{c.contact.email}</a>
+              </li>
               <li>
                 <a
                   href={`https://wa.me/${c.contact.whatsapp}`}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="hover:text-brand-400"
+                  className="inline-flex items-center gap-2 mt-1 text-brand-500 hover:text-brand-400 underline-offset-4 hover:underline"
                 >
-                  WhatsApp Us
+                  WhatsApp Us →
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/50 md:flex-row md:items-center">
+        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-ink-500 pt-6 font-sans text-xs text-silver-500 md:flex-row md:items-center">
           <p>© {year} Norvex Sports. All rights reserved.</p>
-          <p>Hyderabad, Telangana — and every pitch we play on.</p>
+          <p className="uppercase tracking-[0.2em]">Hyderabad · Telangana · India</p>
         </div>
       </div>
     </footer>
   );
 }
 
-function SocialIcon({ name }: { name: 'instagram' | 'facebook' | 'youtube' }) {
-  if (name === 'instagram') {
-    return (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3" y="3" width="18" height="18" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-      </svg>
-    );
-  }
-  if (name === 'facebook') {
-    return (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.4c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.2 2.1.2v2.3h-1.2c-1.2 0-1.5.7-1.5 1.5V12h2.6l-.4 3h-2.2v7A10 10 0 0 0 22 12z" />
-      </svg>
-    );
-  }
+function SocialLink({
+  href,
+  label,
+  Icon,
+}: {
+  href: string;
+  label: string;
+  Icon: React.ComponentType<{ className?: string }>;
+}) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M23 7.3a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.6A3 3 0 0 0 1 7.3 31 31 0 0 0 .4 12 31 31 0 0 0 1 16.7a3 3 0 0 0 2.1 2.1C5 19.4 12 19.4 12 19.4s7 0 8.9-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.6 12 31 31 0 0 0 23 7.3zM9.8 15.4V8.6L15.6 12l-5.8 3.4z" />
-    </svg>
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={label}
+      title={label}
+      className="grid h-10 w-10 place-items-center border border-ink-500 bg-ink-800 text-silver-200 transition hover:border-brand-600 hover:text-brand-500"
+    >
+      <Icon className="h-4 w-4" />
+    </a>
   );
 }

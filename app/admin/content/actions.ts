@@ -16,6 +16,7 @@ const ALLOWED = new Set([
   'contact.careersEmail',
   'social.instagram',
   'social.facebook',
+  'social.linkedin',
   'social.youtube',
 ]);
 

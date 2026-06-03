@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import { Phone, Mail, MapPin, MessageCircle, Clock } from 'lucide-react';
 import { getSiteContent } from '@/lib/settings';
 import { Section } from '@/components/Section';
-import { Icon } from '@/components/Icon';
+import { PageHeader } from '@/components/PageHeader';
 import { ContactForm } from '@/components/ContactForm';
 
 export const metadata: Metadata = {
@@ -15,24 +16,20 @@ export default async function ContactPage() {
 
   return (
     <>
-      <header className="grid-bg">
-        <div className="container-x py-20 md:py-28">
-          <span className="eyebrow">Contact us</span>
-          <h1 className="headline mt-3 text-5xl md:text-6xl">Start your football journey.</h1>
-          <p className="mt-4 max-w-2xl text-white/70">
-            Free trial available. Drop us a line and our team will get back to you.
-          </p>
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="Contact us"
+        title="Start your football journey."
+        intro="Free trial available. Drop us a line and our team will get back to you within one working day."
+      />
 
-      <Section>
-        <div className="grid gap-12 lg:grid-cols-5">
-          <div id="trial" className="lg:col-span-3">
-            <div className="card">
+      <Section id="trial">
+        <div className="grid gap-10 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <div className="border border-ink-500 bg-ink-800 p-6 md:p-8">
               <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
-                <h2 className="font-display text-3xl text-white">Enquiry form</h2>
-                <span className="inline-flex items-center gap-2 rounded-full bg-brand-500/15 px-3 py-1 text-xs font-semibold text-brand-300">
-                  <span className="h-2 w-2 rounded-full bg-brand-400 animate-pulse" /> Free trial available
+                <h2 className="font-display text-3xl uppercase tracking-wide text-silver-100">Enquiry Form</h2>
+                <span className="inline-flex items-center gap-2 border border-brand-600/40 bg-brand-600/10 px-3 py-1 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600">
+                  <span className="h-2 w-2 rounded-full bg-brand-600 animate-pulse" /> Free Trial Available
                 </span>
               </div>
               <ContactForm />
@@ -40,37 +37,74 @@ export default async function ContactPage() {
           </div>
 
           <aside className="space-y-4 lg:col-span-2">
-            <a href={`tel:${phoneTel}`} className="card flex items-center gap-4 hover:border-brand-500">
-              <Icon name="phone" className="h-6 w-6 text-brand-400" />
+            <a href={`tel:${phoneTel}`} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
+              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Phone className="h-5 w-5" /></span>
               <div>
-                <p className="text-xs uppercase tracking-wider text-white/50">Phone</p>
-                <p className="font-display text-xl text-white">{c.contact.phone}</p>
+                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Phone</p>
+                <p className="font-display text-xl uppercase tracking-wide text-silver-100">{c.contact.phone}</p>
               </div>
             </a>
-            <a href={`https://wa.me/${c.contact.whatsapp}`} target="_blank" rel="noreferrer noopener" className="card flex items-center gap-4 hover:border-brand-500">
-              <Icon name="whatsapp" className="h-6 w-6 text-brand-400" />
+            <a
+              href={`https://wa.me/${c.contact.whatsapp}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600"
+            >
+              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><MessageCircle className="h-5 w-5" /></span>
               <div>
-                <p className="text-xs uppercase tracking-wider text-white/50">WhatsApp</p>
-                <p className="font-display text-xl text-white">Chat with us</p>
+                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">WhatsApp</p>
+                <p className="font-display text-xl uppercase tracking-wide text-silver-100">Chat with us</p>
               </div>
             </a>
-            <a href={`mailto:${c.contact.email}`} className="card flex items-center gap-4 hover:border-brand-500">
-              <Icon name="mail" className="h-6 w-6 text-brand-400" />
+            <a href={`mailto:${c.contact.email}`} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
+              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Mail className="h-5 w-5" /></span>
               <div>
-                <p className="text-xs uppercase tracking-wider text-white/50">Email</p>
-                <p className="font-display text-xl text-white break-all">{c.contact.email}</p>
+                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Email</p>
+                <p className="font-display text-lg break-all text-silver-100">{c.contact.email}</p>
               </div>
             </a>
-            <div className="card flex items-center gap-4">
-              <Icon name="pin" className="h-6 w-6 text-brand-400" />
+            <div className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5">
+              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><MapPin className="h-5 w-5" /></span>
               <div>
-                <p className="text-xs uppercase tracking-wider text-white/50">Location</p>
-                <p className="font-display text-xl text-white">{c.contact.location}</p>
+                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Location</p>
+                <p className="font-display text-xl uppercase tracking-wide text-silver-100">{c.contact.location}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5">
+              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Clock className="h-5 w-5" /></span>
+              <div>
+                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Response Time</p>
+                <p className="font-display text-xl uppercase tracking-wide text-silver-100">Within 24 hours</p>
               </div>
             </div>
           </aside>
         </div>
       </Section>
+
+      {/* CTA strip */}
+      <section className="bg-brand-600">
+        <div className="container-x py-10 md:py-12 text-center">
+          <h2 className="font-display text-3xl md:text-4xl uppercase tracking-wide text-silver-100">
+            Book a Trial Session · Contact Us Now
+          </h2>
+          <p className="mt-2 font-sans text-sm text-silver-100/80">
+            First session is on us. Just bring your boots.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <a href={`tel:${phoneTel}`} className="inline-flex items-center bg-silver-100 px-6 py-3 font-sans text-sm font-semibold uppercase tracking-wider text-brand-600 transition hover:bg-silver-100">
+              <Phone className="mr-2 h-4 w-4" /> Call {c.contact.phone}
+            </a>
+            <a
+              href={`https://wa.me/${c.contact.whatsapp}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center border-2 border-silver-100 px-6 py-3 font-sans text-sm font-semibold uppercase tracking-wider text-silver-100 transition hover:bg-silver-100 hover:text-brand-600"
+            >
+              <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

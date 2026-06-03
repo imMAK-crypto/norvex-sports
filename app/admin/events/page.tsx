@@ -9,7 +9,7 @@ export default async function EventsAdminPage() {
   return (
     <AdminListShell title="Events" newHref="/admin/events/new" newLabel="New event">
       {events.length === 0 ? (
-        <p className="p-6 text-sm text-white/50">No events yet.</p>
+        <p className="p-6 text-sm text-silver-100/50">No events yet.</p>
       ) : (
         <ul>
           {events.map((e) => (
@@ -18,9 +18,9 @@ export default async function EventsAdminPage() {
                 <p className="font-medium truncate">
                   {e.title}
                   {e.isFeatured && <span className="ml-2 rounded bg-brand-500/20 px-1.5 py-0.5 text-[10px] text-brand-300">FEATURED</span>}
-                  {!e.isActive && <span className="ml-2 text-xs text-white/40">(hidden)</span>}
+                  {!e.isActive && <span className="ml-2 text-xs text-silver-100/40">(hidden)</span>}
                 </p>
-                <p className="text-xs text-white/50 truncate">
+                <p className="text-xs text-silver-100/50 truncate">
                   /events/{e.slug} · {e.category ?? 'Uncategorised'} · {e.date ? new Date(e.date).toLocaleDateString() : 'no date'}
                 </p>
               </div>

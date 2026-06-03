@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { Logo } from './Logo';
 
 const NAV = [
@@ -10,6 +12,7 @@ const NAV = [
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/events', label: 'Events' },
+  { href: '/the-norvex-project', label: 'The Norvex Project' },
   { href: '/team', label: 'Team' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/news', label: 'News' },
@@ -21,6 +24,9 @@ export function SiteHeader() {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     setOpen(false);
@@ -40,71 +46,148 @@ export function SiteHeader() {
     };
   }, [open]);
 
-  return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'border-b border-white/10 bg-ink-950/80 backdrop-blur-md' : 'bg-transparent'
-      }`}
-    >
-      <div className="container-x flex h-16 items-center justify-between md:h-20">
-        <Logo />
-        <nav className="hidden lg:flex items-center gap-1">
-          {NAV.map((item) => {
-            const active = item.href === '/' ? path === '/' : path?.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`px-3 py-2 text-sm font-medium transition ${
-                  active ? 'text-brand-400' : 'text-white/80 hover:text-white'
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-        <div className="hidden lg:flex items-center gap-3">
-          <Link href="/contact#trial" className="btn-primary">
-            Book a Free Trial
-          </Link>
-        </div>
-        <button
-          type="button"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="lg:hidden relative h-10 w-10 grid place-items-center rounded-lg border border-white/10 bg-white/5"
-        >
-          <span className={`block h-0.5 w-5 bg-white transition ${open ? 'translate-y-0 rotate-45' : '-translate-y-1.5'}`} />
-          <span className={`absolute block h-0.5 w-5 bg-white transition ${open ? 'opacity-0' : ''}`} />
-          <span className={`block h-0.5 w-5 bg-white transition ${open ? 'translate-y-0 -rotate-45' : 'translate-y-1.5'}`} />
-        </button>
-      </div>
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
-      {open && (
-        <div className="lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-ink-950/95 backdrop-blur-md">
-          <nav className="container-x flex flex-col gap-1 py-6">
+  // Mobile drawer rendered via Portal so it escapes the sticky header's stacking context
+  const drawer =
+    mounted &&
+    createPortal(
+      <>
+        {/* Backdrop */}
+        <div
+          onClick={() => setOpen(false)}
+          className="xl:hidden fixed inset-0 transition-opacity duration-300"
+          style={{
+            zIndex: 9998,
+            background: 'rgba(0,0,0,0.7)',
+            backdropFilter: 'blur(4px)',
+            opacity: open ? 1 : 0,
+            pointerEvents: open ? 'auto' : 'none',
+          }}
+          aria-hidden={!open}
+        />
+        {/* Drawer panel */}
+        <aside
+          className="xl:hidden fixed top-0 right-0 bottom-0 w-[88%] max-w-sm"
+          style={{
+            zIndex: 9999,
+            background: '#080808',
+            borderLeft: '1px solid #2e2e2e',
+            transform: open ? 'translateX(0)' : 'translateX(100%)',
+            transition: 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+            boxShadow: open ? '-10px 0 40px rgba(0,0,0,0.7)' : 'none',
+          }}
+          aria-hidden={!open}
+        >
+          <div
+            className="flex items-center justify-between px-5"
+            style={{ height: 64, borderBottom: '1px solid #2e2e2e', background: '#0d0d0d' }}
+          >
+            <span className="font-display text-xl uppercase tracking-[0.18em] text-brand-500">Menu</span>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="grid h-10 w-10 place-items-center text-silver-100 hover:text-brand-500"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          <nav
+            className="flex flex-col overflow-y-auto"
+            style={{ height: 'calc(100% - 64px)' }}
+          >
             {NAV.map((item) => {
               const active = item.href === '/' ? path === '/' : path?.startsWith(item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-lg px-4 py-3 text-base font-semibold transition ${
-                    active ? 'bg-brand-500/10 text-brand-400' : 'text-white/90 hover:bg-white/5'
-                  }`}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between px-5 py-4 font-sans text-base font-semibold uppercase tracking-[0.12em] transition"
+                  style={{
+                    borderLeft: active ? '3px solid #7c0000' : '3px solid transparent',
+                    background: active ? '#141414' : 'transparent',
+                    color: active ? '#cccccc' : '#a8a8a8',
+                  }}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  <ArrowRight className="h-4 w-4 opacity-60" />
                 </Link>
               );
             })}
-            <Link href="/contact#trial" className="btn-primary mt-4">
-              Book a Free Trial
-            </Link>
+            <div className="px-5 py-6 mt-auto" style={{ borderTop: '1px solid #2e2e2e' }}>
+              <Link
+                href="/contact#trial"
+                onClick={() => setOpen(false)}
+                className="btn-primary w-full"
+              >
+                Book a Free Trial
+              </Link>
+            </div>
           </nav>
+        </aside>
+      </>,
+      document.body,
+    );
+
+  return (
+    <header
+      className={`sticky top-0 z-40 transition-all duration-300 ${
+        scrolled
+          ? 'border-b border-ink-500 bg-ink-900/95 backdrop-blur-md'
+          : 'border-b border-transparent bg-ink-900/70 backdrop-blur-sm'
+      }`}
+    >
+      <div className="container-x flex h-20 items-center justify-between md:h-24">
+        <Logo />
+
+        <nav className="hidden xl:flex items-center gap-1">
+          {NAV.map((item) => {
+            const active = item.href === '/' ? path === '/' : path?.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`relative px-3 py-2 font-sans text-[13px] font-medium uppercase tracking-[0.15em] transition ${
+                  active ? 'text-silver-100' : 'text-silver-300 hover:text-silver-100'
+                }`}
+              >
+                {item.label}
+                {active && <span className="absolute left-3 right-3 bottom-0 h-[2px] bg-brand-600" />}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Right-side controls — Book Trial (desktop+mobile) sits beside hamburger */}
+        <div className="flex items-center gap-2">
+          <Link
+            href="/contact#trial"
+            className="inline-flex items-center justify-center rounded-md bg-brand-600 px-4 h-11 font-sans text-[12px] sm:text-[13px] font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-brand-500 active:scale-[0.98]"
+          >
+            Book Trial
+          </Link>
+
+          <button
+            type="button"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="xl:hidden inline-flex h-11 w-11 items-center justify-center rounded-md border border-ink-500 bg-ink-800 text-silver-100 transition hover:border-brand-600 hover:text-brand-500"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
-      )}
+      </div>
+
+      {drawer}
     </header>
   );
 }

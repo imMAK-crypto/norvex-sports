@@ -9,14 +9,14 @@ export default async function ServicesAdminPage() {
   return (
     <AdminListShell title="Services" newHref="/admin/services/new" newLabel="New service">
       {services.length === 0 ? (
-        <p className="p-6 text-sm text-white/50">No services yet.</p>
+        <p className="p-6 text-sm text-silver-100/50">No services yet.</p>
       ) : (
         <ul>
           {services.map((s) => (
             <li key={s.id} className="flex items-center justify-between border-b border-white/5 px-4 py-3 last:border-0">
               <div className="min-w-0">
-                <p className="font-medium truncate">{s.title} {!s.isActive && <span className="text-xs text-white/40">(hidden)</span>}</p>
-                <p className="text-xs text-white/50 truncate">/services/{s.slug}</p>
+                <p className="font-medium truncate">{s.title} {!s.isActive && <span className="text-xs text-silver-100/40">(hidden)</span>}</p>
+                <p className="text-xs text-silver-100/50 truncate">/services/{s.slug}</p>
               </div>
               <div className="flex items-center gap-4">
                 <Link href={`/admin/services/${s.id}`} className="text-xs text-brand-400 hover:underline">Edit</Link>

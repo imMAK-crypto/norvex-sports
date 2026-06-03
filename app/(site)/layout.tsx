@@ -26,7 +26,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     },
     telephone: c.contact.phone,
     email: c.contact.email,
-    sameAs: [c.social.instagram, c.social.facebook, c.social.youtube].filter(Boolean),
+    sameAs: [c.social.instagram, c.social.facebook, c.social.linkedin, c.social.youtube].filter(Boolean),
   };
 
   return (

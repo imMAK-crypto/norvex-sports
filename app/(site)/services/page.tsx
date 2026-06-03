@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowRight, Trophy } from 'lucide-react';
 import { prisma, safeQuery, type ServiceModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
-import { Icon } from '@/components/Icon';
+import { PageHeader } from '@/components/PageHeader';
 import { JsonLd } from '@/components/JsonLd';
 import { siteUrl } from '@/lib/settings';
 
@@ -35,35 +37,60 @@ export default async function ServicesPage() {
   return (
     <>
       <JsonLd data={itemList} />
-      <header className="grid-bg">
-        <div className="container-x py-20 md:py-28">
-          <span className="eyebrow">Our services</span>
-          <h1 className="headline mt-3 text-5xl md:text-6xl">Programs for every player.</h1>
-          <p className="mt-4 max-w-2xl text-white/70">
-            A complete range of football training and development programs — designed for players of all ages and
-            skill levels.
-          </p>
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="Our services"
+        title="Programs for every player."
+        intro="A complete range of football training and development programs — designed for players of all ages and skill levels."
+      />
 
       <Section>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
-            <Link key={s.id} href={`/services/${s.slug}`} className="card group flex flex-col">
-              {s.imageUrl ? (
-                <div className="-m-6 mb-4 aspect-[16/10] overflow-hidden rounded-t-2xl">
-                  <img src={s.imageUrl} alt={s.title} className="h-full w-full object-cover transition group-hover:scale-105" />
+          {services.map((s, i) => (
+            <Link
+              key={s.id}
+              href={`/services/${s.slug}`}
+              className="group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1"
+            >
+              {/* IMAGE + OVERLAY TITLE */}
+              <div className="relative aspect-[16/10] w-full bg-ink-800 overflow-hidden">
+                {s.imageUrl ? (
+                  <Image
+                    src={s.imageUrl}
+                    alt={s.title}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover transition duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="grid h-full w-full place-items-center font-display text-7xl text-brand-600/30">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                )}
+                {/* Dark gradient bottom-of-image so the title is always readable */}
+                <div
+                  className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none"
+                  style={{
+                    background:
+                      'linear-gradient(to top, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.7) 45%, transparent 100%)',
+                  }}
+                />
+                {/* Title overlay */}
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <span className="inline-flex items-center gap-2 mb-2 font-sans text-[10px] uppercase tracking-[0.25em] text-brand-500">
+                    <Trophy className="h-3 w-3" /> {String(i + 1).padStart(2, '0')} · Service
+                  </span>
+                  <h3 className="font-display text-xl md:text-2xl uppercase text-silver-100 leading-tight">
+                    {s.title}
+                  </h3>
                 </div>
-              ) : (
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/10 text-brand-400 mb-4 group-hover:bg-brand-500 group-hover:text-black transition">
-                  <Icon name={s.icon ?? 'trophy'} />
-                </div>
-              )}
-              <h3 className="font-display text-2xl text-white">{s.title}</h3>
-              <p className="mt-2 text-sm text-white/70 flex-1">{s.shortDesc}</p>
-              <span className="mt-4 inline-flex items-center text-sm text-brand-400">
-                Learn more <Icon name="arrow-right" className="ml-1 h-4 w-4" />
-              </span>
+              </div>
+              {/* BODY */}
+              <div className="p-5 flex flex-col flex-1">
+                <p className="text-sm text-silver-200 leading-relaxed flex-1">{s.shortDesc}</p>
+                <span className="mt-4 inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-500 group-hover:text-brand-400 transition">
+                  Learn More <ArrowRight className="h-3 w-3" />
+                </span>
+              </div>
             </Link>
           ))}
         </div>
