@@ -81,8 +81,8 @@ export default async function HomePage() {
         stats={[
           { num: '8+', label: 'Programs' },
           { num: '10+', label: 'Events' },
-          { num: '500', label: 'Players Trained' },
-          { num: '4', label: 'Expert Coaches' },
+          { num: '6', label: 'Days/Week Training' },
+          { num: '5★', label: 'Pro Coaching' },
         ]}
       />
 
