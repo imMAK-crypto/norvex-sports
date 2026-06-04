@@ -30,3 +30,5 @@ deno.lock
 
 # Runtime user uploads (served from /uploads, not source-controlled)
 public/uploads/
+
+.vercel
