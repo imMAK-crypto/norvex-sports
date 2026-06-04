@@ -6,25 +6,25 @@ const prisma = new PrismaClient();
 //  - Service: one-to-one-coaching (One-to-One & Community Coaching)
 //  - Event:   football-themed-birthday-parties
 const SERVICE_MAP: Record<string, string> = {
-  'advanced-player-development':   '/images/service_advanced_player_development.png',
-  'adult-football-training':       '/images/service_adult_football_training.png',
-  'tournament-event-organization': '/images/service_tournament_event_organization.png',
-  'school-college-coaching':       '/images/service_school_college_coaching.png',
-  'fitness-conditioning':          '/images/service_fitness_conditioning.png',
-  'talent-identification-trials':  '/images/service_talent_identification_trials.png',
+  'advanced-player-development':   '/images/service_advanced_player_development.webp',
+  'adult-football-training':       '/images/service_adult_football_training.webp',
+  'tournament-event-organization': '/images/service_tournament_event_organization.webp',
+  'school-college-coaching':       '/images/service_school_college_coaching.webp',
+  'fitness-conditioning':          '/images/service_fitness_conditioning.webp',
+  'talent-identification-trials':  '/images/service_talent_identification_trials.webp',
 };
 
 const EVENT_MAP: Record<string, string> = {
-  'norvex-youth-league':                   '/images/event_norvex_youth_league.png',
-  'friendly-matches-seasonal-tournaments': '/images/event_friendly_matches_tournaments.png',
-  'talent-identification-trials':          '/images/event_talent_identification_trials.png',
-  'football-development-clinics':          '/images/event_football_development_clinics.png',
+  'norvex-youth-league':                   '/images/event_norvex_youth_league.webp',
+  'friendly-matches-seasonal-tournaments': '/images/event_friendly_matches_tournaments.webp',
+  'talent-identification-trials':          '/images/event_talent_identification_trials.webp',
+  'football-development-clinics':          '/images/event_football_development_clinics.webp',
 };
 
 const NEWS_MAP: Record<string, string> = {
-  'welcome-to-norvex-sports':     '/images/news_welcome_to_norvex.png',
-  'open-trials-announcement':     '/images/news_open_trials_announcement.png',
-  'norvex-youth-league-kick-off': '/images/news_youth_league_kickoff.png',
+  'welcome-to-norvex-sports':     '/images/news_welcome_to_norvex.webp',
+  'open-trials-announcement':     '/images/news_open_trials_announcement.webp',
+  'norvex-youth-league-kick-off': '/images/news_youth_league_kickoff.webp',
 };
 
 async function main() {

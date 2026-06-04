@@ -4,9 +4,9 @@ const prisma = new PrismaClient();
 async function main() {
   const r = await prisma.event.updateMany({
     where: { slug: 'football-themed-birthday-parties' },
-    data: { imageUrl: '/images/birthday-party.jpg' },
+    data: { imageUrl: '/images/birthday-party.webp' },
   });
-  console.log(`Updated ${r.count} event row(s) -> /images/birthday-party.jpg`);
+  console.log(`Updated ${r.count} event row(s) -> /images/birthday-party.webp`);
 }
 
 main()
