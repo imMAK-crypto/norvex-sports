@@ -31,7 +31,7 @@ export function Section({
             {title && (
               <h2 className="headline mt-3 text-4xl md:text-5xl lg:text-6xl text-silver-100">{title}</h2>
             )}
-            {intro && <p className="mt-4 text-silver-300">{intro}</p>}
+            {intro && <p className="mt-4 text-base md:text-lg text-silver-300 leading-relaxed">{intro}</p>}
           </div>
         )}
         {children}

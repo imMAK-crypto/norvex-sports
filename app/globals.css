@@ -20,6 +20,19 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 17px;
+}
+
+@media (min-width: 1280px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1536px) {
+  html {
+    font-size: 19px;
+  }
 }
 
 html,
@@ -81,11 +94,11 @@ a {
 }
 
 .eyebrow {
-  @apply inline-block font-sans text-[11px] font-semibold uppercase tracking-[0.3em] text-brand-500;
+  @apply inline-block font-sans text-xs md:text-sm font-semibold uppercase tracking-[0.3em] text-brand-500;
 }
 
 .prose-norvex p {
-  @apply text-silver-100 leading-relaxed;
+  @apply text-silver-100 leading-relaxed text-base md:text-lg;
 }
 
 .prose-norvex p + p {
