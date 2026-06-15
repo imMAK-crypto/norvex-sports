@@ -34,7 +34,7 @@ export default async function HomePage() {
     <>
       {/* 1 — HERO */}
       <section className="relative overflow-hidden">
-        <div className="relative h-[78vh] min-h-[560px] md:h-[88vh]">
+        <div className="relative h-[64vh] min-h-[540px] md:h-[88vh] md:min-h-[560px]">
           <Image
             src={HERO_IMG}
             alt=""
@@ -50,7 +50,7 @@ export default async function HomePage() {
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
           <div className="absolute inset-0 flex items-end md:items-center">
             <div className="container-x pb-12 md:pb-0">
-              <div className="max-w-2xl">
+              <div className="max-w-2xl [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:[text-shadow:none]">
                 <div className="font-sans text-sm sm:text-base md:text-lg font-bold uppercase tracking-[0.35em] text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                   Hyderabad's Premier Football Academy
                 </div>
@@ -114,7 +114,7 @@ export default async function HomePage() {
       </Section>
 
       {/* 4 — THE NORVEX PROJECT */}
-      <section className="border-y border-ink-500 bg-ink-900 py-16 md:py-20">
+      <section className="border-y border-ink-500 bg-ink-900 py-12 md:py-20">
         <div className="container-x text-center">
           <span className="eyebrow">Our Vision</span>
           <h2 className="headline mt-3 text-3xl md:text-5xl text-silver-100">The Norvex Project</h2>
@@ -128,32 +128,34 @@ export default async function HomePage() {
       </section>
 
       {/* 5 — VALUES */}
-      <section className="py-14 md:py-16">
+      <section className="py-12 md:py-16">
         <div className="container-x">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8 md:mb-10">
             <span className="eyebrow">What we stand for</span>
             <h2 className="headline mt-3 text-3xl md:text-4xl text-silver-100">Our Values</h2>
           </div>
           {/* Inline border styles — guaranteed to render on every breakpoint */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-            {VALUES.map(({ name, desc, Icon }) => (
-              <div
-                key={name}
-                className="flex flex-col items-center justify-center text-center p-6 min-h-[200px]"
-                style={{
-                  border: '1px solid #2e2e2e',
-                  marginLeft: -1,
-                  marginTop: -1,
-                  background: '#0d0d0d',
-                }}
-              >
-                <div className="grid h-12 w-12 place-items-center rounded-full border-[1.5px] border-brand-600/40 text-brand-600 mb-3">
-                  <Icon className="h-5 w-5" />
+            {VALUES.map(({ name, desc, Icon }, i) => {
+              const isLast = i === VALUES.length - 1;
+              return (
+                <div
+                  key={name}
+                  /* phone (max-sm): square tiles, lone 5th centered across both columns.
+                     sm/md/lg (tablet + PC) unchanged. */
+                  className={`flex flex-col items-center justify-center text-center p-5 min-h-[150px] md:p-6 md:min-h-[200px] aspect-square sm:aspect-auto ${
+                    isLast ? 'max-sm:col-span-2 max-sm:aspect-[2/1]' : ''
+                  }`}
+                  style={{ border: '1px solid #2e2e2e', marginLeft: -1, marginTop: -1, background: '#0d0d0d' }}
+                >
+                  <div className="grid h-12 w-12 place-items-center rounded-full border-[1.5px] border-brand-600/40 text-brand-600 mb-3">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="font-display text-lg uppercase tracking-wider text-silver-100">{name}</div>
+                  <div className="mt-1 font-sans text-[11px] uppercase tracking-[0.15em] text-silver-400">{desc}</div>
                 </div>
-                <div className="font-display text-lg uppercase tracking-wider text-silver-100">{name}</div>
-                <div className="mt-1 font-sans text-[11px] uppercase tracking-[0.15em] text-silver-400">{desc}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

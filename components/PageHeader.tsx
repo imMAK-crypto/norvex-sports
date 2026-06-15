@@ -23,7 +23,7 @@ export function PageHeader({
           backgroundSize: '64px 64px',
         }}
       />
-      <div className="container-x relative py-16 md:py-24">
+      <div className="container-x relative py-12 md:py-24">
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
         <h1 className="headline mt-3 text-5xl md:text-6xl lg:text-7xl text-silver-100 leading-[0.95]">
           {title}

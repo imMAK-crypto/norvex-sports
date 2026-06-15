@@ -21,12 +21,12 @@ export function Section({
   align?: 'left' | 'center';
   tight?: boolean;
 }) {
-  const pad = tight ? 'py-12 md:py-16' : 'py-16 md:py-24';
+  const pad = tight ? 'py-10 md:py-16' : 'py-12 md:py-24';
   return (
     <section id={id} className={`${pad} ${className}`}>
       <div className="container-x">
         {(eyebrow || title || intro) && (
-          <div className={`mb-12 ${align === 'center' ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}`}>
+          <div className={`mb-8 md:mb-12 ${align === 'center' ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}`}>
             {eyebrow && <span className="eyebrow">{eyebrow}</span>}
             {title && (
               <h2 className="headline mt-3 text-4xl md:text-5xl lg:text-6xl text-silver-100">{title}</h2>

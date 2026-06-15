@@ -8,7 +8,7 @@ export async function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-24 border-t border-ink-500 bg-ink-950">
+    <footer className="mt-16 md:mt-24 border-t border-ink-500 bg-ink-950">
       {/* SOCIAL STRIP */}
       <div className="border-b border-ink-500 bg-ink-900">
         <div className="container-x py-10 md:py-12">
@@ -46,8 +46,8 @@ export async function SiteFooter() {
         </div>
       </div>
 
-      <div className="container-x py-16">
-        <div className="grid gap-12 lg:grid-cols-4">
+      <div className="container-x py-12 md:py-16">
+        <div className="grid gap-10 md:gap-12 lg:grid-cols-4">
           <div>
             <LogoMark />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-silver-200">
