@@ -44,7 +44,7 @@ export default async function HomePage() {
             sizes="100vw"
             placeholder="blur"
             blurDataURL={HERO_BLUR}
-            quality={72}
+            quality={92}
             className="object-cover object-center"
           />
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
