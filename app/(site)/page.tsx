@@ -34,7 +34,7 @@ export default async function HomePage() {
     <>
       {/* 1 — HERO */}
       <section className="relative overflow-hidden">
-        <div className="relative h-[64vh] min-h-[540px] md:h-[88vh] md:min-h-[560px]">
+        <div className="relative h-[52vh] min-h-[480px] md:h-[88vh] md:min-h-[560px]">
           <Image
             src={HERO_IMG}
             alt=""
@@ -45,7 +45,7 @@ export default async function HomePage() {
             placeholder="blur"
             blurDataURL={HERO_BLUR}
             quality={100}
-            className="object-cover object-center scale-[1.08] md:scale-100"
+            className="object-cover object-[65%_center] md:object-center"
           />
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
           <div className="absolute inset-0 flex items-end md:items-center">

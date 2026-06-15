@@ -134,7 +134,7 @@ a {
 }
 
 .hero-overlay-mobile {
-  background: linear-gradient(to top, rgba(8, 8, 8, 0.9) 26%, rgba(8, 8, 8, 0.3) 58%, rgba(8, 8, 8, 0) 100%);
+  background: linear-gradient(to top, rgba(8, 8, 8, 0.9) 30%, rgba(8, 8, 8, 0.42) 62%, rgba(8, 8, 8, 0) 100%);
 }
 
 /* Section dividers */
