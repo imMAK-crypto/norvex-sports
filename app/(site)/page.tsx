@@ -45,7 +45,7 @@ export default async function HomePage() {
             placeholder="blur"
             blurDataURL={HERO_BLUR}
             quality={100}
-            className="object-cover object-center"
+            className="object-cover object-center scale-[1.08] md:scale-100"
           />
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
           <div className="absolute inset-0 flex items-end md:items-center">
