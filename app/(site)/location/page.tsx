@@ -47,7 +47,7 @@ export default async function LocationPage() {
               </div>
             </a>
           </div>
-          <div className="overflow-hidden border border-ink-500 min-h-[400px]">
+          <div className="overflow-hidden rounded-xl border border-ink-500 min-h-[400px]">
             <iframe
               title="Norvex Sports — Hyderabad"
               src="https://www.google.com/maps?q=Hyderabad,Telangana&output=embed"

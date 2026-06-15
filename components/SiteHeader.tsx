@@ -155,7 +155,7 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-3 py-2 font-sans text-[13px] font-medium uppercase tracking-[0.15em] transition ${
+                className={`relative whitespace-nowrap px-3 py-2 font-sans text-[13px] font-medium uppercase tracking-[0.15em] transition ${
                   active ? 'text-silver-100' : 'text-silver-300 hover:text-silver-100'
                 }`}
               >

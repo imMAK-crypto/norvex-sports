@@ -78,7 +78,7 @@ export default async function ServiceDetail({ params }: Params) {
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
           <div>
             {s.imageUrl && (
-              <div className="relative aspect-[16/9] mb-8 overflow-hidden border border-ink-500">
+              <div className="relative aspect-[16/9] mb-8 overflow-hidden rounded-xl border border-ink-500">
                 <Image src={s.imageUrl} alt={s.title} fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
               </div>
             )}

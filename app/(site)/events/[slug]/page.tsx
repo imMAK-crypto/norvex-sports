@@ -81,7 +81,7 @@ export default async function EventDetail({ params }: Params) {
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
           <div>
             {e.imageUrl && (
-              <div className="relative aspect-[16/9] mb-8 overflow-hidden border border-ink-500">
+              <div className="relative aspect-[16/9] mb-8 overflow-hidden rounded-xl border border-ink-500">
                 <Image src={e.imageUrl} alt={e.title} fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
               </div>
             )}
@@ -91,7 +91,7 @@ export default async function EventDetail({ params }: Params) {
             {e.galleryUrls && e.galleryUrls.length > 0 && (
               <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-3">
                 {e.galleryUrls.map((u, i) => (
-                  <div key={i} className="relative aspect-square overflow-hidden border border-ink-500">
+                  <div key={i} className="relative aspect-square overflow-hidden rounded-xl border border-ink-500">
                     <Image src={u} alt={`${e.title} ${i + 1}`} fill sizes="(min-width: 768px) 33vw, 50vw" className="object-cover" />
                   </div>
                 ))}

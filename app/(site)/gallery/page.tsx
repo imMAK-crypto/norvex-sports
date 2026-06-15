@@ -85,7 +85,7 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { c
         {items.length === 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
             {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i} className="aspect-square border border-ink-500 bg-ink-800 grid place-items-center">
+              <div key={i} className="aspect-square rounded-xl border border-ink-500 bg-ink-800 grid place-items-center">
                 <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-silver-600">Coming soon</span>
               </div>
             ))}
@@ -93,7 +93,7 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { c
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
             {items.map((g) => (
-              <figure key={g.id} className="relative group aspect-square overflow-hidden border border-ink-500 bg-ink-800">
+              <figure key={g.id} className="relative group aspect-square overflow-hidden rounded-xl border border-ink-500 bg-ink-800">
                 <Image
                   src={g.imageUrl}
                   alt={g.title ?? 'Norvex Sports gallery'}
@@ -116,7 +116,7 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { c
       {/* Video section placeholder */}
       <Section eyebrow="Video reel" title="Watch Norvex in Action" align="center" className="bg-ink-900 border-y border-ink-500">
         <div className="mx-auto max-w-3xl">
-          <div className="relative aspect-video border border-ink-500 bg-ink-800 grid place-items-center">
+          <div className="relative aspect-video rounded-xl border border-ink-500 bg-ink-800 grid place-items-center overflow-hidden">
             <div className="text-center">
               <div className="grid h-16 w-16 mx-auto place-items-center rounded-full bg-brand-600/20 border-2 border-brand-600">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-brand-600 ml-1">

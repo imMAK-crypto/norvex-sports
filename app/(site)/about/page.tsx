@@ -41,7 +41,7 @@ export default async function AboutPage() {
             </Link>
           </div>
           <aside className="space-y-4">
-            <div className="relative aspect-[4/3] overflow-hidden border border-ink-500">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-ink-500">
               <Image
                 src="/images/about_page.webp"
                 alt="Norvex training"

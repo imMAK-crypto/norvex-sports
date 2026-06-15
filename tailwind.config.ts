@@ -24,15 +24,15 @@ const config: Config = {
           600: '#7c0000',
           700: '#660202',
         },
-        // Norvex Silver — visibly silver/gray, never reads as white
+        // Norvex Silver — brighter readable greys
         silver: {
-          50: '#dcdcdc',
-          100: '#b8b8b8', // primary "silver" tone — clearly grey, not white
-          200: '#a8a8a8',
-          300: '#969696',
-          400: '#808080',
-          500: '#6a6a6a',
-          600: '#555555',
+          50: '#f2f2f2',
+          100: '#dcdcdc', // primary "silver" tone — bright but not pure white
+          200: '#c8c8c8',
+          300: '#b0b0b0',
+          400: '#969696',
+          500: '#7a7a7a',
+          600: '#5e5e5e',
           700: '#404040',
         },
         // Dark surfaces

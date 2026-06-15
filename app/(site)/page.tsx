@@ -51,7 +51,7 @@ export default async function HomePage() {
           <div className="absolute inset-0 flex items-end md:items-center">
             <div className="container-x pb-12 md:pb-0">
               <div className="max-w-2xl">
-                <div className="font-sans text-sm sm:text-base md:text-lg uppercase tracking-[0.35em] text-silver-100">
+                <div className="font-sans text-sm sm:text-base md:text-lg font-bold uppercase tracking-[0.35em] text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                   Hyderabad's Premier Football Academy
                 </div>
                 <h1 className="headline mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-silver-100 leading-[0.95]">
@@ -98,7 +98,7 @@ export default async function HomePage() {
               Read Our Story <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden border border-ink-500">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-ink-500">
             <Image
               src="/images/home_more_than_training.webp"
               alt="Norvex Sports training session"
@@ -248,7 +248,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {team.map((p) => (
               <div key={p.id} className="text-center">
-                <div className="relative aspect-[4/5] overflow-hidden bg-ink-700 border border-ink-500 mb-4">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-ink-700 border border-ink-500 mb-4">
                   {p.imageUrl ? (
                     <Image
                       src={p.imageUrl}
@@ -279,7 +279,7 @@ export default async function HomePage() {
         {gallery.length === 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-square border border-ink-500 bg-ink-800 grid place-items-center font-sans text-[11px] uppercase tracking-[0.2em] text-silver-600">
+              <div key={i} className="aspect-square rounded-xl border border-ink-500 bg-ink-800 grid place-items-center font-sans text-[11px] uppercase tracking-[0.2em] text-silver-600">
                 Coming soon
               </div>
             ))}
@@ -287,7 +287,7 @@ export default async function HomePage() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {gallery.map((g) => (
-              <div key={g.id} className="relative aspect-square overflow-hidden border border-ink-500 bg-ink-800">
+              <div key={g.id} className="relative aspect-square overflow-hidden rounded-xl border border-ink-500 bg-ink-800">
                 <Image
                   src={g.imageUrl}
                   alt={g.title ?? 'Norvex Sports gallery'}

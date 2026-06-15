@@ -6,11 +6,11 @@
   --bg: #0d0d0d;
   --bg-soft: #141414;
   --bg-surface: #1c1c1c;
-  --text: #b8b8b8;
-  --text-dim: #808080;
+  --text: #dcdcdc;
+  --text-dim: #a8a8a8;
   --brand: #7c0000;
   --brand-strong: #a30000;
-  --silver: #b8b8b8;
+  --silver: #dcdcdc;
   --line: #2e2e2e;
 }
 
@@ -81,11 +81,11 @@ a {
 
 /* Cards */
 .card {
-  @apply border border-ink-500 bg-ink-700 p-6 shadow-card transition;
+  @apply border border-ink-500 bg-ink-700 p-6 rounded-xl shadow-card transition;
 }
 
 .card-accent {
-  @apply border border-ink-500 border-t-[3px] border-t-brand-600 bg-ink-700 p-6 shadow-card transition hover:border-t-brand-500;
+  @apply border border-ink-500 border-t-[3px] border-t-brand-600 bg-ink-700 p-6 rounded-xl shadow-card transition hover:border-t-brand-500;
 }
 
 /* Typography */

@@ -30,10 +30,10 @@ const DEFAULTS: SiteContent = {
     'At Norvex Sports, our project is to create a structured and professional environment where athletes can develop their skills, confidence, and overall performance.',
   contact: {
     phone: '+91 80899 20562',
-    email: 'support@norvexsports.in',
+    email: 'admin@norvexsports.in',
     whatsapp: '918089920562',
     location: 'Hyderabad, Telangana, India',
-    careersEmail: 'careers@norvexsports.in',
+    careersEmail: 'hr@norvexsports.in',
   },
   social: {
     instagram: 'https://www.instagram.com/norvexsports?igsh=MXVtOXEwdmFwb3B2YQ==',

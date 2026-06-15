@@ -76,7 +76,7 @@ export default async function NewsDetail({ params }: Params) {
       <Section>
         <article className="mx-auto max-w-3xl">
           {post.imageUrl && (
-            <div className="relative aspect-[16/9] mb-8 overflow-hidden border border-ink-500">
+            <div className="relative aspect-[16/9] mb-8 overflow-hidden rounded-xl border border-ink-500">
               <Image src={post.imageUrl} alt={post.title} fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
             </div>
           )}
