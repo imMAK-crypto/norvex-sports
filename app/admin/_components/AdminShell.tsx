@@ -126,7 +126,7 @@ export function AdminShell({
   }, [menuOpen, sheetOpen]);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', maxWidth: '100vw', overflowX: 'clip' }}>
       {/* ---------- ICON RAIL ---------- */}
       <aside
         className="hidden md:flex"
@@ -214,21 +214,22 @@ export function AdminShell({
       </aside>
 
       {/* ---------- MAIN ---------- */}
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, minWidth: 0, maxWidth: '100%', overflowX: 'clip', display: 'flex', flexDirection: 'column' }}>
         {/* topbar */}
         <header
+          className="cms-topbar"
           style={{
             height: 62, flex: 'none', borderBottom: '1px solid var(--line)', display: 'flex',
-            alignItems: 'center', gap: 16, padding: '0 18px', background: 'var(--canvas)',
+            alignItems: 'center', background: 'var(--canvas)', minWidth: 0,
             position: 'sticky', top: 0, zIndex: 20,
           }}
         >
           <Link href="/admin" aria-label="Norvex Admin" style={{ display: 'flex', alignItems: 'center', flex: 'none' }} className="cms-lift">
-            <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ height: 30, width: 'auto' }} />
+            <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ height: 28, width: 'auto' }} />
           </Link>
-          <span className="mono hidden sm:inline" style={{ fontSize: 11, color: 'var(--t5)' }}>CMS /</span>
-          <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--t1)' }}>{title}</span>
-          <div style={{ flex: 1 }} />
+          <span className="mono hidden sm:inline" style={{ fontSize: 11, color: 'var(--t5)', flex: 'none' }}>CMS /</span>
+          <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--t1)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</span>
+          <div style={{ flex: 1, minWidth: 8 }} />
           <div
             className="hidden lg:flex"
             style={{
@@ -238,13 +239,17 @@ export function AdminShell({
           >
             <span className="mono">⌕</span> Search content…
           </div>
-          <Link href="/" target="_blank" className="cms-btn cms-btn-ghost" style={{ height: 36 }}>
+          <Link href="/" target="_blank" className="cms-btn cms-btn-ghost hidden sm:inline-flex" style={{ height: 36 }}>
             View site <span style={{ color: 'var(--t4)' }}>↗</span>
           </Link>
-          <div
+          <Link
+            href="/admin/contacts"
+            aria-label={`${unread} unread enquiries`}
+            className="cms-lift"
             style={{
               width: 36, height: 36, border: '1px solid var(--line-2)', borderRadius: 9, display: 'flex',
               alignItems: 'center', justifyContent: 'center', fontSize: 13, color: 'var(--t3)', position: 'relative',
+              flex: 'none', textDecoration: 'none',
             }}
             title={`${unread} unread enquiries`}
           >
@@ -255,8 +260,8 @@ export function AdminShell({
                 style={{ position: 'absolute', top: -3, right: -3, width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }}
               />
             )}
-          </div>
-          <div style={{ position: 'relative', paddingLeft: 8, borderLeft: '1px solid var(--line)' }}>
+          </Link>
+          <div style={{ position: 'relative', paddingLeft: 8, borderLeft: '1px solid var(--line)', flex: 'none' }}>
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
@@ -327,7 +332,7 @@ export function AdminShell({
         </header>
 
         {/* scroll area */}
-        <main key={path} className="cms-fade" style={{ flex: 1, overflowY: 'auto', padding: '22px 18px 96px' }}>
+        <main key={path} className="cms-fade" style={{ flex: 1, overflowY: 'auto', overflowX: 'clip', minWidth: 0, padding: '22px 18px 96px' }}>
           {children}
         </main>
       </div>
