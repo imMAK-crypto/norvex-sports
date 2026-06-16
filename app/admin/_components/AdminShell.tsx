@@ -131,7 +131,7 @@ export function AdminShell({
       <aside
         className="hidden md:flex"
         style={{
-          width: 78,
+          width: 96,
           flex: 'none',
           flexDirection: 'column',
           alignItems: 'center',
@@ -149,11 +149,11 @@ export function AdminShell({
           aria-label="Norvex Admin — dashboard"
           className="cms-pop cms-lift"
           style={{
-            width: 72, height: 54, borderRadius: 14, display: 'flex', alignItems: 'center',
+            width: 88, height: 64, borderRadius: 14, display: 'flex', alignItems: 'center',
             justifyContent: 'center', flex: 'none', textDecoration: 'none', padding: 2,
           }}
         >
-          <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ width: 68, height: 'auto' }} />
+          <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ width: 84, height: 'auto' }} />
         </Link>
         <Link
           href="/admin/events/new"
@@ -223,6 +223,9 @@ export function AdminShell({
             position: 'sticky', top: 0, zIndex: 20,
           }}
         >
+          <Link href="/admin" aria-label="Norvex Admin" style={{ display: 'flex', alignItems: 'center', flex: 'none' }} className="cms-lift">
+            <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ height: 30, width: 'auto' }} />
+          </Link>
           <span className="mono hidden sm:inline" style={{ fontSize: 11, color: 'var(--t5)' }}>CMS /</span>
           <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--t1)' }}>{title}</span>
           <div style={{ flex: 1 }} />
@@ -331,7 +334,7 @@ export function AdminShell({
 
       {/* glass flyout label for the icon rail (desktop hover/focus) */}
       {tip && (
-        <div className="cms-railtip" style={{ left: 84, top: tip.y }}>
+        <div className="cms-railtip" style={{ left: 102, top: tip.y }}>
           {tip.label}
         </div>
       )}

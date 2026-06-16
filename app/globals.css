@@ -379,3 +379,31 @@ textarea.cms-field { resize: vertical; line-height: 1.5; }
   display: flex; align-items: center; justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.08); color: var(--t3); font-size: 13px;
 }
+
+/* ================== LEGACY ADMIN PAGES → GLASS + CURVED ================== *
+ * The Events / News / Team / Gallery / Site-content pages still use the old
+ * .admin-card / .input / .btn-* classes. Scope glass + rounded corners to them
+ * inside the CMS so every admin page matches the dashboard — no rewrites needed. */
+.cms .admin-card {
+  background: rgba(28, 30, 34, 0.55) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 30px -18px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+.cms .input,
+.cms .input[type='url'],
+.cms textarea.input,
+.cms select.input {
+  border-radius: 10px !important;
+  background: rgba(12, 13, 15, 0.5) !important;
+  border-color: var(--line-3) !important;
+  color: var(--t2) !important;
+}
+.cms .input:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 3px var(--accent-soft) !important; }
+.cms .btn-primary, .cms .btn-outline, .cms .btn-silver, .cms .btn-ghost { border-radius: 10px !important; }
+.cms .card, .cms .card-accent { border-radius: 14px !important; }
+/* soft hover on legacy list rows */
+.cms .admin-card li { transition: background 0.14s ease; }
+.cms .admin-card li:hover { background: rgba(255, 255, 255, 0.03); }
