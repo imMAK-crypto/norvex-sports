@@ -29,12 +29,12 @@ export default async function TeamPage() {
         {team.length === 0 ? (
           <p className="text-center text-silver-400">Team profiles coming soon.</p>
         ) : (
-          <div className="grid gap-6 max-sm:grid-cols-2 max-sm:gap-4 md:grid-cols-2 md:items-start">
+          <div className="grid gap-6 max-sm:grid-cols-2 max-sm:gap-4 md:grid-cols-2 md:auto-rows-fr">
             {team.map((m) => (
-              <article key={m.id} className="rounded-xl border border-ink-500 bg-ink-800 overflow-hidden">
+              <article key={m.id} className="rounded-xl border border-ink-500 bg-ink-800 overflow-hidden md:flex md:flex-col">
                 {/* Phone (max-sm): compact vertical card — photo → name → role.
                     sm / md / lg (tablet + PC): original horizontal detail card, unchanged. */}
-                <div className="grid grid-cols-[160px_1fr] sm:grid-cols-[200px_1fr] max-sm:flex max-sm:flex-col">
+                <div className="grid grid-cols-[160px_1fr] sm:grid-cols-[200px_1fr] max-sm:flex max-sm:flex-col md:flex-1">
                   <div className="relative max-sm:aspect-[4/5] bg-ink-700">
                     {m.imageUrl ? (
                       <Image src={m.imageUrl} alt={m.name} fill sizes="(max-width: 639px) 50vw, 200px" className="object-cover" />
