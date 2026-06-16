@@ -106,21 +106,24 @@ export function AdminShell({
   unread: number;
 }) {
   const path = usePathname() || '/admin';
-  const [, setMobileOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [tip, setTip] = useState<{ label: string; y: number } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const title = TITLES.find(([h]) => isActive(h, path))?.[1] ?? 'CMS';
   const initial = (user.name || user.email).charAt(0).toUpperCase();
   const tipFns: TipFns = { onShow: (label, y) => setTip({ label, y }), onHide: () => setTip(null) };
 
-  // Close the avatar menu on route change or Escape.
-  useEffect(() => setMenuOpen(false), [path]);
+  // Full nav list for the mobile sheet — quick add, every section, through Settings.
+  const SHEET_NAV: NavItem[] = [{ href: '/admin/events/new', letter: '+', label: 'New event' }, ...GROUPS.flat(), ...BOTTOM];
+
+  // Close menus/sheets on route change or Escape.
+  useEffect(() => { setMenuOpen(false); setSheetOpen(false); }, [path]);
   useEffect(() => {
-    if (!menuOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
+    if (!menuOpen && !sheetOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setMenuOpen(false); setSheetOpen(false); } };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [menuOpen]);
+  }, [menuOpen, sheetOpen]);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -146,11 +149,11 @@ export function AdminShell({
           aria-label="Norvex Admin — dashboard"
           className="cms-pop cms-lift"
           style={{
-            width: 60, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', flex: 'none', textDecoration: 'none', padding: 4,
+            width: 72, height: 54, borderRadius: 14, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', flex: 'none', textDecoration: 'none', padding: 2,
           }}
         >
-          <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ width: 52, height: 'auto' }} />
+          <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ width: 68, height: 'auto' }} />
         </Link>
         <Link
           href="/admin/events/new"
@@ -335,13 +338,12 @@ export function AdminShell({
 
       {/* ---------- MOBILE BOTTOM TAB BAR ---------- */}
       <nav
-        className="flex md:hidden"
+        className="flex md:hidden cms-glass"
         style={{
           position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 40,
           alignItems: 'center', justifyContent: 'space-around', padding: '10px 18px 22px',
-          borderTop: '1px solid #1f2226', background: 'var(--panel-2)',
+          borderTop: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px 20px 0 0',
         }}
-        onClick={() => setMobileOpen(false)}
       >
         {[
           { href: '/admin', letter: '▦' },
@@ -349,16 +351,18 @@ export function AdminShell({
         ].map((i) => (
           <RailIcon key={i.href} item={{ ...i, label: '' }} path={path} />
         ))}
-        <Link
-          href="/admin/events/new"
+        <button
+          type="button"
+          onClick={() => setSheetOpen(true)}
+          aria-label="Open menu"
           style={{
             width: 50, height: 50, borderRadius: 16, background: 'var(--lime)', color: '#1a1c10',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26,
-            boxShadow: '0 6px 16px rgba(200,232,90,.22)', textDecoration: 'none',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 700,
+            boxShadow: '0 6px 16px rgba(200,232,90,.22)', border: 'none', cursor: 'pointer',
           }}
         >
-          +
-        </Link>
+          ☰
+        </button>
         {[
           { href: '/admin/media', letter: '◫' },
           { href: '/admin/settings', letter: '⚙' },
@@ -366,6 +370,47 @@ export function AdminShell({
           <RailIcon key={i.href} item={{ ...i, label: '' }} path={path} />
         ))}
       </nav>
+
+      {/* ---------- MOBILE GLASS MENU SHEET ---------- */}
+      {sheetOpen && (
+        <div className="md:hidden">
+          <button
+            aria-label="Close menu"
+            onClick={() => setSheetOpen(false)}
+            className="cms-sheet-backdrop"
+            style={{ position: 'fixed', inset: 0, zIndex: 47, background: 'rgba(8,9,10,.55)', border: 'none', cursor: 'default' }}
+          />
+          <div
+            role="menu"
+            className="cms-sheet cms-glass"
+            style={{
+              position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 48, maxHeight: '58vh',
+              borderRadius: '22px 22px 0 0', padding: '10px 16px calc(20px + env(safe-area-inset-bottom))',
+              display: 'flex', flexDirection: 'column', gap: 12,
+            }}
+          >
+            <div style={{ width: 40, height: 4, borderRadius: 4, background: 'rgba(255,255,255,.18)', margin: '2px auto 4px' }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--t1)' }}>Menu</span>
+              <button type="button" onClick={() => setSheetOpen(false)} aria-label="Close" style={{ width: 30, height: 30, borderRadius: 8, border: '1px solid var(--line-2)', background: 'none', color: 'var(--t3)', cursor: 'pointer' }}>✕</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, overflowY: 'auto', paddingBottom: 4 }}>
+              {SHEET_NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setSheetOpen(false)}
+                  className="cms-sheet-item mono"
+                  data-on={isActive(item.href, path)}
+                >
+                  <span className="glyph">{item.letter}</span>
+                  <span style={{ fontFamily: 'var(--font-grotesk), sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

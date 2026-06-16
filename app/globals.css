@@ -185,15 +185,18 @@ a {
 
 /* ---- surfaces ---- */
 .cms-panel {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  background: rgba(28, 30, 34, 0.55);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px -18px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 .cms-field {
   width: 100%;
-  background: var(--panel-2);
+  background: rgba(12, 13, 15, 0.5);
   border: 1px solid var(--line-3);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--t2);
   font-size: 13px;
   padding: 9px 12px;
@@ -280,7 +283,7 @@ textarea.cms-field { resize: vertical; line-height: 1.5; }
 .cms-nav-item:hover { transform: scale(1.08); }
 
 @media (prefers-reduced-motion: reduce) {
-  .cms-rise, .cms-fade, .cms-pop, .cms-slide-in, .cms-slide-left, .cms-stagger > *, .cms-railtip { animation: none !important; }
+  .cms-rise, .cms-fade, .cms-pop, .cms-slide-in, .cms-slide-left, .cms-stagger > *, .cms-railtip, .cms-sheet, .cms-sheet-backdrop { animation: none !important; }
 }
 
 /* responsive: collapse 2-col CMS grids to single column on small screens */
@@ -355,3 +358,24 @@ textarea.cms-field { resize: vertical; line-height: 1.5; }
 }
 .cms-menu-item:hover { background: rgba(255, 255, 255, 0.06); color: var(--t1); }
 .cms-menu-item .ico { width: 18px; text-align: center; color: var(--t4); flex: none; }
+
+/* ================== MOBILE GLASS BOTTOM-SHEET MENU ================== */
+@keyframes cmsSheetUp { 0% { transform: translateY(100%); } 100% { transform: translateY(0); } }
+@keyframes cmsBackdropIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+.cms-sheet { animation: cmsSheetUp 0.34s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.cms-sheet-backdrop { animation: cmsBackdropIn 0.25s ease-out both; }
+.cms-sheet-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 12px 13px; border-radius: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--t2); text-decoration: none; font-size: 13px;
+  transition: background 0.14s ease, border-color 0.14s ease, transform 0.12s ease;
+}
+.cms-sheet-item:active { transform: scale(0.97); }
+.cms-sheet-item[data-on='true'] { border-color: var(--accent); background: var(--accent-soft); color: var(--t1); }
+.cms-sheet-item .glyph {
+  width: 30px; height: 30px; flex: none; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08); color: var(--t3); font-size: 13px;
+}
