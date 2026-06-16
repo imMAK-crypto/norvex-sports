@@ -1,6 +1,22 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { AdminSidebar } from './_components/AdminSidebar';
+import { Space_Grotesk, Space_Mono } from 'next/font/google';
+import { getSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { safeQuery } from '@/lib/prisma';
+import { AdminShell } from './_components/AdminShell';
+
+const grotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-grotesk',
+  display: 'swap',
+});
+const mono = Space_Mono({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-mono',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: { default: 'Admin · Norvex', template: '%s · Norvex Admin' },
@@ -9,23 +25,31 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="admin-shell">
-      <div className="flex min-h-screen">
-        <AdminSidebar />
-        <div className="flex-1 min-w-0">
-          <header className="sticky top-0 z-30 border-b border-white/10 bg-ink-950/80 backdrop-blur">
-            <div className="flex h-14 items-center justify-between px-4 lg:px-8">
-              <Link href="/admin" className="font-display text-lg">Norvex Admin</Link>
-              <form action="/api/admin/logout" method="POST">
-                <button type="submit" className="text-xs text-silver-100/60 hover:text-silver-100">Sign out</button>
-              </form>
-            </div>
-          </header>
-          <main className="p-4 lg:p-8">{children}</main>
-        </div>
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const session = await getSession();
+
+  // Login screen (and any unauthenticated state) renders bare inside the CMS theme.
+  if (!session) {
+    return (
+      <div className={`cms ${grotesk.variable} ${mono.variable}`} style={{ minHeight: '100vh' }}>
+        {children}
       </div>
+    );
+  }
+
+  const unread = await safeQuery(
+    () => prisma.contactSubmission.count({ where: { isRead: false } }),
+    0,
+  );
+
+  return (
+    <div className={`cms ${grotesk.variable} ${mono.variable}`}>
+      <AdminShell
+        user={{ email: session.email, name: 'Admin', role: 'owner' }}
+        unread={unread}
+      >
+        {children}
+      </AdminShell>
     </div>
   );
 }

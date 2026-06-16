@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Shield, Activity, Award, Users, Heart } from 'lucide-react';
-import { getSiteContent } from '@/lib/settings';
+import { getSiteContent, getSettings } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 
@@ -42,14 +42,17 @@ const VALUES = [
 ];
 
 export default async function NorvexProjectPage() {
-  const c = await getSiteContent();
+  const [c, s] = await Promise.all([
+    getSiteContent(),
+    getSettings(['norvex.eyebrow', 'norvex.title', 'norvex.intro']),
+  ]);
 
   return (
     <>
       <PageHeader
-        eyebrow="Our vision"
-        title="The Norvex Project"
-        intro="A structured, professional environment where athletes can develop their skills, confidence and overall performance."
+        eyebrow={s['norvex.eyebrow']}
+        title={s['norvex.title']}
+        intro={s['norvex.intro']}
       />
 
       <Section>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Phone, Mail, MapPin, MessageCircle, Clock } from 'lucide-react';
-import { getSiteContent } from '@/lib/settings';
+import { getSiteContent, getSettings } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { ContactForm } from '@/components/ContactForm';
@@ -11,15 +11,18 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const c = await getSiteContent();
+  const [c, s] = await Promise.all([
+    getSiteContent(),
+    getSettings(['contact.eyebrow', 'contact.title', 'contact.intro', 'contact.responseTime']),
+  ]);
   const phoneTel = c.contact.phone.replace(/\s/g, '');
 
   return (
     <>
       <PageHeader
-        eyebrow="Contact us"
-        title="Start your football journey."
-        intro="Free trial available. Drop us a line and our team will get back to you within one working day."
+        eyebrow={s['contact.eyebrow']}
+        title={s['contact.title']}
+        intro={s['contact.intro']}
       />
 
       <Section id="trial">
@@ -74,7 +77,7 @@ export default async function ContactPage() {
               <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Clock className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Response Time</p>
-                <p className="font-display text-xl uppercase tracking-wide text-silver-100">Within 24 hours</p>
+                <p className="font-display text-xl uppercase tracking-wide text-silver-100">{s['contact.responseTime']}</p>
               </div>
             </div>
           </aside>

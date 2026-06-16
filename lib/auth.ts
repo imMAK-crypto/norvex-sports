@@ -3,9 +3,23 @@ import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
 
-const SECRET = new TextEncoder().encode(
-  process.env.SESSION_SECRET ?? 'dev-secret-change-me-min-32-chars-long-please',
-);
+/**
+ * Resolve the session signing secret. Fail-closed: in production we refuse to
+ * fall back to a known string, otherwise anyone could forge an admin JWT. A
+ * dev-only fallback keeps local setup friction-free.
+ */
+function resolveSecret(): Uint8Array {
+  const s = process.env.SESSION_SECRET;
+  if (!s || s.length < 32) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('SESSION_SECRET must be set to a random string of at least 32 characters in production.');
+    }
+    return new TextEncoder().encode('dev-secret-change-me-min-32-chars-long-please');
+  }
+  return new TextEncoder().encode(s);
+}
+
+const SECRET = resolveSecret();
 
 const COOKIE_NAME = 'norvex_session';
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -58,8 +72,12 @@ export async function clearSessionCookie() {
   cookies().set(COOKIE_NAME, '', { path: '/', maxAge: 0 });
 }
 
-export async function validateLogin(email: string, password: string) {
-  const user = await prisma.adminUser.findUnique({ where: { email: email.toLowerCase().trim() } });
+export async function validateLogin(identifier: string, password: string) {
+  const id = identifier.toLowerCase().trim();
+  // Accept either the username (e.g. "norvex") or the email address.
+  const user = await prisma.adminUser.findFirst({
+    where: { OR: [{ email: id }, { username: id }] },
+  });
   if (!user) return null;
   const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) return null;

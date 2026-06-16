@@ -146,3 +146,148 @@ a {
 .glow-red {
   text-shadow: none;
 }
+
+/* ================================================================== *
+ *  NORVEX CMS — admin dashboard design system (scoped to .cms)
+ *  Palette + type taken from the Claude Design handoff wireframe.
+ * ================================================================== */
+.cms {
+  --accent: #e23b40;
+  --accent-strong: #f0565a;
+  --accent-soft: rgba(226, 59, 64, 0.12);
+  --lime: #c8e85a;
+  --canvas: #141517;
+  --panel: #1c1e21;
+  --panel-2: #16181b;
+  --line: #24272b;
+  --line-2: #2a2d31;
+  --line-3: #2f3338;
+  --t1: #eceef0;
+  --t2: #c8ccd2;
+  --t3: #9a9fa6;
+  --t4: #7c8088;
+  --t5: #565a60;
+
+  background: var(--canvas);
+  color: var(--t2);
+  font-family: var(--font-grotesk), 'Space Grotesk', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cms .mono { font-family: var(--font-mono), 'Space Mono', ui-monospace, monospace; }
+
+/* scrollbars */
+.cms ::-webkit-scrollbar { width: 10px; height: 10px; }
+.cms ::-webkit-scrollbar-thumb { background: #2e3237; border-radius: 6px; }
+.cms ::-webkit-scrollbar-track { background: transparent; }
+.cms .rail-scroll::-webkit-scrollbar { width: 0; height: 0; display: none; }
+.cms .rail-scroll { scrollbar-width: none; }
+
+/* ---- surfaces ---- */
+.cms-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.cms-field {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--line-3);
+  border-radius: 8px;
+  color: var(--t2);
+  font-size: 13px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  font-family: inherit;
+}
+.cms-field::placeholder { color: var(--t5); }
+.cms-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+textarea.cms-field { resize: vertical; line-height: 1.5; }
+
+.cms-label {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--t4);
+  font-family: var(--font-mono), 'Space Mono', monospace;
+}
+
+/* ---- buttons ---- */
+.cms-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  height: 38px; padding: 0 16px; border-radius: 9px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1px solid transparent; transition: transform 0.12s ease, filter 0.15s ease, background 0.15s ease;
+  font-family: inherit; white-space: nowrap;
+}
+.cms-btn:active { transform: scale(0.97); }
+.cms-btn-primary { background: var(--accent); color: #fff; }
+.cms-btn-primary:hover { filter: brightness(1.08); }
+.cms-btn-ghost { background: transparent; border-color: var(--line-2); color: var(--t2); }
+.cms-btn-ghost:hover { border-color: var(--accent); color: #fff; }
+.cms-btn-danger { background: transparent; border-color: #3a2326; color: var(--accent); }
+.cms-btn-danger:hover { background: var(--accent-soft); }
+
+/* ---- toggle switch ---- */
+.cms-switch {
+  width: 40px; height: 22px; border-radius: 11px; position: relative; flex: none;
+  background: #3a3f45; cursor: pointer; transition: background 0.2s ease; border: none; padding: 0;
+}
+.cms-switch[data-on='true'] { background: var(--accent); }
+.cms-switch span {
+  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+  border-radius: 50%; background: #9a9fa6; transition: transform 0.2s ease, background 0.2s ease;
+}
+.cms-switch[data-on='true'] span { transform: translateX(18px); background: #fff; }
+
+/* ---- chips / badges ---- */
+.cms-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 12px; border-radius: 20px;
+  border: 1px solid var(--line-2); background: var(--panel-2);
+  font-size: 12px; color: var(--t2);
+}
+.cms-badge {
+  font-size: 10px; color: var(--accent); background: var(--accent-soft);
+  border-radius: 20px; padding: 3px 9px;
+  font-family: var(--font-mono), 'Space Mono', monospace;
+}
+
+/* ================== ANIMATIONS (slide / pop / fade) ================== */
+@keyframes cmsRise { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes cmsFade { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes cmsPop { 0% { opacity: 0; transform: scale(0.92); } 60% { transform: scale(1.02); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes cmsSlideIn { 0% { opacity: 0; transform: translateX(20px); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes cmsSlideLeft { 0% { opacity: 0; transform: translateX(-16px); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes cmsPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.cms-rise { animation: cmsRise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.cms-fade { animation: cmsFade 0.4s ease-out both; }
+.cms-pop { animation: cmsPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.cms-slide-in { animation: cmsSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.cms-slide-left { animation: cmsSlideLeft 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.cms-pulse { animation: cmsPulse 1.6s ease-in-out infinite; }
+
+/* staggered children — set --i on each child */
+.cms-stagger > * { animation: cmsRise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i, 0) * 60ms); }
+
+/* interactive lift */
+.cms-lift { transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease; }
+.cms-lift:hover { transform: translateY(-3px); border-color: var(--line-2); box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.7); }
+
+.cms-nav-item { transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, border-radius 0.25s ease; }
+.cms-nav-item:hover { transform: scale(1.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cms-rise, .cms-fade, .cms-pop, .cms-slide-in, .cms-slide-left, .cms-stagger > * { animation: none !important; }
+}
+
+/* responsive: collapse 2-col CMS grids to single column on small screens */
+@media (max-width: 860px) {
+  .cms-grid-collapse { grid-template-columns: 1fr !important; }
+}
+
+/* peer toggle helper used by ToggleField (Tailwind peer-checked targets sibling) */
+.cms input.peer:checked + span { background: var(--accent) !important; }
+.cms input.peer:checked + span > span { transform: translateX(18px); background: #fff !important; }

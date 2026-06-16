@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { MapPin, Phone, Mail } from 'lucide-react';
-import { getSiteContent } from '@/lib/settings';
+import { getSiteContent, getSettings } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 
@@ -11,13 +11,19 @@ export const metadata: Metadata = {
 };
 
 export default async function LocationPage() {
-  const c = await getSiteContent();
+  const [c, s] = await Promise.all([
+    getSiteContent(),
+    getSettings([
+      'location.eyebrow', 'location.title', 'location.intro',
+      'location.mapEmbed', 'location.outroTitle', 'location.outro',
+    ]),
+  ]);
   return (
     <>
       <PageHeader
-        eyebrow="Our location"
-        title="Built in Hyderabad."
-        intro="Currently based in Hyderabad, Telangana — building a strong football development ecosystem. As we grow, we plan to expand to multiple locations and cities."
+        eyebrow={s['location.eyebrow']}
+        title={s['location.title']}
+        intro={s['location.intro']}
       />
 
       <Section>
@@ -50,7 +56,7 @@ export default async function LocationPage() {
           <div className="overflow-hidden rounded-xl border border-ink-500 min-h-[400px]">
             <iframe
               title="Norvex Sports — Hyderabad"
-              src="https://www.google.com/maps?q=Hyderabad,Telangana&output=embed"
+              src={s['location.mapEmbed']}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="h-full w-full"
@@ -59,10 +65,9 @@ export default async function LocationPage() {
         </div>
       </Section>
 
-      <Section eyebrow="What's next" title="Expanding outward." className="bg-ink-900 border-y border-ink-500" align="center">
+      <Section eyebrow="What's next" title={s['location.outroTitle']} className="bg-ink-900 border-y border-ink-500" align="center">
         <div className="mx-auto max-w-2xl text-center text-silver-300">
-          As we grow, we plan to expand our presence to multiple locations and cities — bringing structured sports
-          development programs to a wider community of athletes across India.
+          {s['location.outro']}
         </div>
       </Section>
     </>

@@ -1,74 +1,141 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
+import { prisma, safeQuery } from '@/lib/prisma';
+import { PageHead, Panel, EmptyState } from './_components/ui';
+
+export const dynamic = 'force-dynamic';
+
+const fmtDate = (d: Date) => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
 
 export default async function AdminDashboard() {
-  const [services, events, news, gallery, team, contacts, unread] = await Promise.all([
-    prisma.service.count(),
-    prisma.event.count(),
-    prisma.newsPost.count(),
-    prisma.galleryItem.count(),
-    prisma.teamMember.count(),
-    prisma.contactSubmission.count(),
-    prisma.contactSubmission.count({ where: { isRead: false } }),
+  const [services, events, news, gallery, team, enquiries, unread, media, jobs] = await Promise.all([
+    safeQuery(() => prisma.service.count(), 0),
+    safeQuery(() => prisma.event.count(), 0),
+    safeQuery(() => prisma.newsPost.count(), 0),
+    safeQuery(() => prisma.galleryItem.count(), 0),
+    safeQuery(() => prisma.teamMember.count(), 0),
+    safeQuery(() => prisma.contactSubmission.count(), 0),
+    safeQuery(() => prisma.contactSubmission.count({ where: { isRead: false } }), 0),
+    safeQuery(() => prisma.mediaAsset.count(), 0),
+    safeQuery(() => prisma.jobPosting.count(), 0),
   ]);
 
-  const recentContacts = await prisma.contactSubmission.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 5,
-  });
+  const [recentEnq, recentMedia] = await Promise.all([
+    safeQuery(() => prisma.contactSubmission.findMany({ orderBy: { createdAt: 'desc' }, take: 5 }), []),
+    safeQuery(() => prisma.mediaAsset.findMany({ orderBy: { createdAt: 'desc' }, take: 6 }), []),
+  ]);
 
-  const stats: Array<{ label: string; n: number; href: string }> = [
-    { label: 'Services', n: services, href: '/admin/services' },
-    { label: 'Events', n: events, href: '/admin/events' },
-    { label: 'News posts', n: news, href: '/admin/news' },
-    { label: 'Gallery items', n: gallery, href: '/admin/gallery' },
-    { label: 'Team members', n: team, href: '/admin/team' },
-    { label: 'Enquiries', n: contacts, href: '/admin/contacts' },
+  const stats: Array<{ label: string; num: number; href: string; badge?: number }> = [
+    { label: 'Services', num: services, href: '/admin/services' },
+    { label: 'Events', num: events, href: '/admin/events' },
+    { label: 'News Posts', num: news, href: '/admin/news' },
+    { label: 'Gallery Items', num: gallery, href: '/admin/gallery' },
+    { label: 'Team Members', num: team, href: '/admin/team' },
+    { label: 'Enquiries', num: enquiries, href: '/admin/contacts', badge: unread },
+    { label: 'Media Assets', num: media, href: '/admin/media' },
+    { label: 'Job Postings', num: jobs, href: '/admin/pages/careers' },
+  ];
+
+  const quickActions = [
+    { label: 'Edit Home hero image', href: '/admin/pages/home' },
+    { label: 'Add new Event', href: '/admin/events/new' },
+    { label: 'Upload to Gallery', href: '/admin/gallery' },
+    { label: 'Write News post', href: '/admin/news/new' },
+    { label: 'Open Media Library', href: '/admin/media' },
   ];
 
   return (
-    <div className="space-y-8">
-      <header className="flex items-end justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="font-display text-3xl">Dashboard</h1>
-          <p className="text-sm text-silver-100/60 mt-1">
-            {unread > 0 ? `${unread} unread enquiry${unread > 1 ? 'ies' : 'y'}` : 'All caught up.'}
-          </p>
-        </div>
-      </header>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 22, maxWidth: 1180 }}>
+      <PageHead
+        crumb="OVERVIEW / DASHBOARD"
+        title="Dashboard"
+        subtitle="Content overview for norvexsports.in"
+        actions={<Link href="/admin/events/new" className="cms-btn cms-btn-primary">+ Quick add</Link>}
+      />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((s) => (
-          <Link key={s.label} href={s.href} className="admin-card hover:border-brand-500/50 transition">
-            <p className="text-xs uppercase tracking-wider text-silver-100/50">{s.label}</p>
-            <p className="mt-2 font-display text-4xl text-brand-400">{s.n}</p>
+      {/* stat cards */}
+      <div className="cms-stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 14 }}>
+        {stats.map((s, i) => (
+          <Link
+            key={s.label}
+            href={s.href}
+            className="cms-panel cms-lift"
+            style={{ ['--i' as string]: i, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 9, textDecoration: 'none' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span className="mono" style={{ fontSize: 11, color: 'var(--t4)' }}>{s.label}</span>
+              <span style={{ width: 22, height: 22, border: '1px solid #3a3f45', borderRadius: 6 }} />
+            </div>
+            <span style={{ fontSize: 30, fontWeight: 700, color: 'var(--t1)', lineHeight: 1 }}>{s.num}</span>
+            {s.badge ? (
+              <span className="cms-badge" style={{ alignSelf: 'flex-start' }}>{s.badge} new</span>
+            ) : (
+              <span style={{ height: 18 }} />
+            )}
           </Link>
         ))}
       </div>
 
-      <section>
-        <h2 className="font-display text-xl mb-4">Recent enquiries</h2>
-        <div className="admin-card p-0 overflow-hidden">
-          {recentContacts.length === 0 ? (
-            <p className="p-6 text-sm text-silver-100/50">No enquiries yet.</p>
-          ) : (
-            <ul>
-              {recentContacts.map((c) => (
-                <li key={c.id} className="flex items-center justify-between border-b border-white/5 px-4 py-3 last:border-0">
-                  <div>
-                    <p className="text-sm font-medium">{c.name} <span className="text-silver-100/40">· {c.phone}</span></p>
-                    <p className="text-xs text-silver-100/50">{c.program ?? 'General'} — {c.createdAt.toLocaleString('en-IN')}</p>
-                  </div>
-                  {!c.isRead && <span className="rounded-full bg-brand-500/20 px-2 py-0.5 text-xs text-brand-300">new</span>}
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="border-t border-white/10 p-3 text-right">
-            <Link href="/admin/contacts" className="text-xs text-brand-400 hover:underline">View all →</Link>
+      {/* recent enquiries + quick actions */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.6fr) minmax(0, 1fr)', gap: 18 }} className="cms-grid-collapse">
+        <Panel i={0} style={{ padding: 0, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 18px', borderBottom: '1px solid var(--line)' }}>
+            <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--t1)' }}>Recent enquiries</span>
+            <Link href="/admin/contacts" style={{ fontSize: 12, color: 'var(--accent)' }}>View all →</Link>
           </div>
+          {recentEnq.length === 0 ? (
+            <EmptyState>No enquiries yet.</EmptyState>
+          ) : (
+            recentEnq.map((e) => (
+              <div key={e.id} style={{ display: 'grid', gridTemplateColumns: '14px 1fr auto', gap: 12, alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid #1e2125' }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: e.isRead ? '#3a3f45' : 'var(--accent)' }} />
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 13, color: 'var(--t2)' }}>{e.name}</div>
+                  <div style={{ fontSize: 12, color: 'var(--t4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.program ?? 'General'}</div>
+                </div>
+                <span className="mono" style={{ fontSize: 11, color: 'var(--t5)', textAlign: 'right' }}>{fmtDate(e.createdAt)}</span>
+              </div>
+            ))
+          )}
+        </Panel>
+
+        <Panel i={1}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--t1)' }}>Quick actions</span>
+          {quickActions.map((q) => (
+            <Link
+              key={q.label}
+              href={q.href}
+              className="cms-lift"
+              style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '10px 12px', border: '1px solid var(--line-2)', borderRadius: 9, fontSize: 13, color: 'var(--t2)', textDecoration: 'none' }}
+            >
+              <span className="mono" style={{ width: 22, height: 22, border: '1px solid #3a3f45', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--t4)', fontSize: 11 }}>+</span>
+              <span style={{ flex: 1 }}>{q.label}</span>
+              <span style={{ color: 'var(--t5)' }}>→</span>
+            </Link>
+          ))}
+        </Panel>
+      </div>
+
+      {/* recent media */}
+      <Panel i={2}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--t1)' }}>Recent media uploads</span>
+          <Link href="/admin/media" style={{ fontSize: 12, color: 'var(--accent)' }}>Media library →</Link>
         </div>
-      </section>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 12 }}>
+          {(recentMedia.length ? recentMedia : Array.from({ length: 6 }).map(() => null)).map((m, i) =>
+            m ? (
+              <Link key={m.id} href="/admin/media" className="cms-lift" style={{ height: 78, borderRadius: 9, border: '1px solid var(--line-2)', overflow: 'hidden', display: 'block', background: '#000' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={m.url} alt={m.alt ?? m.filename} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </Link>
+            ) : (
+              <div key={i} style={{ height: 78, borderRadius: 9, border: '1px solid var(--line-2)', background: 'repeating-linear-gradient(45deg,rgba(255,255,255,.015) 0 9px,rgba(255,255,255,.04) 9px 18px)', display: 'flex', alignItems: 'flex-end', padding: 7 }}>
+                <span className="mono" style={{ fontSize: 9, color: 'var(--t5)' }}>empty</span>
+              </div>
+            ),
+          )}
+        </div>
+      </Panel>
     </div>
   );
 }

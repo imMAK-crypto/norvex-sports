@@ -4,16 +4,21 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@norvexsports.com';
-  const adminPassword = process.env.ADMIN_PASSWORD ?? 'ChangeMe!2026';
+  const adminEmail = (process.env.ADMIN_EMAIL ?? 'admin@norvexsports.in').toLowerCase();
+  const adminUsername = (process.env.ADMIN_USERNAME ?? 'norvex').toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD ?? 'norvex@2026';
+  const adminHash = await bcrypt.hash(adminPassword, 12);
 
+  // Ensure the Norvex admin exists with the configured username + password.
   await prisma.adminUser.upsert({
     where: { email: adminEmail },
-    update: {},
+    update: { username: adminUsername, passwordHash: adminHash, role: 'owner' },
     create: {
       email: adminEmail,
-      passwordHash: await bcrypt.hash(adminPassword, 12),
+      username: adminUsername,
+      passwordHash: adminHash,
       name: 'Norvex Admin',
+      role: 'owner',
     },
   });
 
@@ -235,6 +240,38 @@ async function main() {
     'social.facebook': 'https://www.facebook.com/share/1B2MxrehXu/',
     'social.linkedin': 'https://www.linkedin.com/company/norvex-sports/',
     'social.youtube': '',
+
+    // ---- Home page editable blocks (read by getHomeContent) ----
+    'home.hero.image': '/images/home_hero.webp',
+    'home.hero.imageAlt': 'Young footballers lined up on the pitch',
+    'home.hero.eyebrow': "Hyderabad's Premier Football Academy",
+    'home.hero.headline': 'Build Your *Future.*\nNever Limit.\nNever *Settle.*',
+    'home.hero.sub':
+      'Structured pathways from grassroots to elite — expert coaching, competitive exposure, and a culture built on discipline and consistency.',
+    'home.hero.primaryCtaLabel': 'Book a Free Trial',
+    'home.hero.primaryCtaHref': '/contact#trial',
+    'home.hero.secondaryCtaLabel': 'Our Programs',
+    'home.hero.secondaryCtaHref': '/services',
+    'home.about.title': 'More than training.',
+    'home.about.image': '/images/home_more_than_training.webp',
+    'home.about.linkLabel': 'Read Our Story',
+    'home.stats': JSON.stringify([
+      { num: '8+', label: 'Programs' },
+      { num: '10+', label: 'Events' },
+      { num: '10×', label: 'Fun & Intensity' },
+      { num: '5★', label: 'Pro Coaching' },
+    ]),
+    'home.values': JSON.stringify([
+      { name: 'Discipline', desc: 'Discipline & Consistency', icon: 'shield' },
+      { name: 'Development', desc: 'Prioritizing Athlete Development', icon: 'activity' },
+      { name: 'Integrity', desc: 'Professionalism & Integrity', icon: 'award' },
+      { name: 'Teamwork', desc: 'Teamwork & Respect', icon: 'users' },
+      { name: 'Inclusion', desc: 'Sports for Everyone', icon: 'heart' },
+    ]),
+    // Settings extras
+    'settings.whatsappFab': 'on',
+    'settings.mapEmbed': 'https://www.google.com/maps?q=Hyderabad,Telangana&output=embed',
+    'settings.logoUrl': '',
   };
 
   for (const [key, value] of Object.entries(settings)) {
@@ -245,8 +282,53 @@ async function main() {
     });
   }
 
+  // ---- Gallery categories (managed list) ----
+  const galleryCats = [
+    'Training Sessions', 'Match Day Action', 'Team Photos', 'Events and Tournaments',
+    'Player Highlights', 'Facilities and Infrastructure', 'Kids Training',
+    'Coaches Interacting', 'Match Moments', 'Celebrations',
+  ];
+  for (let i = 0; i < galleryCats.length; i++) {
+    await prisma.galleryCategory.upsert({
+      where: { name: galleryCats[i] },
+      update: { order: i },
+      create: { name: galleryCats[i], order: i },
+    });
+  }
+
+  // ---- Sample job postings (Careers) ----
+  const jobs = [
+    {
+      title: 'Football Coach (Youth)',
+      type: 'Full-time',
+      location: 'Hyderabad',
+      description:
+        'Lead youth development sessions, plan curriculum, and mentor players from grassroots to competitive levels. Coaching licence preferred.',
+    },
+    {
+      title: 'Marketing & Social Media Intern',
+      type: 'Internship',
+      location: 'Hyderabad / Remote',
+      description:
+        'Help tell the Norvex story across Instagram, YouTube and the website — content, scheduling, and community engagement.',
+    },
+  ];
+  for (let i = 0; i < jobs.length; i++) {
+    const j = jobs[i];
+    const existing = await prisma.jobPosting.findFirst({ where: { title: j.title } });
+    if (!existing) await prisma.jobPosting.create({ data: { ...j, order: i, isOpen: true } });
+  }
+
+  // ---- Gallery video reel (replaces "coming soon") ----
+  const existingVideo = await prisma.galleryVideo.findFirst();
+  if (!existingVideo) {
+    await prisma.galleryVideo.create({
+      data: { title: 'Norvex in Action', url: '', isEnabled: false, order: 0 },
+    });
+  }
+
   console.log('Seed complete.');
-  console.log(`Admin: ${adminEmail} / ${adminPassword}`);
+  console.log(`Admin login → username: ${adminUsername} · email: ${adminEmail} · password: ${adminPassword}`);
 }
 
 main()

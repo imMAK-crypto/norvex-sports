@@ -1,27 +1,40 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Phone, Mail, MapPin, MessageCircle, Trophy, Users, Calendar, Activity, Heart, Shield, Award } from 'lucide-react';
+import { ArrowRight, Phone, Mail, MapPin, MessageCircle, Trophy, Users, Calendar, Activity, Heart, Shield, Award, Target, Flame } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { prisma, safeQuery, type EventModel, type NewsPostModel, type ServiceModel, type GalleryItemModel, type TeamMemberModel } from '@/lib/prisma';
-import { getSiteContent } from '@/lib/settings';
+import { getSiteContent, getHomeContent } from '@/lib/settings';
 import { Section, StatsBar } from '@/components/Section';
 import { ContactForm } from '@/components/ContactForm';
 
 export const revalidate = 60;
 
-const HERO_IMG = '/images/home_hero.webp';
 const HERO_BLUR =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiA5Ij48cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iOSIgZmlsbD0iIzBkMGQwZCIvPjwvc3ZnPg==';
 
-const VALUES = [
-  { name: 'Discipline', desc: 'Discipline & Consistency', Icon: Shield },
-  { name: 'Development', desc: 'Prioritizing Athlete Development', Icon: Activity },
-  { name: 'Integrity', desc: 'Professionalism & Integrity', Icon: Award },
-  { name: 'Teamwork', desc: 'Teamwork & Respect', Icon: Users },
-  { name: 'Inclusion', desc: 'Sports for Everyone', Icon: Heart },
-];
+const VALUE_ICONS: Record<string, LucideIcon> = {
+  shield: Shield, activity: Activity, award: Award, users: Users,
+  heart: Heart, trophy: Trophy, target: Target, flame: Flame, calendar: Calendar,
+};
+
+/** Render an editable headline: each line on its own row, *word* → brand-red. */
+function renderHeadline(raw: string) {
+  return raw.split('\n').map((line, li) => (
+    <span key={li}>
+      {li > 0 && <br />}
+      {line.split(/(\*[^*]+\*)/g).map((part, pi) =>
+        part.startsWith('*') && part.endsWith('*') && part.length > 1 ? (
+          <span key={pi} className="text-brand-500">{part.slice(1, -1)}</span>
+        ) : (
+          <span key={pi}>{part}</span>
+        ),
+      )}
+    </span>
+  ));
+}
 
 export default async function HomePage() {
-  const c = await getSiteContent();
+  const [c, h] = await Promise.all([getSiteContent(), getHomeContent()]);
   const [services, events, news, gallery, team] = await Promise.all([
     safeQuery<ServiceModel[]>(() => prisma.service.findMany({ where: { isActive: true }, orderBy: { order: 'asc' }, take: 6 }), []),
     safeQuery<EventModel[]>(() => prisma.event.findMany({ where: { isActive: true }, orderBy: [{ isFeatured: 'desc' }, { createdAt: 'desc' }], take: 3 }), []),
@@ -36,8 +49,8 @@ export default async function HomePage() {
       <section className="relative overflow-hidden">
         <div className="relative h-[58vh] min-h-[540px] md:h-[88vh] md:min-h-[560px]">
           <Image
-            src={HERO_IMG}
-            alt=""
+            src={h.hero.image}
+            alt={h.hero.imageAlt}
             fill
             priority
             fetchPriority="high"
@@ -52,22 +65,20 @@ export default async function HomePage() {
             <div className="container-x pb-8 md:pb-0">
               <div className="max-w-2xl [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:[text-shadow:none]">
                 <div className="font-sans text-[13px] sm:text-base md:text-lg font-bold uppercase tracking-[0.18em] sm:tracking-[0.28em] md:tracking-[0.35em] text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-                  Hyderabad's Premier Football Academy
+                  {h.hero.eyebrow}
                 </div>
                 <h1 className="headline mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-silver-100 leading-[0.95]">
-                  Build Your <span className="text-brand-500">Future.</span><br />
-                  <span className="text-silver-200">Never Limit.</span><br />
-                  <span className="text-silver-200">Never </span><span className="text-brand-500">Settle.</span>
+                  {renderHeadline(h.hero.headline)}
                 </h1>
                 <p className="mt-6 max-w-xl text-base md:text-lg text-silver-200 leading-relaxed">
-                  {c.tagline} Structured pathways from grassroots to elite — expert coaching, competitive exposure, and a culture built on discipline and consistency.
+                  {h.hero.sub}
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href="/contact#trial" className="btn-primary">
-                    Book a Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+                  <Link href={h.hero.primaryCtaHref} className="btn-primary">
+                    {h.hero.primaryCtaLabel} <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
-                  <Link href="/services" className="btn-silver">
-                    Our Programs →
+                  <Link href={h.hero.secondaryCtaHref} className="btn-silver">
+                    {h.hero.secondaryCtaLabel} →
                   </Link>
                 </div>
               </div>
@@ -77,17 +88,10 @@ export default async function HomePage() {
       </section>
 
       {/* 2 — STATS BAR */}
-      <StatsBar
-        stats={[
-          { num: '8+', label: 'Programs' },
-          { num: '10+', label: 'Events' },
-          { num: '10×', label: 'Fun & Intensity' },
-          { num: '5★', label: 'Pro Coaching' },
-        ]}
-      />
+      <StatsBar stats={h.stats} />
 
       {/* 3 — ABOUT */}
-      <Section eyebrow="About Norvex Sports" title="More than training.">
+      <Section eyebrow="About Norvex Sports" title={h.about.title}>
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] items-center">
           <div className="prose-norvex">
             <p>{c.aboutLong}</p>
@@ -95,13 +99,13 @@ export default async function HomePage() {
               What began as a grassroots initiative has grown into a structured platform offering academy training, one-to-one coaching, team building, and competitive opportunities for players of every level.
             </p>
             <Link href="/about" className="mt-8 inline-flex items-center gap-2 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-brand-600 hover:text-brand-500">
-              Read Our Story <ArrowRight className="h-4 w-4" />
+              {h.about.linkLabel} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-ink-500">
             <Image
-              src="/images/home_more_than_training.webp"
-              alt="Norvex Sports training session"
+              src={h.about.image}
+              alt={h.about.title}
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"
               quality={72}
@@ -136,8 +140,9 @@ export default async function HomePage() {
           </div>
           {/* Inline border styles — guaranteed to render on every breakpoint */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-            {VALUES.map(({ name, desc, Icon }, i) => {
-              const isLast = i === VALUES.length - 1;
+            {h.values.map(({ name, desc, icon }, i) => {
+              const Icon = VALUE_ICONS[icon ?? ''] ?? Shield;
+              const isLast = i === h.values.length - 1;
               return (
                 <div
                   key={name}

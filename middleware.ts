@@ -1,9 +1,20 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-const SECRET = new TextEncoder().encode(
-  process.env.SESSION_SECRET ?? 'dev-secret-change-me-min-32-chars-long-please',
-);
+// Fail-closed secret resolution — must match lib/auth.ts. In production we never
+// fall back to a known string (which would let anyone forge an admin session).
+function resolveSecret(): Uint8Array {
+  const s = process.env.SESSION_SECRET;
+  if (!s || s.length < 32) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('SESSION_SECRET must be set to a random string of at least 32 characters in production.');
+    }
+    return new TextEncoder().encode('dev-secret-change-me-min-32-chars-long-please');
+  }
+  return new TextEncoder().encode(s);
+}
+
+const SECRET = resolveSecret();
 
 const COOKIE = 'norvex_session';
 

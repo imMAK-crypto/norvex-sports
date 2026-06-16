@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Shield, Activity, Award, Users, Heart } from 'lucide-react';
-import { getSiteContent } from '@/lib/settings';
+import { getSiteContent, getSettings } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 
@@ -23,12 +23,15 @@ const VALUES = [
 ];
 
 export default async function AboutPage() {
-  const c = await getSiteContent();
+  const [c, s] = await Promise.all([
+    getSiteContent(),
+    getSettings(['about.eyebrow', 'about.title', 'about.intro', 'about.image']),
+  ]);
   const paragraphs = c.aboutLong.split(/\n\s*\n/);
 
   return (
     <>
-      <PageHeader eyebrow="About us" title="Built for the football journey." intro="Founded in 2026 in Hyderabad — structured training, expert coaching, and a culture built on discipline." />
+      <PageHeader eyebrow={s['about.eyebrow']} title={s['about.title']} intro={s['about.intro']} />
 
       <Section>
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
@@ -43,8 +46,8 @@ export default async function AboutPage() {
           <aside className="space-y-4">
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-ink-500">
               <Image
-                src="/images/about_page.webp"
-                alt="Norvex training"
+                src={s['about.image']}
+                alt={s['about.title']}
                 fill
                 sizes="(min-width: 1024px) 35vw, 100vw"
                 className="object-cover"

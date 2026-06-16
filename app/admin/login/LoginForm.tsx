@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { LogIn } from 'lucide-react';
 import { loginAction } from './actions';
 
 export function LoginForm({ next, initialError }: { next?: string; initialError?: string }) {
@@ -16,10 +15,8 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
     setPending(true);
     try {
       const res = await loginAction(formData);
-      // loginAction redirects on success — only returns on failure
       if (res && !res.ok) toast.error(res.message);
     } catch (err: unknown) {
-      // Next redirects throw an internal NEXT_REDIRECT — ignore those, surface others
       const msg = err instanceof Error ? err.message : '';
       if (!msg.includes('NEXT_REDIRECT')) toast.error('Something went wrong. Try again.');
       throw err;
@@ -29,35 +26,28 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
   }
 
   return (
-    <form action={action} className="card space-y-4">
+    <form action={action} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <input type="hidden" name="next" value={next ?? '/admin'} />
-      <div>
-        <label className="label" htmlFor="email">Username or Email</label>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <span className="cms-label">Username or Email</span>
         <input
-          id="email"
           name="email"
           type="text"
           required
           autoComplete="username"
           autoCapitalize="none"
           spellCheck={false}
-          className="input"
-          placeholder="norvex@9191"
+          className="cms-field"
+          style={{ height: 42 }}
+          placeholder="norvex"
         />
       </div>
-      <div>
-        <label className="label" htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          autoComplete="current-password"
-          className="input"
-        />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <span className="cms-label">Password</span>
+        <input name="password" type="password" required autoComplete="current-password" className="cms-field" style={{ height: 42 }} placeholder="••••••••" />
       </div>
-      <button type="submit" disabled={pending} className="btn-primary w-full disabled:opacity-50">
-        {pending ? 'Signing in…' : (<>Sign in <LogIn className="ml-2 h-4 w-4" /></>)}
+      <button type="submit" disabled={pending} className="cms-btn cms-btn-primary" style={{ height: 42, opacity: pending ? 0.6 : 1 }}>
+        {pending ? 'Signing in…' : 'Sign in →'}
       </button>
     </form>
   );

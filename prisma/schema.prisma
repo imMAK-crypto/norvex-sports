@@ -11,8 +11,11 @@ datasource db {
 model AdminUser {
   id           String   @id @default(cuid())
   email        String   @unique
+  username     String?  @unique
   passwordHash String
   name         String?
+  avatarUrl    String?
+  role         String   @default("owner")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -116,13 +119,73 @@ model ContactSubmission {
   program   String?
   message   String?  @db.Text
   isRead    Boolean  @default(false)
+  label     String   @default("new") // new | lead | followup | scam | closed
+  note      String?  @db.Text
   createdAt DateTime @default(now())
 
   @@index([isRead, createdAt])
+  @@index([label])
 }
 
 model SiteSetting {
   key       String   @id
   value     String   @db.Text
   updatedAt DateTime @updatedAt
+}
+
+/// Central registry of every Cloudinary asset — powers the Media Library
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String?
+  filename  String
+  alt       String?
+  width     Int?
+  height    Int?
+  bytes     Int?
+  format    String?
+  folder    String?
+  usedOn    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+/// Open roles for the Careers page
+model JobPosting {
+  id          String   @id @default(cuid())
+  title       String
+  type        String?  // Full-time | Part-time | Contract | Internship
+  location    String?
+  description String   @db.Text
+  applyUrl    String?
+  isOpen      Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isOpen, order])
+}
+
+/// Managed list of gallery categories (replaces the hardcoded list)
+model GalleryCategory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([order])
+}
+
+/// Video reel entries for the Gallery page (replaces "coming soon")
+model GalleryVideo {
+  id        String   @id @default(cuid())
+  title     String?
+  url       String
+  isEnabled Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([isEnabled, order])
 }

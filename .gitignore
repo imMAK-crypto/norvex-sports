@@ -32,3 +32,6 @@ deno.lock
 public/uploads/
 
 .vercel
+
+# TS incremental build info
+tsconfig.tsbuildinfo
