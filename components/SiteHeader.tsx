@@ -170,7 +170,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <Link
             href="/contact#trial"
-            className="inline-flex items-center justify-center rounded-md bg-brand-600 px-4 h-11 font-sans text-[12px] sm:text-[13px] font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-brand-500 active:scale-[0.98]"
+            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md bg-brand-600 px-3 sm:px-4 h-11 font-sans text-[12px] sm:text-[13px] font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-brand-500 active:scale-[0.98]"
           >
             Book Trial
           </Link>

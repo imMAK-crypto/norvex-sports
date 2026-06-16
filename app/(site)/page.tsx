@@ -34,7 +34,7 @@ export default async function HomePage() {
     <>
       {/* 1 — HERO */}
       <section className="relative overflow-hidden">
-        <div className="relative h-[52vh] min-h-[480px] md:h-[88vh] md:min-h-[560px]">
+        <div className="relative h-[58vh] min-h-[540px] md:h-[88vh] md:min-h-[560px]">
           <Image
             src={HERO_IMG}
             alt=""
@@ -45,13 +45,13 @@ export default async function HomePage() {
             placeholder="blur"
             blurDataURL={HERO_BLUR}
             quality={100}
-            className="object-cover object-[65%_center] md:object-center"
+            className="object-cover object-[80%_center] md:object-center"
           />
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
           <div className="absolute inset-0 flex items-end md:items-center">
-            <div className="container-x pb-12 md:pb-0">
+            <div className="container-x pb-8 md:pb-0">
               <div className="max-w-2xl [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:[text-shadow:none]">
-                <div className="font-sans text-sm sm:text-base md:text-lg font-bold uppercase tracking-[0.35em] text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                <div className="font-sans text-[13px] sm:text-base md:text-lg font-bold uppercase tracking-[0.18em] sm:tracking-[0.28em] md:tracking-[0.35em] text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                   Hyderabad's Premier Football Academy
                 </div>
                 <h1 className="headline mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-silver-100 leading-[0.95]">
