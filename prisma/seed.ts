@@ -152,28 +152,28 @@ async function main() {
 
   const team = [
     {
-      name: 'Shoukath',
+      name: 'Shoukkthali',
       role: 'Co-Founder & Head of Youth Development',
       bio: 'Shoukath leads Norvex youth pathways, designing the curriculum that takes players from first touch to first team. His sessions focus on technique, decision-making and competitive maturity.',
       qualifications: 'Coaching Licence (pending listing)',
       experience: 'Years of youth coaching experience',
     },
     {
-      name: 'Riyas',
+      name: 'Riyas NM',
       role: 'Co-Founder & Head of Grassroots',
       bio: 'Riyas builds the grassroots base — community programs, school partnerships, and the open trials that surface the next generation of Norvex players.',
       qualifications: 'Grassroots coaching credentials',
       experience: 'Years of grassroots development',
     },
     {
-      name: 'Shuraih',
+      name: 'Shuraih Sharaf',
       role: 'Co-Founder & Operations Lead',
       bio: 'Shuraih runs the day-to-day — venues, scheduling, logistics, fixturing and the back-of-house that keeps every session and event running on time.',
       qualifications: 'Operations & event management',
       experience: 'Multi-event operational lead',
     },
     {
-      name: 'Minhaj',
+      name: 'Muhammed Minhaj',
       role: 'Co-Founder & Marketing Lead',
       bio: 'Minhaj shapes how Norvex tells its story — brand, digital, partnerships, and the player journeys that make the academy visible to the families and clubs it serves.',
       qualifications: 'Marketing & digital strategy',
