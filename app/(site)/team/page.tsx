@@ -35,7 +35,7 @@ export default async function TeamPage() {
                 {/* Phone (max-sm): compact vertical card — photo → name → role.
                     sm / md / lg (tablet + PC): original horizontal detail card, unchanged. */}
                 <div className="grid grid-cols-[160px_1fr] sm:grid-cols-[200px_1fr] max-sm:flex max-sm:flex-col">
-                  <div className="relative aspect-[3/4] max-sm:aspect-[4/5] bg-ink-700">
+                  <div className="relative max-sm:aspect-[4/5] bg-ink-700">
                     {m.imageUrl ? (
                       <Image src={m.imageUrl} alt={m.name} fill sizes="(max-width: 639px) 50vw, 200px" className="object-cover" />
                     ) : (
