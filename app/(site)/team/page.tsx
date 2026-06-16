@@ -29,7 +29,7 @@ export default async function TeamPage() {
         {team.length === 0 ? (
           <p className="text-center text-silver-400">Team profiles coming soon.</p>
         ) : (
-          <div className="grid gap-6 max-sm:grid-cols-2 max-sm:gap-4 md:grid-cols-2">
+          <div className="grid gap-6 max-sm:grid-cols-2 max-sm:gap-4 md:grid-cols-2 md:items-start">
             {team.map((m) => (
               <article key={m.id} className="rounded-xl border border-ink-500 bg-ink-800 overflow-hidden">
                 {/* Phone (max-sm): compact vertical card — photo → name → role.
