@@ -37,17 +37,22 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     );
   }
 
-  const unread = await safeQuery(
-    () => prisma.contactSubmission.count({ where: { isRead: false } }),
-    0,
-  );
+  const [unread, account] = await Promise.all([
+    safeQuery(() => prisma.contactSubmission.count({ where: { isRead: false } }), 0),
+    safeQuery(() => prisma.adminUser.findUnique({ where: { id: session.sub } }), null),
+  ]);
+
+  const user = {
+    email: account?.email ?? session.email,
+    name: account?.name || 'Admin',
+    role: account?.role ?? 'owner',
+    username: account?.username ?? null,
+    avatarUrl: account?.avatarUrl ?? null,
+  };
 
   return (
     <div className={`cms ${grotesk.variable} ${mono.variable}`}>
-      <AdminShell
-        user={{ email: session.email, name: 'Admin', role: 'owner' }}
-        unread={unread}
-      >
+      <AdminShell user={user} unread={unread}>
         {children}
       </AdminShell>
     </div>

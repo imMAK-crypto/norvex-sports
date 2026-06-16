@@ -1,10 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type NavItem = { href: string; letter: string; label: string };
+
+type TipFns = { onShow?: (label: string, y: number) => void; onHide?: () => void };
 
 const GROUPS: NavItem[][] = [
   [
@@ -57,12 +60,21 @@ function isActive(href: string, path: string): boolean {
   return href === '/admin' ? path === '/admin' : path.startsWith(href);
 }
 
-function RailIcon({ item, path }: { item: NavItem; path: string }) {
+function RailIcon({ item, path, onShow, onHide }: { item: NavItem; path: string } & TipFns) {
   const on = isActive(item.href, path);
+  const show = (e: React.SyntheticEvent<HTMLElement>) => {
+    if (!item.label) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    onShow?.(item.label, r.top + r.height / 2);
+  };
   return (
     <Link
       href={item.href}
-      title={item.label}
+      aria-label={item.label || undefined}
+      onMouseEnter={show}
+      onMouseLeave={() => onHide?.()}
+      onFocus={show}
+      onBlur={() => onHide?.()}
       className="cms-nav-item mono"
       style={{
         width: 38,
@@ -90,12 +102,25 @@ export function AdminShell({
   unread,
 }: {
   children: React.ReactNode;
-  user: { email: string; name: string; role: string };
+  user: { email: string; name: string; role: string; username?: string | null; avatarUrl?: string | null };
   unread: number;
 }) {
   const path = usePathname() || '/admin';
   const [, setMobileOpen] = useState(false);
+  const [tip, setTip] = useState<{ label: string; y: number } | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const title = TITLES.find(([h]) => isActive(h, path))?.[1] ?? 'CMS';
+  const initial = (user.name || user.email).charAt(0).toUpperCase();
+  const tipFns: TipFns = { onShow: (label, y) => setTip({ label, y }), onHide: () => setTip(null) };
+
+  // Close the avatar menu on route change or Escape.
+  useEffect(() => setMenuOpen(false), [path]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -118,14 +143,14 @@ export function AdminShell({
       >
         <Link
           href="/admin"
-          className="cms-pop"
+          aria-label="Norvex Admin — dashboard"
+          className="cms-pop cms-lift"
           style={{
-            width: 40, height: 40, borderRadius: 12, border: '1px solid #2c2f34',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--accent)', fontWeight: 700, fontSize: 18, flex: 'none', textDecoration: 'none',
+            width: 60, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', flex: 'none', textDecoration: 'none', padding: 4,
           }}
         >
-          N
+          <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ width: 52, height: 'auto' }} />
         </Link>
         <Link
           href="/admin/events/new"
@@ -155,7 +180,7 @@ export function AdminShell({
             {GROUPS.map((group, gi) => (
               <div key={gi} style={{ display: 'contents' }}>
                 {group.map((item) => (
-                  <RailIcon key={item.href} item={item} path={path} />
+                  <RailIcon key={item.href} item={item} path={path} {...tipFns} />
                 ))}
                 {gi < GROUPS.length - 1 && (
                   <div style={{ width: 20, height: 1, background: '#26292e', flex: 'none' }} />
@@ -165,7 +190,7 @@ export function AdminShell({
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, flex: 'none', paddingTop: 8 }}>
             {BOTTOM.map((item) => (
-              <RailIcon key={item.href} item={item} path={path} />
+              <RailIcon key={item.href} item={item} path={path} {...tipFns} />
             ))}
           </div>
         </div>
@@ -225,14 +250,73 @@ export function AdminShell({
               />
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9, paddingLeft: 8, borderLeft: '1px solid var(--line)' }}>
-            <div style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid #3a3f45', background: '#1f2226', display: 'grid', placeItems: 'center', color: 'var(--accent)', fontWeight: 700 }}>
-              {user.email.charAt(0).toUpperCase()}
-            </div>
-            <div className="hidden sm:flex" style={{ flexDirection: 'column', lineHeight: 1.25 }}>
-              <span style={{ fontSize: 12, color: 'var(--t2)' }}>{user.name}</span>
-              <span className="mono" style={{ fontSize: 10, color: 'var(--t4)' }}>{user.role}</span>
-            </div>
+          <div style={{ position: 'relative', paddingLeft: 8, borderLeft: '1px solid var(--line)' }}>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              title="Account & settings"
+              className="cms-lift"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 9, background: 'none', border: '1px solid transparent',
+                borderRadius: 10, padding: '3px 5px', cursor: 'pointer',
+              }}
+            >
+              <div style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid #3a3f45', background: '#1f2226', display: 'grid', placeItems: 'center', color: 'var(--accent)', fontWeight: 700, overflow: 'hidden' }}>
+                {user.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={user.avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  initial
+                )}
+              </div>
+              <div className="hidden sm:flex" style={{ flexDirection: 'column', lineHeight: 1.25, alignItems: 'flex-start' }}>
+                <span style={{ fontSize: 12, color: 'var(--t2)' }}>{user.name}</span>
+                <span className="mono" style={{ fontSize: 10, color: 'var(--t4)' }}>{user.role}</span>
+              </div>
+              <span className="hidden sm:inline" style={{ color: 'var(--t4)', fontSize: 10, transition: 'transform .2s', transform: menuOpen ? 'rotate(180deg)' : 'none' }}>▾</span>
+            </button>
+
+            {menuOpen && (
+              <>
+                <button
+                  aria-label="Close menu"
+                  onClick={() => setMenuOpen(false)}
+                  style={{ position: 'fixed', inset: 0, zIndex: 45, background: 'transparent', border: 'none', cursor: 'default' }}
+                />
+                <div
+                  role="menu"
+                  className="cms-glass cms-pop"
+                  style={{ position: 'absolute', right: 0, top: 'calc(100% + 10px)', width: 256, borderRadius: 14, padding: 8, zIndex: 50, display: 'flex', flexDirection: 'column', gap: 2 }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '10px 12px 12px', borderBottom: '1px solid var(--line)', marginBottom: 4 }}>
+                    <div style={{ width: 38, height: 38, borderRadius: '50%', border: '1px solid #3a3f45', background: '#1f2226', display: 'grid', placeItems: 'center', color: 'var(--accent)', fontWeight: 700, flex: 'none', overflow: 'hidden' }}>
+                      {user.avatarUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={user.avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        initial
+                      )}
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 13, color: 'var(--t1)', fontWeight: 600 }}>{user.name}</div>
+                      <div className="mono" style={{ fontSize: 10, color: 'var(--t4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>
+                      <span style={{ display: 'inline-block', marginTop: 4, fontSize: 9, letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--accent)', background: 'var(--accent-soft)', borderRadius: 20, padding: '2px 8px' }}>{user.role}</span>
+                    </div>
+                  </div>
+                  <Link role="menuitem" href="/admin/settings" onClick={() => setMenuOpen(false)} className="cms-menu-item"><span className="ico">⚙</span> Settings</Link>
+                  <Link role="menuitem" href="/admin/settings#password" onClick={() => setMenuOpen(false)} className="cms-menu-item"><span className="ico mono">⚿</span> Change password</Link>
+                  <Link role="menuitem" href="/admin/content" onClick={() => setMenuOpen(false)} className="cms-menu-item"><span className="ico mono">{'{}'}</span> Site content</Link>
+                  <Link role="menuitem" href="/admin/media" onClick={() => setMenuOpen(false)} className="cms-menu-item"><span className="ico mono">◫</span> Media library</Link>
+                  <Link role="menuitem" href="/" target="_blank" onClick={() => setMenuOpen(false)} className="cms-menu-item"><span className="ico">↗</span> View site</Link>
+                  <div style={{ height: 1, background: 'var(--line)', margin: '5px 6px' }} />
+                  <form action="/api/admin/logout" method="POST">
+                    <button type="submit" role="menuitem" className="cms-menu-item" style={{ color: 'var(--accent)' }}><span className="ico" style={{ color: 'var(--accent)' }}>⏻</span> Log out</button>
+                  </form>
+                </div>
+              </>
+            )}
           </div>
         </header>
 
@@ -241,6 +325,13 @@ export function AdminShell({
           {children}
         </main>
       </div>
+
+      {/* glass flyout label for the icon rail (desktop hover/focus) */}
+      {tip && (
+        <div className="cms-railtip" style={{ left: 84, top: tip.y }}>
+          {tip.label}
+        </div>
+      )}
 
       {/* ---------- MOBILE BOTTOM TAB BAR ---------- */}
       <nav

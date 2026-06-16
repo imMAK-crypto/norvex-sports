@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { LoginForm } from './LoginForm';
 
 export const metadata: Metadata = { title: 'Admin Sign In', robots: { index: false, follow: false } };
@@ -16,11 +17,9 @@ export default function AdminLogin({ searchParams }: { searchParams?: { next?: s
       }}
     >
       <div className="cms-pop cms-panel" style={{ width: 380, maxWidth: '100%', padding: 32, display: 'flex', flexDirection: 'column', gap: 20, borderRadius: 18, borderColor: 'var(--line-2)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 42, height: 42, borderRadius: 10, border: '1px solid #3a3f45', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 700, fontSize: 20 }}>
-            N
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
+          <Image src="/norvex_sports_logo.png" alt="Norvex Sports" width={755} height={364} priority style={{ width: 64, height: 'auto' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', borderLeft: '1px solid var(--line-2)', paddingLeft: 13 }}>
             <span style={{ fontWeight: 600, color: 'var(--t1)', fontSize: 15 }}>Norvex Sports</span>
             <span className="mono" style={{ fontSize: 11, color: 'var(--t4)' }}>Content Admin</span>
           </div>
