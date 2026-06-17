@@ -25,6 +25,10 @@ function onlyLetters(e: FormEvent<HTMLInputElement>) {
 function onlyDigits(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
 }
+// Age: digits only, capped at 3 characters (also enforces pasted values).
+function ageDigits(e: FormEvent<HTMLInputElement>) {
+  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '').slice(0, 3);
+}
 
 export function ContactForm() {
   const [pending, setPending] = useState(false);
@@ -84,8 +88,9 @@ export function ContactForm() {
             placeholder="e.g. 12"
             inputMode="numeric"
             pattern="[0-9]*"
-            title="Numbers only"
-            onInput={onlyDigits}
+            maxLength={3}
+            title="Numbers only (max 3 digits)"
+            onInput={ageDigits}
           />
         </div>
       </div>

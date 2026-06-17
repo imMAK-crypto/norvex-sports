@@ -7,7 +7,7 @@ import { clientKey, rateLimit } from '@/lib/rate-limit';
 
 const schema = z.object({
   name: z.string().min(2, 'Please enter your name').max(120),
-  age: z.string().max(20).optional().or(z.literal('')),
+  age: z.string().regex(/^\d{1,3}$/, 'Age must be up to 3 digits').optional().or(z.literal('')),
   phone: z.string().min(6, 'Please enter a valid phone').max(40),
   email: z.string().email().max(160).optional().or(z.literal('')),
   program: z.string().max(160).optional().or(z.literal('')),
