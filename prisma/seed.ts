@@ -232,14 +232,16 @@ async function main() {
     'site.projectStatement':
       'At Norvex Sports, our project is to create a structured and professional environment where athletes can develop their skills, confidence, and overall performance through expert coaching and continuous development. Starting with football, we aim to build a strong sports development platform that supports athletes from grassroots to elite levels while expanding across multiple sports and cities in the future. Through discipline, consistency, and competitive exposure, we strive to create opportunities that help individuals grow both on and off the field.',
     'contact.phone': process.env.NEXT_PUBLIC_PHONE ?? '+91 80899 20562',
-    'contact.email': process.env.NEXT_PUBLIC_EMAIL ?? 'support@norvexsports.in',
+    'contact.email': process.env.NEXT_PUBLIC_EMAIL ?? 'admin@norvexsports.in',
     'contact.whatsapp': process.env.NEXT_PUBLIC_WHATSAPP ?? '918089920562',
     'contact.location': 'Hyderabad, Telangana, India',
-    'contact.careersEmail': 'careers@norvexsports.in',
+    'contact.careersEmail': 'hr@norvexsports.in',
     'social.instagram': 'https://www.instagram.com/norvexsports?igsh=MXVtOXEwdmFwb3B2YQ==',
     'social.facebook': 'https://www.facebook.com/share/1B2MxrehXu/',
     'social.linkedin': 'https://www.linkedin.com/company/norvex-sports/',
     'social.youtube': '',
+    'social.threads': 'https://www.threads.com/@norvexsports',
+    'social.x': 'https://x.com/NORVEXSPORTS',
 
     // ---- Home page editable blocks (read by getHomeContent) ----
     'home.hero.image': '/images/home_hero.webp',

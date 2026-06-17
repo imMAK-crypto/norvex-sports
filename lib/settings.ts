@@ -17,6 +17,8 @@ export type SiteContent = {
     facebook: string;
     linkedin: string;
     youtube: string;
+    threads: string;
+    x: string;
   };
 };
 
@@ -40,6 +42,8 @@ const DEFAULTS: SiteContent = {
     facebook: 'https://www.facebook.com/share/1B2MxrehXu/',
     linkedin: 'https://www.linkedin.com/company/norvex-sports/',
     youtube: '',
+    threads: 'https://www.threads.com/@norvexsports',
+    x: 'https://x.com/NORVEXSPORTS',
   },
 };
 
@@ -65,6 +69,8 @@ export async function getSiteContent(): Promise<SiteContent> {
         facebook: get('social.facebook', DEFAULTS.social.facebook),
         linkedin: get('social.linkedin', DEFAULTS.social.linkedin),
         youtube: get('social.youtube', DEFAULTS.social.youtube),
+        threads: get('social.threads', DEFAULTS.social.threads),
+        x: get('social.x', DEFAULTS.social.x),
       },
     };
   } catch {

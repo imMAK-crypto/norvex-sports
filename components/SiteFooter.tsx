@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Instagram, Facebook, Linkedin, Youtube, MapPin, Phone, Mail, ArrowRight } from 'lucide-react';
 import { getSiteContent } from '@/lib/settings';
 import { LogoMark } from './Logo';
+import { ThreadsIcon, XIcon } from './SocialIcons';
 
 export async function SiteFooter() {
   const c = await getSiteContent();
@@ -41,6 +42,26 @@ export async function SiteFooter() {
               >
                 <Linkedin className="mr-2 h-4 w-4" /> Connect on LinkedIn
               </a>
+              {c.social.threads && (
+                <a
+                  href={c.social.threads}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="btn-outline"
+                >
+                  <ThreadsIcon className="mr-2 h-4 w-4" /> Threads
+                </a>
+              )}
+              {c.social.x && (
+                <a
+                  href={c.social.x}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="btn-outline"
+                >
+                  <XIcon className="mr-2 h-4 w-4" /> Follow on X
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -57,6 +78,12 @@ export async function SiteFooter() {
               <SocialLink href={c.social.instagram} label="Instagram (@norvexsports)" Icon={Instagram} />
               <SocialLink href={c.social.facebook} label="Facebook (Norvex Sports)" Icon={Facebook} />
               <SocialLink href={c.social.linkedin} label="LinkedIn (Norvex Sports)" Icon={Linkedin} />
+              {c.social.threads && (
+                <SocialLink href={c.social.threads} label="Threads (@norvexsports)" Icon={ThreadsIcon} />
+              )}
+              {c.social.x && (
+                <SocialLink href={c.social.x} label="X (@NORVEXSPORTS)" Icon={XIcon} />
+              )}
               {c.social.youtube && (
                 <SocialLink href={c.social.youtube} label="YouTube (Norvex Sports)" Icon={Youtube} />
               )}

@@ -12,6 +12,8 @@ const TEAM_RENAMES: Array<{ from: string; to: string }> = [
 const EMAIL_UPDATES: Record<string, string> = {
   'contact.email': 'admin@norvexsports.in',
   'contact.careersEmail': 'hr@norvexsports.in',
+  'social.threads': 'https://www.threads.com/@norvexsports',
+  'social.x': 'https://x.com/NORVEXSPORTS',
 };
 
 async function main() {

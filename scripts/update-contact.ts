@@ -4,14 +4,16 @@ const prisma = new PrismaClient();
 
 const updates: Record<string, string> = {
   'contact.phone': '+91 80899 20562',
-  'contact.email': 'support@norvexsports.in',
+  'contact.email': 'admin@norvexsports.in',
   'contact.whatsapp': '918089920562',
   'contact.location': 'Hyderabad, Telangana, India',
-  'contact.careersEmail': 'careers@norvexsports.in',
+  'contact.careersEmail': 'hr@norvexsports.in',
   'social.instagram': 'https://www.instagram.com/norvexsports?igsh=MXVtOXEwdmFwb3B2YQ==',
   'social.facebook': 'https://www.facebook.com/share/1B2MxrehXu/',
   'social.linkedin': 'https://www.linkedin.com/company/norvex-sports/',
   'social.youtube': '',
+  'social.threads': 'https://www.threads.com/@norvexsports',
+  'social.x': 'https://x.com/NORVEXSPORTS',
 };
 
 async function main() {

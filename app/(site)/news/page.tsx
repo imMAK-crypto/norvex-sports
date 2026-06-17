@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { prisma, safeQuery, type NewsPostModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const metadata: Metadata = {
   title: 'News & Updates',
@@ -35,12 +36,12 @@ export default async function NewsPage() {
         {posts.length === 0 ? (
           <p className="text-center text-silver-400 py-12">No news yet — check back soon.</p>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((p) => (
+          <div className={`grid gap-6 md:grid-cols-2 ${centerGridClass('lg')}`}>
+            {posts.map((p, i) => (
               <Link
                 key={p.id}
                 href={`/news/${p.slug}`}
-                className="group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1"
+                className={`group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1 ${centerCardSpan('lg')} ${centerLastRow('lg', i, posts.length)}`}
               >
                 {/* IMAGE + OVERLAY TITLE */}
                 <div className="relative aspect-[16/10] w-full bg-ink-700 overflow-hidden">

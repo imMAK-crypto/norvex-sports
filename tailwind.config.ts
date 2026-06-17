@@ -2,6 +2,18 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}'],
+  // Centering classes for the last incomplete row of 3-up card grids are
+  // generated dynamically (see lib/grid.ts) — keep them in the build.
+  safelist: [
+    'lg:grid-cols-6',
+    'lg:col-span-2',
+    'lg:col-start-2',
+    'lg:col-start-3',
+    'md:grid-cols-6',
+    'md:col-span-2',
+    'md:col-start-2',
+    'md:col-start-3',
+  ],
   theme: {
     extend: {
       colors: {

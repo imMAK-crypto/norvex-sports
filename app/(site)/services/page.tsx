@@ -7,6 +7,7 @@ import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { JsonLd } from '@/components/JsonLd';
 import { siteUrl } from '@/lib/settings';
+import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const metadata: Metadata = {
   title: 'Football Training Programs & Services',
@@ -44,12 +45,12 @@ export default async function ServicesPage() {
       />
 
       <Section>
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className={`grid gap-5 md:grid-cols-2 ${centerGridClass('lg')}`}>
           {services.map((s, i) => (
             <Link
               key={s.id}
               href={`/services/${s.slug}`}
-              className="group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1"
+              className={`group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1 ${centerCardSpan('lg')} ${centerLastRow('lg', i, services.length)}`}
             >
               {/* IMAGE + OVERLAY TITLE */}
               <div className="relative aspect-[16/10] w-full bg-ink-800 overflow-hidden">

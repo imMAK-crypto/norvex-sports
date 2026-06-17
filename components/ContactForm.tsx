@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import { Send, CheckCircle2 } from 'lucide-react';
 import { submitContact } from '@/app/(site)/contact/actions';
 
 const PROGRAMS = [
+  'General Enquiry',
   'Football Development Program',
   'One-to-One Personal Coaching',
   'Advanced Player Development',
@@ -14,8 +15,16 @@ const PROGRAMS = [
   'Fitness & Conditioning',
   'Talent Trials',
   'Birthday Party',
-  'General Enquiry',
 ];
+
+// Strip everything except letters/spaces (name) or digits (age, phone) as the
+// user types, so the enquiry form only accepts valid characters.
+function onlyLetters(e: FormEvent<HTMLInputElement>) {
+  e.currentTarget.value = e.currentTarget.value.replace(/[^A-Za-z ]/g, '');
+}
+function onlyDigits(e: FormEvent<HTMLInputElement>) {
+  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+}
 
 export function ContactForm() {
   const [pending, setPending] = useState(false);
@@ -54,17 +63,46 @@ export function ContactForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="name">Name *</label>
-          <input id="name" name="name" required className="input" autoComplete="name" />
+          <input
+            id="name"
+            name="name"
+            required
+            className="input"
+            autoComplete="name"
+            inputMode="text"
+            pattern="[A-Za-z ]+"
+            title="Letters only"
+            onInput={onlyLetters}
+          />
         </div>
         <div>
           <label className="label" htmlFor="age">Age</label>
-          <input id="age" name="age" className="input" placeholder="e.g. 12" />
+          <input
+            id="age"
+            name="age"
+            className="input"
+            placeholder="e.g. 12"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            title="Numbers only"
+            onInput={onlyDigits}
+          />
         </div>
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="phone">Phone *</label>
-          <input id="phone" name="phone" required className="input" autoComplete="tel" inputMode="tel" />
+          <input
+            id="phone"
+            name="phone"
+            required
+            className="input"
+            autoComplete="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            title="Numbers only"
+            onInput={onlyDigits}
+          />
         </div>
         <div>
           <label className="label" htmlFor="email">Email</label>
@@ -73,8 +111,7 @@ export function ContactForm() {
       </div>
       <div>
         <label className="label" htmlFor="program">Program Interested In</label>
-        <select id="program" name="program" className="input" defaultValue="">
-          <option value="" disabled>Select a program…</option>
+        <select id="program" name="program" className="input" defaultValue="General Enquiry">
           {PROGRAMS.map((p) => <option key={p} value={p}>{p}</option>)}
         </select>
       </div>

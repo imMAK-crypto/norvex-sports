@@ -4,6 +4,7 @@ import { ArrowRight, Shield, Activity, Award, Users, Heart } from 'lucide-react'
 import { getSiteContent, getSettings } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const metadata: Metadata = {
   title: 'The Norvex Project — Our Vision',
@@ -84,9 +85,9 @@ export default async function NorvexProjectPage() {
         className="bg-ink-900 border-y border-ink-500"
         intro="At Norvex Sports, our values shape everything we do — on and off the field. We are committed to building not just better players, but disciplined and confident individuals."
       >
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {VALUES.map(({ Icon, t, d }) => (
-            <div key={t} className="card-accent">
+        <div className={`grid gap-5 md:grid-cols-2 ${centerGridClass('lg')}`}>
+          {VALUES.map(({ Icon, t, d }, i) => (
+            <div key={t} className={`card-accent ${centerCardSpan('lg')} ${centerLastRow('lg', i, VALUES.length)}`}>
               <div className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600 mb-4">
                 <Icon className="h-5 w-5" />
               </div>

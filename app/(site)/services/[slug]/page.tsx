@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { JsonLd } from '@/components/JsonLd';
 import { siteUrl } from '@/lib/settings';
+import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 type Params = { params: { slug: string } };
 
@@ -99,9 +100,9 @@ export default async function ServiceDetail({ params }: Params) {
 
       {related.length > 0 && (
         <Section eyebrow="More programs" title="Explore other services." className="bg-ink-900 border-y border-ink-500">
-          <div className="grid gap-5 md:grid-cols-3">
-            {related.map((r) => (
-              <Link key={r.id} href={`/services/${r.slug}`} className="card-accent group">
+          <div className={`grid gap-5 ${centerGridClass('md')}`}>
+            {related.map((r, i) => (
+              <Link key={r.id} href={`/services/${r.slug}`} className={`card-accent group ${centerCardSpan('md')} ${centerLastRow('md', i, related.length)}`}>
                 <div className="grid h-10 w-10 place-items-center bg-brand-600/10 text-brand-600 mb-3 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
                   <Trophy className="h-4 w-4" />
                 </div>

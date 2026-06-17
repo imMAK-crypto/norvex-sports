@@ -6,6 +6,7 @@ import { prisma, safeQuery, type EventModel, type NewsPostModel, type ServiceMod
 import { getSiteContent, getHomeContent } from '@/lib/settings';
 import { Section, StatsBar } from '@/components/Section';
 import { ContactForm } from '@/components/ContactForm';
+import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const revalidate = 60;
 
@@ -167,12 +168,12 @@ export default async function HomePage() {
 
       {/* 6 — SERVICES PREVIEW */}
       <Section eyebrow="What we offer" title="Our Services" align="center" className="bg-ink-900 border-y border-ink-500">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {(services.length ? services : DEFAULT_SERVICE_PREVIEW).map((s: any) => (
+        <div className={`grid gap-5 md:grid-cols-2 ${centerGridClass('lg')}`}>
+          {(services.length ? services : DEFAULT_SERVICE_PREVIEW).map((s: any, i: number, arr: any[]) => (
             <Link
               key={s.id || s.slug}
               href={`/services/${s.slug}`}
-              className="card-accent group flex flex-col"
+              className={`card-accent group flex flex-col ${centerCardSpan('lg')} ${centerLastRow('lg', i, arr.length)}`}
             >
               <div className="mb-3 grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
                 <Trophy className="h-5 w-5" />
@@ -197,17 +198,17 @@ export default async function HomePage() {
             ✦ Stay tuned for upcoming events and registrations
           </p>
         </div>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className={`grid gap-5 ${centerGridClass('md')}`}>
           {events.length === 0 ? (
             <div className="col-span-full text-center text-silver-400 py-12">
               Events will appear here soon. Check back regularly.
             </div>
           ) : (
-            events.map((e) => (
+            events.map((e, i) => (
               <Link
                 key={e.id}
                 href={`/events/${e.slug}`}
-                className="group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1"
+                className={`group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1 ${centerCardSpan('md')} ${centerLastRow('md', i, events.length)}`}
               >
                 <div className="relative aspect-[16/10] w-full bg-ink-700 overflow-hidden">
                   {e.imageUrl ? (
@@ -314,12 +315,12 @@ export default async function HomePage() {
       {/* 10 — NEWS PREVIEW */}
       {news.length > 0 && (
         <Section eyebrow="News & updates" title="Latest from Norvex" className="bg-ink-900 border-y border-ink-500">
-          <div className="grid gap-5 md:grid-cols-3">
-            {news.map((n) => (
+          <div className={`grid gap-5 ${centerGridClass('md')}`}>
+            {news.map((n, i) => (
               <Link
                 key={n.id}
                 href={`/news/${n.slug}`}
-                className="group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1"
+                className={`group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1 ${centerCardSpan('md')} ${centerLastRow('md', i, news.length)}`}
               >
                 <div className="relative aspect-[16/10] w-full bg-ink-700 overflow-hidden">
                   {n.imageUrl ? (

@@ -5,6 +5,7 @@ import { Calendar, MapPin, Tag, ArrowRight } from 'lucide-react';
 import { prisma, safeQuery, type EventModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const metadata: Metadata = {
   title: 'Events & Programs',
@@ -52,12 +53,12 @@ export default async function EventsPage() {
             New events drop in soon — bookmark this page or follow us on Instagram for the latest.
           </p>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {events.map((e) => (
+          <div className={`grid gap-6 md:grid-cols-2 ${centerGridClass('lg')}`}>
+            {events.map((e, i) => (
               <Link
                 key={e.id}
                 href={`/events/${e.slug}`}
-                className="group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1"
+                className={`group flex flex-col overflow-hidden bg-ink-800 rounded-xl transition hover:-translate-y-1 ${centerCardSpan('lg')} ${centerLastRow('lg', i, events.length)}`}
               >
                 {/* IMAGE + OVERLAY TITLE */}
                 <div className="relative aspect-[16/10] w-full bg-ink-700 overflow-hidden">
