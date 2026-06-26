@@ -418,7 +418,10 @@ export default async function HomePage() {
               Careers at Norvex Sports
             </div>
             <div className="mt-1 font-sans text-sm text-silver-100/80">
-              Passionate about football? Join our team — {c.contact.careersEmail}
+              Passionate about football? Join our team —{' '}
+              <a href={`mailto:${c.contact.careersEmail}`} className="underline underline-offset-2 hover:text-silver-100">
+                {c.contact.careersEmail}
+              </a>
             </div>
           </div>
           <Link
