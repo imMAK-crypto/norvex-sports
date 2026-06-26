@@ -247,7 +247,7 @@ async function main() {
     'home.hero.image': '/images/home_hero.webp',
     'home.hero.imageAlt': 'Young footballers lined up on the pitch',
     'home.hero.eyebrow': "Hyderabad's Premier Football Academy",
-    'home.hero.headline': 'Build Your *Future.*\nNever Limit.\nNever *Settle.*',
+    'home.hero.headline': 'Build Your\n*Future.*\nNever Limit.\nNever *Settle.*',
     'home.hero.sub':
       'Structured pathways from grassroots to elite — expert coaching, competitive exposure, and a culture built on discipline and consistency.',
     'home.hero.primaryCtaLabel': 'Book a Free Trial',

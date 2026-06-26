@@ -112,7 +112,7 @@ export const HOME_DEFAULTS: HomeContent = {
     image: '/images/home_hero.webp',
     imageAlt: 'Young footballers lined up on the pitch',
     eyebrow: "Hyderabad's Premier Football Academy",
-    headline: 'Build Your *Future.*\nNever Limit.\nNever *Settle.*',
+    headline: 'Build Your\n*Future.*\nNever Limit.\nNever *Settle.*',
     sub: 'Structured pathways from grassroots to elite — expert coaching, competitive exposure, and a culture built on discipline and consistency.',
     primaryCtaLabel: 'Book a Free Trial',
     primaryCtaHref: '/contact#trial',
