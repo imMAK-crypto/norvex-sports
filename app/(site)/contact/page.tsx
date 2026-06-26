@@ -4,6 +4,7 @@ import { getSiteContent, getSettings } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { ContactForm } from '@/components/ContactForm';
+import { EmailLink } from '@/components/EmailLink';
 
 export const metadata: Metadata = {
   title: 'Contact Us — Book a Free Trial',
@@ -59,13 +60,13 @@ export default async function ContactPage() {
                 <p className="font-display text-xl uppercase tracking-wide text-silver-100">Chat with us</p>
               </div>
             </a>
-            <a href={`mailto:${c.contact.email}`} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
+            <EmailLink email={c.contact.email} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
               <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Mail className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Email</p>
                 <p className="font-display text-lg break-all text-silver-100">{c.contact.email}</p>
               </div>
-            </a>
+            </EmailLink>
             <div className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5">
               <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><MapPin className="h-5 w-5" /></span>
               <div>

@@ -4,6 +4,7 @@ import { prisma, safeQuery } from '@/lib/prisma';
 import { getSiteContent, getSettings } from '@/lib/settings';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { EmailLink } from '@/components/EmailLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,13 +69,24 @@ export default async function CareersPage() {
                     {job.location && <span className="inline-flex items-center gap-1 border border-ink-500 px-2 py-1"><MapPin className="h-3 w-3" /> {job.location}</span>}
                   </div>
                   {job.description && <p className="mt-3 text-sm text-silver-300">{job.description}</p>}
-                  <a
-                    href={job.applyUrl || `mailto:${c.contact.careersEmail}?subject=Application: ${encodeURIComponent(job.title)}`}
-                    {...(job.applyUrl ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
-                    className="mt-auto pt-4 inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-600 hover:text-brand-500"
-                  >
-                    Apply Now <ArrowRight className="h-3 w-3" />
-                  </a>
+                  {job.applyUrl ? (
+                    <a
+                      href={job.applyUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="mt-auto pt-4 inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-600 hover:text-brand-500"
+                    >
+                      Apply Now <ArrowRight className="h-3 w-3" />
+                    </a>
+                  ) : (
+                    <EmailLink
+                      email={c.contact.careersEmail}
+                      subject={`Application: ${job.title}`}
+                      className="mt-auto pt-4 inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-600 hover:text-brand-500"
+                    >
+                      Apply Now <ArrowRight className="h-3 w-3" />
+                    </EmailLink>
+                  )}
                 </div>
               ))}
             </div>
@@ -84,9 +96,9 @@ export default async function CareersPage() {
         <div className="mx-auto mt-12 max-w-2xl border border-ink-500 bg-ink-800 p-8 text-center">
           <h3 className="font-display text-2xl uppercase text-silver-100">Interested in joining our team?</h3>
           <p className="mt-2 text-silver-300">Send your resume and portfolio to:</p>
-          <a href={`mailto:${c.contact.careersEmail}`} className="btn-primary mt-6">
+          <EmailLink email={c.contact.careersEmail} className="btn-primary mt-6">
             <Mail className="mr-2 h-4 w-4" /> {c.contact.careersEmail}
-          </a>
+          </EmailLink>
         </div>
       </Section>
     </>

@@ -6,6 +6,7 @@ import { prisma, safeQuery, type EventModel, type NewsPostModel, type ServiceMod
 import { getSiteContent, getHomeContent } from '@/lib/settings';
 import { Section, StatsBar } from '@/components/Section';
 import { ContactForm } from '@/components/ContactForm';
+import { EmailLink } from '@/components/EmailLink';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const revalidate = 60;
@@ -380,7 +381,7 @@ export default async function HomePage() {
               </li>
               <li className="flex items-center gap-3 text-silver-300">
                 <span className="grid h-9 w-9 place-items-center border border-ink-500 bg-ink-800 text-brand-600"><Mail className="h-4 w-4" /></span>
-                <a href={`mailto:${c.contact.email}`} className="hover:text-silver-100">{c.contact.email}</a>
+                <EmailLink email={c.contact.email} className="hover:text-silver-100" />
               </li>
             </ul>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -419,9 +420,9 @@ export default async function HomePage() {
             </div>
             <div className="mt-1 font-sans text-sm text-silver-100/80">
               Passionate about football? Join our team —{' '}
-              <a href={`mailto:${c.contact.careersEmail}`} className="underline underline-offset-2 hover:text-silver-100">
+              <EmailLink email={c.contact.careersEmail} className="underline underline-offset-2 hover:text-silver-100">
                 {c.contact.careersEmail}
-              </a>
+              </EmailLink>
             </div>
           </div>
           <Link

@@ -3,6 +3,7 @@ import { Instagram, Facebook, Linkedin, Youtube, MapPin, Phone, Mail, ArrowRight
 import { getSiteContent } from '@/lib/settings';
 import { LogoMark } from './Logo';
 import { ThreadsIcon, XIcon } from './SocialIcons';
+import { EmailLink } from './EmailLink';
 
 export async function SiteFooter() {
   const c = await getSiteContent();
@@ -110,12 +111,12 @@ export async function SiteFooter() {
               <li><Link href="/location" className="hover:text-brand-500">Our Location</Link></li>
               <li><Link href="/contact" className="hover:text-brand-500">Contact</Link></li>
             </ul>
-            <a
-              href={`mailto:${c.contact.careersEmail}`}
+            <EmailLink
+              email={c.contact.careersEmail}
               className="mt-5 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-500 hover:text-brand-400"
             >
               Apply: {c.contact.careersEmail} <ArrowRight className="h-3 w-3" />
-            </a>
+            </EmailLink>
           </div>
 
           <div>
@@ -131,7 +132,7 @@ export async function SiteFooter() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-brand-600 flex-shrink-0" />
-                <a href={`mailto:${c.contact.email}`} className="hover:text-brand-500">{c.contact.email}</a>
+                <EmailLink email={c.contact.email} className="hover:text-brand-500" />
               </li>
               <li>
                 <a
