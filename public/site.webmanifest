@@ -1,12 +1,18 @@
 {
-  "name": "Norvex Sports",
+  "id": "/",
+  "name": "Norvex Sports — Football Development in Hyderabad",
   "short_name": "Norvex",
-  "description": "Professional football development in Hyderabad.",
+  "description": "Professional football development in Hyderabad — grassroots to elite training, leagues, trials and tournaments.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": ["sports", "education", "fitness"],
   "background_color": "#050807",
   "theme_color": "#050807",
   "icons": [
-    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }

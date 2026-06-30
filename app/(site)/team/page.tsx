@@ -2,12 +2,16 @@ import type { Metadata } from 'next';
 import { prisma, safeQuery, type TeamMemberModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
+import { pageMeta, teamListLd } from '@/lib/seo';
 import { TeamGrid } from '@/components/TeamGrid';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'Core Team',
   description: 'Meet the Norvex Sports founding team — coaches and operators building football in Hyderabad.',
-};
+  path: '/team',
+});
 
 export const revalidate = 60;
 
@@ -19,6 +23,8 @@ export default async function TeamPage() {
 
   return (
     <>
+      {team.length > 0 && <JsonLd data={teamListLd(team)} />}
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Team', path: '/team' }]} />
       <PageHeader
         eyebrow="Core team"
         title="The people behind Norvex."

@@ -2,16 +2,20 @@ import type { Metadata } from 'next';
 import { Mail, Heart, Zap, Target, MapPin, Briefcase, ArrowRight } from 'lucide-react';
 import { prisma, safeQuery } from '@/lib/prisma';
 import { getSiteContent, getSettings } from '@/lib/settings';
+import { pageMeta, jobPostingLd } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
 import { EmailLink } from '@/components/EmailLink';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'Careers',
   description: 'Join Norvex Sports — passionate, dedicated, growth-driven individuals building a sports development environment.',
-};
+  path: '/careers',
+});
 
 const TRAITS = [
   { Icon: Heart, t: 'Passionate', d: 'You live and breathe football and player development.' },
@@ -31,6 +35,8 @@ export default async function CareersPage() {
 
   return (
     <>
+      {jobs.length > 0 && <JsonLd data={jobs.map((job) => jobPostingLd(job))} />}
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Careers', path: '/careers' }]} />
       <PageHeader eyebrow={s['careers.eyebrow']} title={s['careers.title']} intro={s['careers.intro']} />
 
       <Section>

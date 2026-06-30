@@ -6,7 +6,9 @@ import { ArrowRight, Trophy } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { JsonLd } from '@/components/JsonLd';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
+import { serviceLd } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 type Params = { params: { slug: string } };
@@ -48,18 +50,18 @@ export default async function ServiceDetail({ params }: Params) {
     take: 3,
   });
 
-  const ld = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: s.title,
-    description: s.shortDesc,
-    provider: { '@type': 'SportsActivityLocation', name: 'Norvex Sports', url: siteUrl() },
-    areaServed: 'Hyderabad, India',
-  };
+  const ld = serviceLd(s);
 
   return (
     <>
       <JsonLd data={ld} />
+      <Breadcrumbs
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Services', path: '/services' },
+          { name: s.title, path: `/services/${s.slug}` },
+        ]}
+      />
       <header className="relative overflow-hidden border-b border-ink-500 bg-ink-900">
         <div className="container-x py-16 md:py-20">
           <div className="flex items-center gap-3 font-sans text-xs uppercase tracking-[0.18em] text-silver-500">

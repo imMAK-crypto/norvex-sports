@@ -6,7 +6,9 @@ import { Calendar, MapPin, Tag } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { JsonLd } from '@/components/JsonLd';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
+import { eventLd } from '@/lib/seo';
 
 type Params = { params: { slug: string } };
 
@@ -41,24 +43,18 @@ export default async function EventDetail({ params }: Params) {
   if (!event || !event.isActive) return notFound();
   const e = event;
 
-  const ld = {
-    '@context': 'https://schema.org',
-    '@type': 'Event',
-    name: e.title,
-    description: e.summary,
-    startDate: e.date?.toISOString(),
-    eventStatus: 'https://schema.org/EventScheduled',
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    location: e.location
-      ? { '@type': 'Place', name: e.location, address: 'Hyderabad, Telangana, India' }
-      : { '@type': 'Place', name: 'Hyderabad', address: 'Hyderabad, Telangana, India' },
-    image: e.imageUrl,
-    organizer: { '@type': 'Organization', name: 'Norvex Sports', url: siteUrl() },
-  };
+  const ld = eventLd(e);
 
   return (
     <>
       <JsonLd data={ld} />
+      <Breadcrumbs
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Events', path: '/events' },
+          { name: e.title, path: `/events/${e.slug}` },
+        ]}
+      />
       <header className="relative overflow-hidden border-b border-ink-500 bg-ink-900">
         <div className="container-x py-16 md:py-20">
           <div className="flex items-center gap-3 font-sans text-xs uppercase tracking-[0.18em] text-silver-500">

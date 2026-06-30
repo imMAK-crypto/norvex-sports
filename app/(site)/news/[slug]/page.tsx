@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { JsonLd } from '@/components/JsonLd';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
 
 type Params = { params: { slug: string } };
@@ -43,21 +44,35 @@ export default async function NewsDetail({ params }: Params) {
   if (!found || !found.isPublished) return notFound();
   const post = found;
 
+  const url = siteUrl();
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${url}/news/${post.slug}` },
     headline: post.title,
     description: post.excerpt,
-    image: post.imageUrl,
+    image: post.imageUrl ? [post.imageUrl] : undefined,
     datePublished: post.publishedAt?.toISOString(),
     dateModified: post.updatedAt.toISOString(),
-    author: { '@type': 'Organization', name: post.author ?? 'Norvex Sports' },
-    publisher: { '@type': 'Organization', name: 'Norvex Sports', url: siteUrl() },
+    author: { '@type': 'Organization', name: post.author ?? 'Norvex Sports', url },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Norvex Sports',
+      url,
+      logo: { '@type': 'ImageObject', url: `${url}/norvex_sports_logo.png` },
+    },
   };
 
   return (
     <>
       <JsonLd data={ld} />
+      <Breadcrumbs
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'News', path: '/news' },
+          { name: post.title, path: `/news/${post.slug}` },
+        ]}
+      />
       <header className="relative overflow-hidden border-b border-ink-500 bg-ink-900">
         <div className="container-x py-16 md:py-20">
           <Link href="/news" className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.18em] text-silver-500 hover:text-brand-500">

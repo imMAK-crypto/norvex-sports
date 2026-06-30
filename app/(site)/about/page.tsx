@@ -3,16 +3,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Shield, Activity, Award, Users, Heart, Instagram, Facebook, Linkedin, Youtube } from 'lucide-react';
 import { getSiteContent, getSettings } from '@/lib/settings';
+import { pageMeta } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ThreadsIcon, XIcon } from '@/components/SocialIcons';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'About Norvex Sports',
   description:
     'Founded in 2026 in Hyderabad, Norvex Sports is a professional football development platform — grassroots to elite, technical, physical and mental.',
-};
+  path: '/about',
+});
 
 export const revalidate = 300;
 
@@ -42,6 +45,7 @@ export default async function AboutPage() {
 
   return (
     <>
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }]} />
       <PageHeader eyebrow={s['about.eyebrow']} title={s['about.title']} intro={s['about.intro']} />
 
       <Section>

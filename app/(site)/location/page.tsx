@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { getSiteContent, getSettings } from '@/lib/settings';
+import { pageMeta } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { EmailLink } from '@/components/EmailLink';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'Our Location',
   description:
     'Norvex Sports is based in Hyderabad, Telangana — serving players across the city with structured training and competitive exposure.',
-};
+  path: '/location',
+});
 
 export default async function LocationPage() {
   const [c, s] = await Promise.all([
@@ -21,6 +24,7 @@ export default async function LocationPage() {
   ]);
   return (
     <>
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Location', path: '/location' }]} />
       <PageHeader
         eyebrow={s['location.eyebrow']}
         title={s['location.title']}

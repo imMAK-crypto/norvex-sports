@@ -31,7 +31,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Norvex Sports' }],
   creator: 'Norvex Sports',
   publisher: 'Norvex Sports',
-  alternates: { canonical: url },
+  // Self-referencing canonical for the homepage. Inner pages set their own
+  // canonical via `pageMeta()` so nothing collapses to the homepage URL.
+  alternates: {
+    canonical: '/',
+    types: {
+      'application/rss+xml': [{ url: '/feed.xml', title: 'Norvex Sports — News & Updates' }],
+    },
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
@@ -43,8 +50,22 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@NORVEXSPORTS',
+    creator: '@NORVEXSPORTS',
     title: 'Norvex Sports — Football Development in Hyderabad',
     description: 'Professional football training, leagues and trials in Hyderabad.',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'Norvex Sports',
+    statusBarStyle: 'black-translucent',
+  },
+  formatDetection: { telephone: false, email: false, address: false },
+  other: {
+    'geo.region': 'IN-TG',
+    'geo.placename': 'Hyderabad, Telangana',
+    'geo.position': '17.498302;78.3443668',
+    ICBM: '17.498302, 78.3443668',
   },
   robots: {
     index: true,

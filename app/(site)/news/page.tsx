@@ -5,12 +5,16 @@ import { ArrowRight } from 'lucide-react';
 import { prisma, safeQuery, type NewsPostModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
+import { pageMeta, newsListLd } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'News & Updates',
   description: 'Latest match results, player achievements, event announcements and academy updates from Norvex Sports.',
-};
+  path: '/news',
+});
 
 export const revalidate = 60;
 
@@ -26,6 +30,8 @@ export default async function NewsPage() {
 
   return (
     <>
+      {posts.length > 0 && <JsonLd data={newsListLd(posts)} />}
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'News', path: '/news' }]} />
       <PageHeader
         eyebrow="News & updates"
         title="Stay in the loop."

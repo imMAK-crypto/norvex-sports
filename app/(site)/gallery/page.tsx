@@ -4,11 +4,15 @@ import Link from 'next/link';
 import { prisma, safeQuery, type GalleryItemModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
+import { pageMeta, galleryLd } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'Gallery',
   description: 'Moments from Norvex Sports — training sessions, match days, events, and celebrations.',
-};
+  path: '/gallery',
+});
 
 export const revalidate = 60;
 
@@ -52,6 +56,8 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { c
 
   return (
     <>
+      {items.length > 0 && <JsonLd data={galleryLd(items)} />}
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Gallery', path: '/gallery' }]} />
       <PageHeader
         eyebrow="Gallery"
         title="Energy. Passion. Progress."

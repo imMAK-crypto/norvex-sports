@@ -5,13 +5,16 @@ import { Calendar, MapPin, Tag, ArrowRight } from 'lucide-react';
 import { prisma, safeQuery, type EventModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { pageMeta } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'Events & Programs',
   description:
     'Norvex Youth League, development clinics, talent trials, friendly matches, seasonal tournaments and football-themed birthday parties.',
-};
+  path: '/events',
+});
 
 export const revalidate = 60;
 
@@ -32,6 +35,7 @@ export default async function EventsPage() {
 
   return (
     <>
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Events', path: '/events' }]} />
       <PageHeader
         eyebrow="Events & programs"
         title="Compete. Showcase. Celebrate."

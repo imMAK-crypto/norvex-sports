@@ -6,14 +6,17 @@ import { prisma, safeQuery, type ServiceModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { JsonLd } from '@/components/JsonLd';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
+import { pageMeta } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'Football Training Programs & Services',
   description:
     'Football development, one-to-one coaching, advanced player development, adult training, tournament organization, school programs, fitness, and trials.',
-};
+  path: '/services',
+});
 
 export const revalidate = 60;
 
@@ -27,17 +30,28 @@ export default async function ServicesPage() {
   const itemList = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
+    name: 'Norvex Sports — Football Training Programs & Services',
+    numberOfItems: services.length,
     itemListElement: services.map((s, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       url: `${url}/services/${s.slug}`,
-      name: s.title,
+      item: {
+        '@type': 'Service',
+        '@id': `${url}/services/${s.slug}#service`,
+        name: s.title,
+        description: s.shortDesc,
+        url: `${url}/services/${s.slug}`,
+        ...(s.imageUrl ? { image: [s.imageUrl] } : {}),
+        provider: { '@id': `${url}/#organization` },
+      },
     })),
   };
 
   return (
     <>
       <JsonLd data={itemList} />
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }]} />
       <PageHeader
         eyebrow="Our services"
         title="Programs for every player."

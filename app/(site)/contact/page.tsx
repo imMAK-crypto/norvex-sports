@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
 import { Phone, Mail, MapPin, MessageCircle, Clock } from 'lucide-react';
 import { getSiteContent, getSettings } from '@/lib/settings';
+import { pageMeta } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { ContactForm } from '@/components/ContactForm';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { EmailLink } from '@/components/EmailLink';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: 'Contact Us — Book a Free Trial',
   description: 'Get in touch with Norvex Sports — book a free trial, ask about programs, or enquire about events and birthday parties.',
-};
+  path: '/contact',
+});
 
 export default async function ContactPage() {
   const [c, s] = await Promise.all([
@@ -20,6 +23,7 @@ export default async function ContactPage() {
 
   return (
     <>
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }]} />
       <PageHeader
         eyebrow={s['contact.eyebrow']}
         title={s['contact.title']}
