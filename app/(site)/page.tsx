@@ -8,6 +8,7 @@ import { Section, StatsBar } from '@/components/Section';
 import { ContactForm } from '@/components/ContactForm';
 import { EmailLink } from '@/components/EmailLink';
 import { JsonLd } from '@/components/JsonLd';
+import { VenueBlocks } from '@/components/VenueBlocks';
 import { webPageLd } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
@@ -424,7 +425,10 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      {/* 12 — CAREERS STRIP */}
+      {/* 12 — OUR LOCATIONS */}
+      <VenueBlocks className="bg-ink-900 border-y border-ink-500" />
+
+      {/* 13 — CAREERS STRIP */}
       <section className="bg-brand-600">
         <div className="container-x py-8 md:py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>

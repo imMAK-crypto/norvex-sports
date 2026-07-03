@@ -8,6 +8,7 @@ import { ContactForm } from '@/components/ContactForm';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { EmailLink } from '@/components/EmailLink';
 import { JsonLd } from '@/components/JsonLd';
+import { VenueBlocks } from '@/components/VenueBlocks';
 
 export const metadata: Metadata = pageMeta({
   title: 'Contact Us — Book a Free Trial',
@@ -127,6 +128,12 @@ export default async function ContactPage() {
           </div>
         </div>
       </Section>
+
+      {/* OUR LOCATIONS */}
+      <VenueBlocks className="bg-ink-900 border-y border-ink-500" />
+
+      {/* OUR LOCATIONS */}
+      <VenueBlocks className="bg-ink-900 border-y border-ink-500" />
 
       {/* CTA strip */}
       <section className="bg-brand-600">
