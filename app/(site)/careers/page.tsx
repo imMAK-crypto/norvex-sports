@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Mail, Heart, Zap, Target, MapPin, Briefcase, ArrowRight } from 'lucide-react';
 import { prisma, safeQuery } from '@/lib/prisma';
 import { getSiteContent, getSettings } from '@/lib/settings';
-import { pageMeta, jobPostingLd } from '@/lib/seo';
+import { pageMeta, jobPostingLd, webPageLd } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -35,7 +35,18 @@ export default async function CareersPage() {
 
   return (
     <>
-      {jobs.length > 0 && <JsonLd data={jobs.map((job) => jobPostingLd(job))} />}
+      <JsonLd
+        data={[
+          webPageLd({
+            path: '/careers',
+            type: 'CollectionPage',
+            name: 'Careers — Norvex Sports',
+            description:
+              'Join Norvex Sports — passionate, dedicated, growth-driven people building a sports development environment in Hyderabad.',
+          }),
+          ...jobs.map((job) => jobPostingLd(job)),
+        ]}
+      />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Careers', path: '/careers' }]} />
       <PageHeader eyebrow={s['careers.eyebrow']} title={s['careers.title']} intro={s['careers.intro']} />
 

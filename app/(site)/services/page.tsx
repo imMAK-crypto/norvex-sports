@@ -8,7 +8,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
-import { pageMeta } from '@/lib/seo';
+import { pageMeta, ORG_KEYWORDS, webPageLd } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const metadata: Metadata = pageMeta({
@@ -16,6 +16,7 @@ export const metadata: Metadata = pageMeta({
   description:
     'Football development, one-to-one coaching, advanced player development, adult training, tournament organization, school programs, fitness, and trials.',
   path: '/services',
+  keywords: ORG_KEYWORDS,
 });
 
 export const revalidate = 60;
@@ -48,9 +49,17 @@ export default async function ServicesPage() {
     })),
   };
 
+  const pageLd = webPageLd({
+    path: '/services',
+    type: 'CollectionPage',
+    name: 'Football Training Programs & Services',
+    description:
+      'Football development, one-to-one coaching, advanced player development, adult training, tournament organization, school programs, fitness, and trials in Hyderabad.',
+  });
+
   return (
     <>
-      <JsonLd data={itemList} />
+      <JsonLd data={[pageLd, itemList]} />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }]} />
       <PageHeader
         eyebrow="Our services"

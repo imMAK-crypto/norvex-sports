@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Shield, Activity, Award, Users, Heart } from 'lucide-react';
 import { getSiteContent, getSettings } from '@/lib/settings';
-import { pageMeta } from '@/lib/seo';
+import { pageMeta, webPageLd } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const metadata: Metadata = pageMeta({
@@ -13,6 +14,7 @@ export const metadata: Metadata = pageMeta({
   description:
     'The Norvex Project — building a structured, professional sports development platform from grassroots to elite across multiple sports and cities.',
   path: '/the-norvex-project',
+  keywords: ['Norvex Project', 'sports development platform India', 'football vision Hyderabad'],
 });
 
 export const revalidate = 300;
@@ -53,6 +55,14 @@ export default async function NorvexProjectPage() {
 
   return (
     <>
+      <JsonLd
+        data={webPageLd({
+          path: '/the-norvex-project',
+          type: 'AboutPage',
+          name: 'The Norvex Project — Our Vision',
+          description: c.projectStatement,
+        })}
+      />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'The Norvex Project', path: '/the-norvex-project' }]} />
       <PageHeader
         eyebrow={s['norvex.eyebrow']}

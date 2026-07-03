@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { getSiteContent, getSettings } from '@/lib/settings';
-import { pageMeta } from '@/lib/seo';
+import { pageMeta, webPageLd } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
 import { EmailLink } from '@/components/EmailLink';
 
 export const metadata: Metadata = pageMeta({
@@ -12,6 +13,7 @@ export const metadata: Metadata = pageMeta({
   description:
     'Norvex Sports is based in Hyderabad, Telangana — serving players across the city with structured training and competitive exposure.',
   path: '/location',
+  keywords: ['football academy Hyderabad location', 'football training near me Hyderabad', 'Norvex Sports Hyderabad'],
 });
 
 export default async function LocationPage() {
@@ -24,6 +26,15 @@ export default async function LocationPage() {
   ]);
   return (
     <>
+      <JsonLd
+        data={webPageLd({
+          path: '/location',
+          type: 'ContactPage',
+          name: 'Our Location — Norvex Sports, Hyderabad',
+          description:
+            'Norvex Sports is based in Hyderabad, Telangana — serving players across the city with structured training and competitive exposure.',
+        })}
+      />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Location', path: '/location' }]} />
       <PageHeader
         eyebrow={s['location.eyebrow']}

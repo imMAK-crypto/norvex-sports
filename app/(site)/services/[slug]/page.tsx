@@ -8,7 +8,7 @@ import { Section } from '@/components/Section';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
-import { serviceLd } from '@/lib/seo';
+import { serviceLd, courseLd, webPageLd, ORG_KEYWORDS } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 type Params = { params: { slug: string } };
@@ -28,6 +28,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: s.metaTitle ?? s.title,
     description: s.metaDescription ?? s.shortDesc,
+    keywords: [
+      s.title,
+      `${s.title} Hyderabad`,
+      `${s.title} near me`,
+      ...ORG_KEYWORDS.slice(0, 8),
+    ],
     alternates: { canonical: `${siteUrl()}/services/${s.slug}` },
     openGraph: {
       title: s.title,
@@ -50,7 +56,17 @@ export default async function ServiceDetail({ params }: Params) {
     take: 3,
   });
 
-  const ld = serviceLd(s);
+  const ld = [
+    serviceLd(s),
+    courseLd(s),
+    webPageLd({
+      path: `/services/${s.slug}`,
+      name: s.metaTitle ?? s.title,
+      description: s.metaDescription ?? s.shortDesc,
+      image: s.imageUrl,
+      dateModified: s.updatedAt?.toISOString(),
+    }),
+  ];
 
   return (
     <>

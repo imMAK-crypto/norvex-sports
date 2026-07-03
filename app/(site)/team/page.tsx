@@ -4,7 +4,7 @@ import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
-import { pageMeta, teamListLd } from '@/lib/seo';
+import { pageMeta, teamListLd, webPageLd } from '@/lib/seo';
 import { TeamGrid } from '@/components/TeamGrid';
 
 export const metadata: Metadata = pageMeta({
@@ -23,7 +23,27 @@ export default async function TeamPage() {
 
   return (
     <>
-      {team.length > 0 && <JsonLd data={teamListLd(team)} />}
+      <JsonLd
+        data={
+          team.length > 0
+            ? [
+                webPageLd({
+                  path: '/team',
+                  type: 'ProfilePage',
+                  name: 'Core Team — Norvex Sports',
+                  description:
+                    'Meet the Norvex Sports founding team — coaches and operators building football in Hyderabad.',
+                }),
+                teamListLd(team),
+              ]
+            : webPageLd({
+                path: '/team',
+                type: 'ProfilePage',
+                name: 'Core Team — Norvex Sports',
+                description: 'Meet the Norvex Sports founding team.',
+              })
+        }
+      />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Team', path: '/team' }]} />
       <PageHeader
         eyebrow="Core team"

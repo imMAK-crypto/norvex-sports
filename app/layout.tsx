@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 import { siteUrl } from '@/lib/settings';
+import { ORG_KEYWORDS } from '@/lib/seo';
 import { AppToaster } from '@/components/Toaster';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -17,17 +18,7 @@ export const metadata: Metadata = {
   },
   description:
     'Norvex Sports is a professional football development platform in Hyderabad — grassroots to elite training, leagues, trials and tournaments.',
-  keywords: [
-    'Norvex Sports',
-    'football academy Hyderabad',
-    'football training Hyderabad',
-    'youth football India',
-    'soccer academy Hyderabad',
-    'football trials',
-    'football coaching',
-    'kids football Hyderabad',
-    'football clinic',
-  ],
+  keywords: ORG_KEYWORDS,
   authors: [{ name: 'Norvex Sports' }],
   creator: 'Norvex Sports',
   publisher: 'Norvex Sports',

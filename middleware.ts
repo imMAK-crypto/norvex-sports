@@ -30,11 +30,11 @@ async function isValid(token?: string): Promise<boolean> {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+  if (pathname.startsWith('/nvx-panel-7q2') && pathname !== '/nvx-panel-7q2/login') {
     const ok = await isValid(req.cookies.get(COOKIE)?.value);
     if (!ok) {
       const url = req.nextUrl.clone();
-      url.pathname = '/admin/login';
+      url.pathname = '/nvx-panel-7q2/login';
       url.searchParams.set('next', pathname);
       return NextResponse.redirect(url);
     }
@@ -43,5 +43,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/nvx-panel-7q2/:path*'],
 };

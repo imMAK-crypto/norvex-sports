@@ -7,6 +7,8 @@ import { getSiteContent, getHomeContent } from '@/lib/settings';
 import { Section, StatsBar } from '@/components/Section';
 import { ContactForm } from '@/components/ContactForm';
 import { EmailLink } from '@/components/EmailLink';
+import { JsonLd } from '@/components/JsonLd';
+import { webPageLd } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const revalidate = 60;
@@ -47,6 +49,17 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd
+        data={webPageLd({
+          path: '/',
+          name: 'Norvex Sports — Football Development in Hyderabad',
+          description:
+            'Professional football academy in Hyderabad — grassroots to elite training, leagues, trials and tournaments. Book a free trial.',
+          image: h.hero.image,
+          hasBreadcrumb: false,
+          speakableSelectors: ['h1', 'h2'],
+        })}
+      />
       {/* 1 — HERO */}
       <section className="relative overflow-hidden">
         <div className="relative h-[58vh] min-h-[540px] md:h-[88vh] md:min-h-[560px]">

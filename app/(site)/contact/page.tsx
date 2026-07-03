@@ -1,17 +1,25 @@
 import type { Metadata } from 'next';
 import { Phone, Mail, MapPin, MessageCircle, Clock } from 'lucide-react';
 import { getSiteContent, getSettings } from '@/lib/settings';
-import { pageMeta } from '@/lib/seo';
+import { pageMeta, faqLd, SITE_FAQ, ORG_KEYWORDS, webPageLd } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { ContactForm } from '@/components/ContactForm';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { EmailLink } from '@/components/EmailLink';
+import { JsonLd } from '@/components/JsonLd';
 
 export const metadata: Metadata = pageMeta({
   title: 'Contact Us — Book a Free Trial',
   description: 'Get in touch with Norvex Sports — book a free trial, ask about programs, or enquire about events and birthday parties.',
   path: '/contact',
+  keywords: [
+    'contact Norvex Sports',
+    'book football trial Hyderabad',
+    'free football trial',
+    'football academy enquiry Hyderabad',
+    ...ORG_KEYWORDS.slice(0, 6),
+  ],
 });
 
 export default async function ContactPage() {
@@ -23,6 +31,18 @@ export default async function ContactPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          webPageLd({
+            path: '/contact',
+            type: 'ContactPage',
+            name: 'Contact Norvex Sports — Book a Free Trial',
+            description:
+              'Get in touch with Norvex Sports in Hyderabad — book a free football trial, ask about programs, events or birthday parties.',
+          }),
+          faqLd(),
+        ]}
+      />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }]} />
       <PageHeader
         eyebrow={s['contact.eyebrow']}
@@ -86,6 +106,25 @@ export default async function ContactPage() {
               </div>
             </div>
           </aside>
+        </div>
+      </Section>
+
+      {/* FAQ — visible content backing the FAQPage schema (required for rich results) */}
+      <Section>
+        <div className="mx-auto max-w-3xl">
+          <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-brand-600">FAQ</p>
+          <h2 className="headline mt-2 text-3xl md:text-4xl text-silver-100">Frequently asked questions</h2>
+          <div className="mt-8 divide-y divide-ink-500 border-y border-ink-500">
+            {SITE_FAQ.map((f) => (
+              <details key={f.q} className="group py-5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg uppercase tracking-wide text-silver-100 marker:content-none">
+                  {f.q}
+                  <span className="shrink-0 text-brand-600 transition group-open:rotate-45">+</span>
+                </summary>
+                <p className="mt-3 text-base text-silver-300 leading-relaxed">{f.a}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </Section>
 

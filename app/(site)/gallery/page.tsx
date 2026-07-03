@@ -6,7 +6,7 @@ import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
-import { pageMeta, galleryLd } from '@/lib/seo';
+import { pageMeta, galleryLd, webPageLd, videoLd } from '@/lib/seo';
 
 export const metadata: Metadata = pageMeta({
   title: 'Gallery',
@@ -54,9 +54,26 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { c
   const categories = ['All', ...ALL_CATEGORIES.filter((c) => presentCats.has(c))];
   const selected = cat ?? 'All';
 
+  const video = await safeQuery(
+    () => prisma.galleryVideo.findFirst({ where: { isEnabled: true, NOT: { url: '' } }, orderBy: { order: 'asc' } }),
+    null,
+  );
+
+  const gLd: Array<Record<string, unknown>> = [
+    webPageLd({
+      path: '/gallery',
+      type: 'CollectionPage',
+      name: 'Gallery — Norvex Sports',
+      description: 'Moments from Norvex Sports — training sessions, match days, events, and celebrations in Hyderabad.',
+      image: items[0]?.imageUrl,
+    }),
+  ];
+  if (items.length > 0) gLd.push(galleryLd(items));
+  if (video?.url) gLd.push(videoLd({ title: video.title, url: video.url, uploadDate: video.createdAt }));
+
   return (
     <>
-      {items.length > 0 && <JsonLd data={galleryLd(items)} />}
+      <JsonLd data={gLd} />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Gallery', path: '/gallery' }]} />
       <PageHeader
         eyebrow="Gallery"

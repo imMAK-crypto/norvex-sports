@@ -3,5 +3,5 @@ import { clearSessionCookie } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
   await clearSessionCookie();
-  return NextResponse.redirect(new URL('/admin/login', req.url));
+  return NextResponse.redirect(new URL('/nvx-panel-7q2/login', req.url));
 }

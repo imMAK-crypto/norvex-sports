@@ -21,6 +21,33 @@ export const GOOGLE_MAPS_PLACE_URL =
 export const FOUNDING_DATE = '2026';
 export const LOCALE = 'en_IN';
 
+/**
+ * Master keyword set — the terms Norvex should rank for. Reused across the
+ * Organization/LocalBusiness schema and available for per-page metadata.
+ */
+export const ORG_KEYWORDS: string[] = [
+  'football academy Hyderabad',
+  'football coaching Hyderabad',
+  'football training Hyderabad',
+  'soccer academy Hyderabad',
+  'youth football Hyderabad',
+  'kids football training Hyderabad',
+  'football classes near me',
+  'football coaching near me',
+  'football academy near me',
+  'grassroots football India',
+  'football trials Hyderabad',
+  'football tournament Hyderabad',
+  'one to one football coaching',
+  'adult football training Hyderabad',
+  'football fitness and conditioning',
+  'school football coaching',
+  'talent identification football',
+  'football development program',
+  'Norvex Sports',
+  'best football academy in Hyderabad',
+];
+
 /** Absolute URL for a same-origin path. */
 export function abs(path: string): string {
   const base = siteUrl();
@@ -40,12 +67,14 @@ export function pageMeta(opts: {
   path: string;
   images?: string[];
   type?: 'website' | 'article';
+  keywords?: string[];
 }): Metadata {
-  const { title, description, path, images, type = 'website' } = opts;
+  const { title, description, path, images, type = 'website', keywords } = opts;
   const canonicalPath = path === '/' ? '/' : path.replace(/\/$/, '');
   return {
     ...(title ? { title } : {}),
     ...(description ? { description } : {}),
+    ...(keywords && keywords.length ? { keywords } : {}),
     alternates: { canonical: canonicalPath },
     openGraph: {
       ...(title ? { title } : {}),
@@ -64,9 +93,12 @@ export function pageMeta(opts: {
 export function breadcrumbLd(
   crumbs: Array<{ name: string; path: string }>,
 ): Record<string, unknown> {
+  const last = crumbs[crumbs.length - 1];
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    // Stable @id keyed on the current page so WebPage nodes can cross-link it.
+    '@id': `${abs(last.path)}#breadcrumb`,
     itemListElement: crumbs.map((c, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -77,12 +109,127 @@ export function breadcrumbLd(
 }
 
 /**
+ * Per-page WebPage-family node (WebPage / AboutPage / ContactPage /
+ * CollectionPage / ProfilePage). Anchors each URL into the entity graph:
+ * isPartOf the WebSite, about the Organization, links its breadcrumb, marks
+ * the primary image, and flags speakable regions for voice search. No visible
+ * copy — pure structured data.
+ */
+export function webPageLd(opts: {
+  path: string;
+  name: string;
+  description?: string;
+  type?: 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage' | 'ProfilePage';
+  image?: string | null;
+  hasBreadcrumb?: boolean;
+  dateModified?: string;
+  datePublished?: string;
+  speakableSelectors?: string[];
+}): Record<string, unknown> {
+  const base = siteUrl();
+  const { path, name, description, type = 'WebPage', image, hasBreadcrumb = true } = opts;
+  const canonical = path === '/' ? base : `${base}${path.replace(/\/$/, '')}`;
+  const primaryImage = image ? abs(image) : abs('/opengraph-image');
+  return {
+    '@context': 'https://schema.org',
+    '@type': type,
+    '@id': `${canonical}#webpage`,
+    url: canonical,
+    name,
+    ...(description ? { description } : {}),
+    isPartOf: { '@id': `${base}/#website` },
+    about: { '@id': `${base}/#organization` },
+    inLanguage: 'en-IN',
+    primaryImageOfPage: { '@type': 'ImageObject', url: primaryImage },
+    ...(hasBreadcrumb ? { breadcrumb: { '@id': `${canonical}#breadcrumb` } } : {}),
+    ...(opts.datePublished ? { datePublished: opts.datePublished } : {}),
+    ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: opts.speakableSelectors ?? ['h1', 'h2'],
+    },
+  };
+}
+
+/**
+ * Service detail → Course / EducationalOccupationalProgram, so training
+ * programs are eligible for course-style rich results. Complements serviceLd
+ * (the same page carries both a Service and a Course node).
+ */
+export function courseLd(s: {
+  slug: string;
+  title: string;
+  shortDesc: string;
+  longDesc?: string | null;
+  metaDescription?: string | null;
+  imageUrl?: string | null;
+}): Record<string, unknown> {
+  const base = siteUrl();
+  const url = `${base}/services/${s.slug}`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    '@id': `${url}#course`,
+    name: s.title,
+    description: s.metaDescription || s.longDesc || s.shortDesc,
+    url,
+    ...(s.imageUrl ? { image: [s.imageUrl] } : {}),
+    provider: { '@id': `${base}/#organization` },
+    educationalLevel: 'Beginner to Advanced',
+    inLanguage: 'en-IN',
+    about: 'Football training',
+    teaches: s.title,
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: ['Onsite', 'InPerson'],
+      courseWorkload: 'Ongoing sessions',
+      location: {
+        '@type': 'Place',
+        name: 'Norvex Sports — Hyderabad',
+        address: POSTAL_ADDRESS,
+      },
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'INR',
+        availability: 'https://schema.org/InStock',
+        url: `${base}/contact#trial`,
+        category: 'Football coaching',
+      },
+    },
+  };
+}
+
+/** Gallery video reel → schema.org/VideoObject (video rich results). */
+export function videoLd(v: {
+  title?: string | null;
+  url: string;
+  thumbnailUrl?: string | null;
+  uploadDate?: Date | null;
+}): Record<string, unknown> {
+  const base = siteUrl();
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: v.title || 'Norvex Sports — In Action',
+    description: 'Highlights from Norvex Sports football training, matches and events in Hyderabad.',
+    thumbnailUrl: v.thumbnailUrl ? [v.thumbnailUrl] : [abs('/opengraph-image')],
+    uploadDate: (v.uploadDate ?? new Date()).toISOString(),
+    contentUrl: v.url,
+    embedUrl: v.url,
+    publisher: { '@id': `${base}/#organization` },
+  };
+}
+
+/**
  * Site-wide entity graph: Organization + WebSite + the physical
  * SportsActivityLocation/LocalBusiness, cross-linked by @id so search
  * engines treat them as one entity. Powers the local "knowledge panel"
  * and map pack.
  */
-export function siteGraph(c: SiteContent): Array<Record<string, unknown>> {
+export function siteGraph(
+  c: SiteContent,
+  services?: Array<{ slug: string; title: string; shortDesc?: string | null }>,
+): Array<Record<string, unknown>> {
   const url = siteUrl();
   const logoUrl = abs('/norvex_sports_logo.png');
   const ogUrl = abs('/opengraph-image');
@@ -96,6 +243,61 @@ export function siteGraph(c: SiteContent): Array<Record<string, unknown>> {
     c.social.x,
     GOOGLE_MAPS_PLACE_URL,
   ].filter(Boolean);
+
+  // Real service catalogue → Offer nodes, so the business entity is linked to
+  // everything it actually sells. Built only from active services (no fabrication).
+  const offerCatalog =
+    services && services.length
+      ? {
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: 'Football Training Programs & Services',
+            itemListElement: services.map((s) => ({
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                '@id': `${url}/services/${s.slug}#service`,
+                name: s.title,
+                ...(s.shortDesc ? { description: s.shortDesc } : {}),
+                url: `${url}/services/${s.slug}`,
+                serviceType: 'Football coaching',
+                provider: { '@id': `${url}/#organization` },
+              },
+              category: 'Football coaching',
+              availability: 'https://schema.org/InStock',
+              priceCurrency: 'INR',
+            })),
+          },
+          makesOffer: services.map((s) => ({
+            '@type': 'Offer',
+            priceCurrency: 'INR',
+            availability: 'https://schema.org/InStock',
+            itemOffered: { '@id': `${url}/services/${s.slug}#service` },
+          })),
+        }
+      : {};
+
+  // Booking CTA search engines can surface as an action.
+  const bookAction = {
+    potentialAction: {
+      '@type': 'ReserveAction',
+      name: 'Book a Free Trial',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${url}/contact#trial`,
+        inLanguage: 'en-IN',
+        actionPlatform: [
+          'https://schema.org/DesktopWebPlatform',
+          'https://schema.org/MobileWebPlatform',
+        ],
+      },
+      result: { '@type': 'Reservation', name: 'Football trial session' },
+    },
+  };
+
+  const whatsappNumber = c.contact.whatsapp
+    ? `+${c.contact.whatsapp.replace(/[^\d]/g, '')}`
+    : c.contact.phone;
 
   const address = {
     '@type': 'PostalAddress',
@@ -118,7 +320,7 @@ export function siteGraph(c: SiteContent): Array<Record<string, unknown>> {
       '@type': 'Organization',
       '@id': `${url}/#organization`,
       name: 'Norvex Sports',
-      alternateName: 'Norvex',
+      alternateName: ['Norvex', 'Norvex Sports Academy', 'Norvex Football Academy'],
       url,
       logo,
       image: { '@id': `${url}/#logo` },
@@ -126,15 +328,27 @@ export function siteGraph(c: SiteContent): Array<Record<string, unknown>> {
       email: c.contact.email,
       telephone: c.contact.phone,
       foundingDate: FOUNDING_DATE,
+      foundingLocation: { '@type': 'Place', name: 'Hyderabad, Telangana, India' },
       slogan: c.tagline,
+      keywords: ORG_KEYWORDS,
+      knowsLanguage: ['en', 'hi', 'te'],
       address,
-      areaServed: { '@type': 'City', name: 'Hyderabad' },
+      areaServed: AREA_SERVED,
+      ...offerCatalog,
       contactPoint: [
         {
           '@type': 'ContactPoint',
           telephone: c.contact.phone,
           email: c.contact.email,
           contactType: 'customer service',
+          areaServed: 'IN',
+          availableLanguage: ['en', 'hi', 'te'],
+        },
+        {
+          '@type': 'ContactPoint',
+          telephone: whatsappNumber,
+          contactType: 'sales',
+          contactOption: 'https://schema.org/TollFree',
           areaServed: 'IN',
           availableLanguage: ['en', 'hi', 'te'],
         },
@@ -164,6 +378,11 @@ export function siteGraph(c: SiteContent): Array<Record<string, unknown>> {
       telephone: c.contact.phone,
       email: c.contact.email,
       foundingDate: FOUNDING_DATE,
+      priceRange: '₹₹',
+      currenciesAccepted: 'INR',
+      paymentAccepted: 'Cash, UPI, Bank Transfer, Card',
+      slogan: c.tagline,
+      keywords: ORG_KEYWORDS,
       parentOrganization: { '@id': `${url}/#organization` },
       address,
       geo: {
@@ -172,17 +391,22 @@ export function siteGraph(c: SiteContent): Array<Record<string, unknown>> {
         longitude: GEO.longitude,
       },
       hasMap: GOOGLE_MAPS_URL,
-      areaServed: [
-        { '@type': 'City', name: 'Hyderabad' },
-        { '@type': 'AdministrativeArea', name: 'Telangana' },
-      ],
+      areaServed: AREA_SERVED,
+      ...offerCatalog,
+      ...bookAction,
       knowsAbout: [
         'Football',
         'Football coaching',
+        'Football academy',
         'Youth football development',
+        'Grassroots football',
         'Soccer training',
         'Football trials',
         'Football tournaments',
+        'One-to-one football coaching',
+        'Fitness and conditioning',
+        'Talent identification',
+        'School football programs',
       ],
       sameAs,
     },
@@ -358,6 +582,58 @@ export function galleryLd(
           })),
         }
       : {}),
+  };
+}
+
+/**
+ * Site FAQ — single source of truth for both the visible accordion and the
+ * FAQPage JSON-LD. Google only grants FAQ rich results when the same Q&A is
+ * visible on the page, so this feeds the rendered section too.
+ */
+export const SITE_FAQ: Array<{ q: string; a: string }> = [
+  {
+    q: 'Where is Norvex Sports located?',
+    a: 'Norvex Sports is a professional football development academy based in Hyderabad, Telangana, India. We run training, leagues, trials and tournaments across the city.',
+  },
+  {
+    q: 'What age groups do you coach?',
+    a: 'We coach players across all age groups — from young grassroots beginners through youth development to adult football training. Programs are organised into clear age- and skill-banded stages.',
+  },
+  {
+    q: 'Do you offer a free trial session?',
+    a: 'Yes. Your first session is on us — just bring your boots. You can book a free trial from our Contact page, by phone, or on WhatsApp.',
+  },
+  {
+    q: 'What programs and services does Norvex Sports offer?',
+    a: 'Football development programs, one-to-one and community coaching, advanced player development, adult football training, tournament and event organization, school and college coaching, fitness and conditioning, and talent identification trials.',
+  },
+  {
+    q: 'How do I join or register for training?',
+    a: 'Submit an enquiry through the Contact page or message us on WhatsApp. Our team responds within one working day to arrange your free trial and confirm the right program for you.',
+  },
+  {
+    q: 'Do you organise football tournaments and events?',
+    a: 'Yes. We plan and run tournaments, leagues, clinics and open trials — including the Norvex Youth League — plus football-themed birthday parties.',
+  },
+  {
+    q: 'Do you provide one-to-one coaching?',
+    a: 'Yes. Alongside group programs we offer personalised one-to-one sessions focused on a specific position, skill set or area for improvement.',
+  },
+];
+
+/** FAQPage JSON-LD built from a list of Q&A pairs. */
+export function faqLd(
+  items: Array<{ q: string; a: string }> = SITE_FAQ,
+): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${siteUrl()}/#faq`,
+    mainEntity: items.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
   };
 }
 
