@@ -91,7 +91,7 @@ export default async function AboutPage() {
         <div className={`grid gap-5 md:grid-cols-2 ${centerGridClass('lg')}`}>
           {VALUES.map(({ Icon, t, d }, i) => (
             <div key={t} className={`card-accent ${centerCardSpan('lg')} ${centerLastRow('lg', i, VALUES.length)}`}>
-              <div className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600 mb-4">
+              <div className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600 mb-4">
                 <Icon className="h-5 w-5" />
               </div>
               <h3 className="font-display text-xl uppercase tracking-wide text-silver-100">{t}</h3>
@@ -115,9 +115,9 @@ export default async function AboutPage() {
                 href={href}
                 target="_blank"
                 rel="noreferrer noopener"
-                className={`flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600 ${centerCardSpan('lg')} ${centerLastRow('lg', i, socials.length)}`}
+                className={`flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600 ${centerCardSpan('lg')} ${centerLastRow('lg', i, socials.length)}`}
               >
-                <span className="grid h-11 w-11 flex-none place-items-center bg-brand-600/10 text-brand-600">
+                <span className="grid h-11 w-11 flex-none place-items-center rounded-lg bg-brand-600/10 text-brand-600">
                   <Icon className="h-5 w-5" />
                 </span>
                 <span className="text-left">

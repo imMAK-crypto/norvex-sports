@@ -102,7 +102,7 @@ export default async function NorvexProjectPage() {
         <div className={`grid gap-5 md:grid-cols-2 ${centerGridClass('lg')}`}>
           {VALUES.map(({ Icon, t, d }, i) => (
             <div key={t} className={`card-accent ${centerCardSpan('lg')} ${centerLastRow('lg', i, VALUES.length)}`}>
-              <div className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600 mb-4">
+              <div className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600 mb-4">
                 <Icon className="h-5 w-5" />
               </div>
               <h3 className="font-display text-xl uppercase tracking-wide text-silver-100">{t}</h3>

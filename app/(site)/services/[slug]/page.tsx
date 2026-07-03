@@ -105,7 +105,7 @@ export default async function ServiceDetail({ params }: Params) {
               {s.longDesc.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}
             </div>
           </div>
-          <aside className="border border-ink-500 border-t-[3px] border-t-brand-600 bg-ink-800 p-6 h-fit lg:sticky lg:top-28">
+          <aside className="rounded-xl border border-ink-500 border-t-[3px] border-t-brand-600 bg-ink-800 p-6 h-fit lg:sticky lg:top-28">
             <h3 className="font-display text-xl uppercase text-silver-100">Get Started</h3>
             <p className="mt-2 text-sm text-silver-300">
               Book a free trial session — meet the coaches and try it out, no pressure.
@@ -121,7 +121,7 @@ export default async function ServiceDetail({ params }: Params) {
           <div className={`grid gap-5 ${centerGridClass('md')}`}>
             {related.map((r, i) => (
               <Link key={r.id} href={`/services/${r.slug}`} className={`card-accent group ${centerCardSpan('md')} ${centerLastRow('md', i, related.length)}`}>
-                <div className="grid h-10 w-10 place-items-center bg-brand-600/10 text-brand-600 mb-3 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
+                <div className="grid h-10 w-10 place-items-center rounded-lg bg-brand-600/10 text-brand-600 mb-3 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
                   <Trophy className="h-4 w-4" />
                 </div>
                 <h3 className="font-display text-xl uppercase text-silver-100">{r.title}</h3>

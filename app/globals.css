@@ -107,7 +107,7 @@ a {
 
 /* Form */
 .input {
-  @apply w-full border border-ink-500 bg-ink-800 px-4 py-3 font-sans text-silver-100 placeholder:text-silver-500 outline-none transition focus:border-brand-500 focus:shadow-red-sm;
+  @apply w-full rounded-lg border border-ink-500 bg-ink-800 px-4 py-3 font-sans text-silver-100 placeholder:text-silver-500 outline-none transition focus:border-brand-500 focus:shadow-red-sm;
   min-height: 44px;
 }
 

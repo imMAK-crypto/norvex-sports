@@ -56,10 +56,10 @@ export default async function ContactPage() {
       <Section id="trial">
         <div className="grid gap-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <div className="border border-ink-500 bg-ink-800 p-6 md:p-8">
+            <div className="rounded-xl border border-ink-500 bg-ink-800 p-6 md:p-8">
               <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
                 <h2 className="font-display text-3xl uppercase tracking-wide text-silver-100">Enquiry Form</h2>
-                <span className="inline-flex items-center gap-2 border border-brand-600/40 bg-brand-600/10 px-3 py-1 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600">
+                <span className="inline-flex items-center gap-2 rounded-md border border-brand-600/40 bg-brand-600/10 px-3 py-1 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600">
                   <span className="h-2 w-2 rounded-full bg-brand-600 animate-pulse" /> Free Trial Available
                 </span>
               </div>
@@ -68,8 +68,8 @@ export default async function ContactPage() {
           </div>
 
           <aside className="space-y-4 lg:col-span-2">
-            <a href={`tel:${phoneTel}`} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
-              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Phone className="h-5 w-5" /></span>
+            <a href={`tel:${phoneTel}`} className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Phone className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Phone</p>
                 <p className="font-display text-xl uppercase tracking-wide text-silver-100">{c.contact.phone}</p>
@@ -79,30 +79,30 @@ export default async function ContactPage() {
               href={`https://wa.me/${c.contact.whatsapp}`}
               target="_blank"
               rel="noreferrer noopener"
-              className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600"
+              className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600"
             >
-              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><MessageCircle className="h-5 w-5" /></span>
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><MessageCircle className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">WhatsApp</p>
                 <p className="font-display text-xl uppercase tracking-wide text-silver-100">Chat with us</p>
               </div>
             </a>
-            <EmailLink email={c.contact.email} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
-              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Mail className="h-5 w-5" /></span>
+            <EmailLink email={c.contact.email} className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Mail className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Email</p>
                 <p className="font-display text-lg break-all text-silver-100">{c.contact.email}</p>
               </div>
             </EmailLink>
-            <div className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5">
-              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><MapPin className="h-5 w-5" /></span>
+            <div className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><MapPin className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Location</p>
                 <p className="font-display text-xl uppercase tracking-wide text-silver-100">{c.contact.location}</p>
               </div>
             </div>
-            <div className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5">
-              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Clock className="h-5 w-5" /></span>
+            <div className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Clock className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Response Time</p>
                 <p className="font-display text-xl uppercase tracking-wide text-silver-100">{s['contact.responseTime']}</p>

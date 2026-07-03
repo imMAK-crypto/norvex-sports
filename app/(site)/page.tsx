@@ -190,7 +190,7 @@ export default async function HomePage() {
               href={`/services/${s.slug}`}
               className={`card-accent group flex flex-col ${centerCardSpan('lg')} ${centerLastRow('lg', i, arr.length)}`}
             >
-              <div className="mb-3 grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
+              <div className="mb-3 grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
                 <Trophy className="h-5 w-5" />
               </div>
               <h3 className="font-display text-2xl text-silver-100 uppercase">{s.title}</h3>
@@ -386,15 +386,15 @@ export default async function HomePage() {
             </p>
             <ul className="mt-8 space-y-3 font-sans text-sm">
               <li className="flex items-center gap-3 text-silver-300">
-                <span className="grid h-9 w-9 place-items-center border border-ink-500 bg-ink-800 text-brand-600"><MapPin className="h-4 w-4" /></span>
+                <span className="grid h-9 w-9 place-items-center rounded-lg border border-ink-500 bg-ink-800 text-brand-600"><MapPin className="h-4 w-4" /></span>
                 {c.contact.location}
               </li>
               <li className="flex items-center gap-3 text-silver-300">
-                <span className="grid h-9 w-9 place-items-center border border-ink-500 bg-ink-800 text-brand-600"><Phone className="h-4 w-4" /></span>
+                <span className="grid h-9 w-9 place-items-center rounded-lg border border-ink-500 bg-ink-800 text-brand-600"><Phone className="h-4 w-4" /></span>
                 <a href={`tel:${c.contact.phone.replace(/\s/g, '')}`} className="hover:text-silver-100">{c.contact.phone}</a>
               </li>
               <li className="flex items-center gap-3 text-silver-300">
-                <span className="grid h-9 w-9 place-items-center border border-ink-500 bg-ink-800 text-brand-600"><Mail className="h-4 w-4" /></span>
+                <span className="grid h-9 w-9 place-items-center rounded-lg border border-ink-500 bg-ink-800 text-brand-600"><Mail className="h-4 w-4" /></span>
                 <EmailLink email={c.contact.email} className="hover:text-silver-100" />
               </li>
             </ul>
@@ -413,10 +413,10 @@ export default async function HomePage() {
               </a>
             </div>
           </div>
-          <div className="border border-ink-500 bg-ink-800 p-6 md:p-8" id="trial">
+          <div className="rounded-xl border border-ink-500 bg-ink-800 p-6 md:p-8" id="trial">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-display text-2xl uppercase text-silver-100">Enquiry Form</h3>
-              <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600 border border-brand-600/30 bg-brand-600/10 px-2 py-1">
+              <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600 rounded-md border border-brand-600/30 bg-brand-600/10 px-2 py-1">
                 ✦ Free Trial
               </span>
             </div>

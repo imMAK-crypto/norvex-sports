@@ -62,7 +62,7 @@ export default async function CareersPage() {
         <div className="mx-auto mt-12 max-w-3xl grid gap-4 sm:grid-cols-3">
           {TRAITS.map(({ Icon, t, d }) => (
             <div key={t} className="card-accent text-center">
-              <div className="grid h-11 w-11 mx-auto place-items-center bg-brand-600/10 text-brand-600 mb-3">
+              <div className="grid h-11 w-11 mx-auto place-items-center rounded-lg bg-brand-600/10 text-brand-600 mb-3">
                 <Icon className="h-5 w-5" />
               </div>
               <h3 className="font-display text-lg uppercase text-silver-100">{t}</h3>
@@ -76,14 +76,14 @@ export default async function CareersPage() {
             <h2 className="font-display text-3xl uppercase tracking-wide text-silver-100 text-center">Open Positions</h2>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {jobs.map((job) => (
-                <div key={job.id} className="flex flex-col border border-ink-500 bg-ink-800 p-6 transition hover:border-brand-600">
+                <div key={job.id} className="flex flex-col rounded-xl border border-ink-500 bg-ink-800 p-6 transition hover:border-brand-600">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="font-display text-xl uppercase text-silver-100">{job.title}</h3>
-                    <span className="grid h-9 w-9 flex-none place-items-center bg-brand-600/10 text-brand-600"><Briefcase className="h-4 w-4" /></span>
+                    <span className="grid h-9 w-9 flex-none place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Briefcase className="h-4 w-4" /></span>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2 font-sans text-[11px] uppercase tracking-[0.15em] text-silver-400">
-                    {job.type && <span className="inline-flex items-center border border-ink-500 px-2 py-1">{job.type}</span>}
-                    {job.location && <span className="inline-flex items-center gap-1 border border-ink-500 px-2 py-1"><MapPin className="h-3 w-3" /> {job.location}</span>}
+                    {job.type && <span className="inline-flex items-center rounded-md border border-ink-500 px-2 py-1">{job.type}</span>}
+                    {job.location && <span className="inline-flex items-center gap-1 rounded-md border border-ink-500 px-2 py-1"><MapPin className="h-3 w-3" /> {job.location}</span>}
                   </div>
                   {job.description && <p className="mt-3 text-sm text-silver-300">{job.description}</p>}
                   {job.applyUrl ? (
@@ -110,7 +110,7 @@ export default async function CareersPage() {
           </div>
         )}
 
-        <div className="mx-auto mt-12 max-w-2xl border border-ink-500 bg-ink-800 p-8 text-center">
+        <div className="mx-auto mt-12 max-w-2xl rounded-xl border border-ink-500 bg-ink-800 p-8 text-center">
           <h3 className="font-display text-2xl uppercase text-silver-100">Interested in joining our team?</h3>
           <p className="mt-2 text-silver-300">Send your resume and portfolio to:</p>
           <EmailLink email={c.contact.careersEmail} className="btn-primary mt-6">

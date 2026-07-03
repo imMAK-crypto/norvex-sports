@@ -173,7 +173,7 @@ function SocialLink({
       rel="noreferrer noopener"
       aria-label={label}
       title={label}
-      className="grid h-10 w-10 place-items-center border border-ink-500 bg-ink-800 text-silver-200 transition hover:border-brand-600 hover:text-brand-500"
+      className="grid h-10 w-10 place-items-center rounded-lg border border-ink-500 bg-ink-800 text-silver-200 transition hover:border-brand-600 hover:text-brand-500"
     >
       <Icon className="h-4 w-4" />
     </a>

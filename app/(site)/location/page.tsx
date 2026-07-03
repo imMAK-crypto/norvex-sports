@@ -54,8 +54,8 @@ export default async function LocationPage() {
       <Section>
         <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr]">
           <div className="space-y-4">
-            <div className="border border-ink-500 bg-ink-800 p-6">
-              <div className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600 mb-4">
+            <div className="rounded-xl border border-ink-500 bg-ink-800 p-6">
+              <div className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600 mb-4">
                 <MapPin className="h-5 w-5" />
               </div>
               <h3 className="font-display text-xl uppercase text-silver-100">
@@ -76,15 +76,15 @@ export default async function LocationPage() {
                 </a>
               )}
             </div>
-            <a href={`tel:${c.contact.phone.replace(/\s/g, '')}`} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
-              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Phone className="h-5 w-5" /></span>
+            <a href={`tel:${c.contact.phone.replace(/\s/g, '')}`} className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Phone className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Phone</p>
                 <p className="font-display text-lg text-silver-100">{c.contact.phone}</p>
               </div>
             </a>
-            <EmailLink email={c.contact.email} className="flex items-center gap-4 border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
-              <span className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600"><Mail className="h-5 w-5" /></span>
+            <EmailLink email={c.contact.email} className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Mail className="h-5 w-5" /></span>
               <div>
                 <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Email</p>
                 <p className="font-display text-lg break-all text-silver-100">{c.contact.email}</p>

@@ -94,7 +94,7 @@ export default async function EventDetail({ params }: Params) {
               </div>
             )}
           </div>
-          <aside className="border border-ink-500 border-t-[3px] border-t-brand-600 bg-ink-800 p-6 h-fit lg:sticky lg:top-28">
+          <aside className="rounded-xl border border-ink-500 border-t-[3px] border-t-brand-600 bg-ink-800 p-6 h-fit lg:sticky lg:top-28">
             <h3 className="font-display text-xl uppercase text-silver-100">Event Details</h3>
             <dl className="mt-4 space-y-4 text-sm">
               {e.category && (

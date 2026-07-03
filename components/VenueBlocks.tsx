@@ -24,11 +24,11 @@ export async function VenueBlocks({ className = '' }: { className?: string }) {
             className={`card-accent group flex flex-col ${centerCardSpan('lg')} ${centerLastRow('lg', i, venues.length)}`}
           >
             <div className="mb-3 flex items-start justify-between gap-3">
-              <div className="grid h-11 w-11 place-items-center bg-brand-600/10 text-brand-600 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
+              <div className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600 group-hover:bg-brand-600 group-hover:text-silver-100 transition">
                 <MapPin className="h-5 w-5" />
               </div>
               {v.isPrimary && (
-                <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-600 border border-brand-600/30 bg-brand-600/10 px-2 py-1">
+                <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-600 rounded-md border border-brand-600/30 bg-brand-600/10 px-2 py-1">
                   Main Academy
                 </span>
               )}

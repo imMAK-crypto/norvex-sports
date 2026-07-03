@@ -92,7 +92,7 @@ export default async function GalleryPage({ searchParams }: { searchParams?: Pro
                 <Link
                   key={c}
                   href={href}
-                  className={`border px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] transition ${
+                  className={`rounded-lg border px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.18em] transition ${
                     active
                       ? 'border-brand-600 bg-brand-600 text-silver-100'
                       : 'border-ink-500 bg-ink-800 text-silver-300 hover:border-brand-600 hover:text-silver-100'
