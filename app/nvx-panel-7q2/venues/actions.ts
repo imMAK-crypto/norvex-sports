@@ -11,10 +11,19 @@ const schema = z.object({
   name: z.string().min(2).max(160),
   mapUrl: z.string().url().max(2048),
   address: z.string().max(600).optional().or(z.literal('')),
+  lat: z.string().optional().or(z.literal('')),
+  lng: z.string().optional().or(z.literal('')),
   isPrimary: z.string().optional().or(z.literal('')),
   order: z.string().optional().or(z.literal('')),
   isActive: z.string().optional().or(z.literal('')),
 });
+
+/** Parse a coordinate field; accepts a raw number or a "lat,lng" pasted pair. */
+function num(v: string | undefined): number | null {
+  if (!v) return null;
+  const n = Number(String(v).trim().split(',')[0]);
+  return Number.isFinite(n) ? n : null;
+}
 
 function read(fd: FormData) {
   const obj: Record<string, string> = {};
@@ -23,13 +32,18 @@ function read(fd: FormData) {
 }
 
 async function shape(d: z.infer<typeof schema>) {
-  // Auto-build the embed + fill the address from the share link on every save.
-  const { embedUrl, address } = await resolveMapLink(d.mapUrl, d.address || undefined);
+  // Auto-build the embed + fill the address/coords from the share link on save.
+  const resolved = await resolveMapLink(d.mapUrl, d.address || undefined);
+  // Admin-typed coordinates win over auto-detected ones.
+  const lat = num(d.lat) ?? resolved.lat;
+  const lng = num(d.lng) ?? resolved.lng;
   return {
     name: d.name.trim(),
     mapUrl: d.mapUrl.trim(),
-    address: (d.address?.trim() || address) ?? null,
-    embedUrl,
+    address: (d.address?.trim() || resolved.address) ?? null,
+    embedUrl: resolved.embedUrl,
+    lat,
+    lng,
     isPrimary: d.isPrimary === 'on',
     order: d.order ? Number(d.order) : 0,
     isActive: d.isActive === 'on',

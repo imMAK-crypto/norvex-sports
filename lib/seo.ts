@@ -637,6 +637,80 @@ export function faqLd(
   };
 }
 
+/**
+ * Split a free-text venue address into a schema.org PostalAddress. Pulls the
+ * 6-digit Indian PIN, strips the city/state/PIN tail off the street portion,
+ * and defaults locality/region/country to Hyderabad/Telangana/IN.
+ */
+export function toPostalAddress(address?: string | null): Record<string, unknown> {
+  const a = (address ?? '').trim();
+  const postalCode = a.match(/\b(\d{6})\b/)?.[1];
+  const street = a
+    .replace(/,?\s*\b\d{6}\b/g, '')
+    .replace(/,?\s*\bTelangana\b/gi, '')
+    .replace(/,?\s*\bHyderabad\b/gi, '')
+    .replace(/,?\s*\bIndia\b/gi, '')
+    .replace(/[,\s]+$/, '')
+    .trim();
+  return {
+    '@type': 'PostalAddress',
+    ...(street ? { streetAddress: street } : {}),
+    addressLocality: 'Hyderabad',
+    addressRegion: 'Telangana',
+    ...(postalCode ? { postalCode } : {}),
+    addressCountry: 'IN',
+  };
+}
+
+/**
+ * Location page → ItemList of the academy's physical training venues as
+ * SportsActivityLocation Places. Each carries a full PostalAddress, the real
+ * Google Maps link (hasMap) and precise geo when known, and is tied back to the
+ * Organization. Purely additive local-SEO signal — it does not touch the
+ * verified primary business entity in siteGraph().
+ */
+export function venuesLd(
+  venues: Array<{
+    id: string;
+    name: string;
+    address?: string | null;
+    mapUrl: string;
+    lat?: number | null;
+    lng?: number | null;
+    isPrimary?: boolean;
+  }>,
+): Record<string, unknown> | null {
+  if (!venues.length) return null;
+  const base = siteUrl();
+  const locationUrl = abs('/location');
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${locationUrl}#venues`,
+    name: 'Norvex Sports — Training Venues',
+    url: locationUrl,
+    numberOfItems: venues.length,
+    itemListElement: venues.map((v, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': ['SportsActivityLocation', 'Place'],
+        '@id': `${locationUrl}#venue-${v.id}`,
+        name: v.name,
+        sport: 'Football',
+        address: toPostalAddress(v.address),
+        hasMap: v.mapUrl,
+        ...(typeof v.lat === 'number' && typeof v.lng === 'number'
+          ? { geo: { '@type': 'GeoCoordinates', latitude: v.lat, longitude: v.lng } }
+          : {}),
+        containedInPlace: { '@type': 'City', name: 'Hyderabad' },
+        parentOrganization: { '@id': `${base}/#organization` },
+        ...(v.isPrimary ? { additionalType: 'https://schema.org/SportsActivityLocation' } : {}),
+      },
+    })),
+  };
+}
+
 /** News index → CollectionPage wrapping an ItemList of posts. */
 export function newsListLd(
   posts: Array<{ slug: string; title: string }>,

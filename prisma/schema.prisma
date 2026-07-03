@@ -187,6 +187,8 @@ model Venue {
   address   String?  @db.Text
   mapUrl    String   @db.Text
   embedUrl  String?  @db.Text
+  lat       Float?
+  lng       Float?
   isPrimary Boolean  @default(false)
   order     Int      @default(0)
   isActive  Boolean  @default(true)

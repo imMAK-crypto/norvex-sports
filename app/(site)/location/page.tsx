@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { MapPin, Phone, Mail, Navigation } from 'lucide-react';
 import { getSiteContent, getSettings } from '@/lib/settings';
 import { getVenues } from '@/lib/venue';
-import { pageMeta, webPageLd } from '@/lib/seo';
+import { pageMeta, webPageLd, venuesLd } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -32,17 +32,18 @@ export default async function LocationPage() {
   // Map shown in the hero slot: the primary venue, else the legacy single embed.
   const heroEmbed = primary?.embedUrl ?? s['location.mapEmbed'];
 
+  const pageLd = webPageLd({
+    path: '/location',
+    type: 'ContactPage',
+    name: 'Our Location — Norvex Sports, Hyderabad',
+    description:
+      'Norvex Sports is based in Hyderabad, Telangana — serving players across the city with structured training and competitive exposure.',
+  });
+  const venueGraph = venuesLd(venues);
+
   return (
     <>
-      <JsonLd
-        data={webPageLd({
-          path: '/location',
-          type: 'ContactPage',
-          name: 'Our Location — Norvex Sports, Hyderabad',
-          description:
-            'Norvex Sports is based in Hyderabad, Telangana — serving players across the city with structured training and competitive exposure.',
-        })}
-      />
+      <JsonLd data={venueGraph ? [pageLd, venueGraph] : pageLd} />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Location', path: '/location' }]} />
       <PageHeader
         eyebrow={s['location.eyebrow']}
