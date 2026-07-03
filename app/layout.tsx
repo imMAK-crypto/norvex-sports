@@ -74,6 +74,7 @@ export const metadata: Metadata = {
     : undefined,
   icons: {
     icon: [{ url: '/favicon.svg?v=2', type: 'image/svg+xml' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   manifest: '/site.webmanifest',
   category: 'sports',

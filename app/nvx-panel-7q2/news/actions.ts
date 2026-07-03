@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
+import { pingIndexNow } from '@/lib/indexnow';
 
 const schema = z.object({
   title: z.string().min(2).max(200),
@@ -46,18 +47,22 @@ function shape(d: z.infer<typeof schema>) {
 export async function createNews(fd: FormData) {
   await requireAdmin();
   const d = schema.parse(read(fd));
-  await prisma.newsPost.create({ data: shape(d) });
+  const data = shape(d);
+  await prisma.newsPost.create({ data });
   revalidatePath('/news');
   revalidatePath('/');
+  await pingIndexNow(['/news', `/news/${data.slug}`]);
   redirect('/nvx-panel-7q2/news');
 }
 
 export async function updateNews(id: string, fd: FormData) {
   await requireAdmin();
   const d = schema.parse(read(fd));
-  await prisma.newsPost.update({ where: { id }, data: shape(d) });
+  const data = shape(d);
+  await prisma.newsPost.update({ where: { id }, data });
   revalidatePath('/news');
   revalidatePath('/');
+  await pingIndexNow(['/news', `/news/${data.slug}`]);
   redirect('/nvx-panel-7q2/news');
 }
 
@@ -68,4 +73,5 @@ export async function deleteNews(fd: FormData) {
   await prisma.newsPost.delete({ where: { id } });
   revalidatePath('/news');
   revalidatePath('/');
+  await pingIndexNow(['/news']);
 }

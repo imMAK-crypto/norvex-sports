@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
+import { pingIndexNow } from '@/lib/indexnow';
 
 const schema = z.object({
   title: z.string().min(2).max(160),
@@ -55,17 +56,19 @@ export async function createService(fd: FormData) {
   });
   revalidatePath('/services');
   revalidatePath('/');
+  await pingIndexNow(['/services', `/services/${slug}`]);
   redirect('/nvx-panel-7q2/services');
 }
 
 export async function updateService(id: string, fd: FormData) {
   await requireAdmin();
   const d = schema.parse(fromFormData(fd));
+  const slug = d.slug ? slugify(d.slug) : slugify(d.title);
   await prisma.service.update({
     where: { id },
     data: {
       title: d.title,
-      slug: d.slug ? slugify(d.slug) : slugify(d.title),
+      slug,
       shortDesc: d.shortDesc,
       longDesc: d.longDesc,
       imageUrl: d.imageUrl || null,
@@ -78,6 +81,7 @@ export async function updateService(id: string, fd: FormData) {
   });
   revalidatePath('/services');
   revalidatePath('/');
+  await pingIndexNow(['/services', `/services/${slug}`]);
   redirect('/nvx-panel-7q2/services');
 }
 
@@ -88,4 +92,5 @@ export async function deleteService(fd: FormData) {
   await prisma.service.delete({ where: { id } });
   revalidatePath('/services');
   revalidatePath('/');
+  await pingIndexNow(['/services']);
 }

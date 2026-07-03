@@ -54,7 +54,7 @@ export default async function OG() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <span style={{ fontSize: 20, color: '#c0c0c0' }}>norvexsports.com</span>
+          <span style={{ fontSize: 20, color: '#c0c0c0' }}>norvexsports.in</span>
           <span style={{ fontSize: 18, color: '#cc0000', letterSpacing: 3, fontWeight: 700 }}>FREE TRIAL AVAILABLE</span>
         </div>
       </div>

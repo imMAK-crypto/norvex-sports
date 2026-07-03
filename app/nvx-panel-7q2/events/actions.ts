@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
+import { pingIndexNow } from '@/lib/indexnow';
 
 const schema = z.object({
   title: z.string().min(2).max(160),
@@ -52,18 +53,22 @@ function shape(d: z.infer<typeof schema>) {
 export async function createEvent(fd: FormData) {
   await requireAdmin();
   const d = schema.parse(read(fd));
-  await prisma.event.create({ data: shape(d) });
+  const data = shape(d);
+  await prisma.event.create({ data });
   revalidatePath('/events');
   revalidatePath('/');
+  await pingIndexNow(['/events', `/events/${data.slug}`]);
   redirect('/nvx-panel-7q2/events');
 }
 
 export async function updateEvent(id: string, fd: FormData) {
   await requireAdmin();
   const d = schema.parse(read(fd));
-  await prisma.event.update({ where: { id }, data: shape(d) });
+  const data = shape(d);
+  await prisma.event.update({ where: { id }, data });
   revalidatePath('/events');
   revalidatePath('/');
+  await pingIndexNow(['/events', `/events/${data.slug}`]);
   redirect('/nvx-panel-7q2/events');
 }
 
@@ -74,4 +79,5 @@ export async function deleteEvent(fd: FormData) {
   await prisma.event.delete({ where: { id } });
   revalidatePath('/events');
   revalidatePath('/');
+  await pingIndexNow(['/events']);
 }

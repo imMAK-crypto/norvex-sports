@@ -79,7 +79,7 @@ export async function getSiteContent(): Promise<SiteContent> {
 }
 
 export function siteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'https://norvexsports.com';
+  return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'https://norvexsports.in';
 }
 
 /* ------------------------------------------------------------------ *

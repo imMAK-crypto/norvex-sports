@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
 import { resolveMapLink } from '@/lib/venue';
+import { pingIndexNow } from '@/lib/indexnow';
 
 const schema = z.object({
   name: z.string().min(2).max(160),
@@ -66,6 +67,7 @@ export async function createVenue(fd: FormData) {
   const created = await prisma.venue.create({ data });
   await enforceSinglePrimary(created.id, data.isPrimary);
   revalidatePath('/location');
+  await pingIndexNow(['/location']);
   redirect('/nvx-panel-7q2/venues');
 }
 
@@ -76,6 +78,7 @@ export async function updateVenue(id: string, fd: FormData) {
   await enforceSinglePrimary(id, data.isPrimary);
   await prisma.venue.update({ where: { id }, data });
   revalidatePath('/location');
+  await pingIndexNow(['/location']);
   redirect('/nvx-panel-7q2/venues');
 }
 
@@ -85,4 +88,5 @@ export async function deleteVenue(fd: FormData) {
   if (!id) return;
   await prisma.venue.delete({ where: { id } });
   revalidatePath('/location');
+  await pingIndexNow(['/location']);
 }
