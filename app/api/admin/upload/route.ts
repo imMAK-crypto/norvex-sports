@@ -24,10 +24,12 @@ export async function POST(req: NextRequest) {
     if (!(file instanceof File)) return NextResponse.json({ error: 'no file' }, { status: 400 });
     if (file.size > 10 * 1024 * 1024) return NextResponse.json({ error: 'file too large (max 10MB)' }, { status: 413 });
 
-    // Defense-in-depth: only allow real image types (admin-only route, but never trust input).
-    const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'image/svg+xml'];
+    // Defense-in-depth: only allow real raster image types (admin-only route, but never trust input).
+    // SVG is deliberately excluded — it can carry <script>/onload handlers, making an uploaded
+    // .svg a stored-XSS payload if ever opened directly.
+    const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
     if (!ALLOWED.includes(file.type)) {
-      return NextResponse.json({ error: 'unsupported file type — images only' }, { status: 415 });
+      return NextResponse.json({ error: 'unsupported file type — raster images only (no SVG)' }, { status: 415 });
     }
 
     const buf = Buffer.from(await file.arrayBuffer());

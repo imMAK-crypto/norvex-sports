@@ -66,7 +66,10 @@ export async function createVenue(fd: FormData) {
   const data = await shape(d);
   const created = await prisma.venue.create({ data });
   await enforceSinglePrimary(created.id, data.isPrimary);
+  // Venues now surface on the location page AND the home + contact venue blocks.
   revalidatePath('/location');
+  revalidatePath('/');
+  revalidatePath('/contact');
   await pingIndexNow(['/location']);
   redirect('/nvx-panel-7q2/venues');
 }
@@ -77,7 +80,10 @@ export async function updateVenue(id: string, fd: FormData) {
   const data = await shape(d);
   await enforceSinglePrimary(id, data.isPrimary);
   await prisma.venue.update({ where: { id }, data });
+  // Venues now surface on the location page AND the home + contact venue blocks.
   revalidatePath('/location');
+  revalidatePath('/');
+  revalidatePath('/contact');
   await pingIndexNow(['/location']);
   redirect('/nvx-panel-7q2/venues');
 }
@@ -87,6 +93,9 @@ export async function deleteVenue(fd: FormData) {
   const id = String(fd.get('id') ?? '');
   if (!id) return;
   await prisma.venue.delete({ where: { id } });
+  // Venues now surface on the location page AND the home + contact venue blocks.
   revalidatePath('/location');
+  revalidatePath('/');
+  revalidatePath('/contact');
   await pingIndexNow(['/location']);
 }

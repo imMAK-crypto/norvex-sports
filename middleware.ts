@@ -68,6 +68,15 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
+
+  // Forward the real pathname so the admin layout can enforce a second,
+  // independent auth check (defense-in-depth: if this middleware is ever
+  // bypassed, the layout still refuses to render admin pages without a session).
+  if (pathname.startsWith('/nvx-panel-7q2')) {
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set('x-nvx-pathname', pathname);
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
   return NextResponse.next();
 }
 

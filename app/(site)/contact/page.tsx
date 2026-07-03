@@ -23,6 +23,8 @@ export const metadata: Metadata = pageMeta({
   ],
 });
 
+export const revalidate = 300;
+
 export default async function ContactPage() {
   const [c, s] = await Promise.all([
     getSiteContent(),

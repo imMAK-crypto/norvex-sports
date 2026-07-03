@@ -41,12 +41,14 @@ const nextConfig = {
     minimumCacheTTL: 31536000,
     deviceSizes: [360, 640, 750, 828, 1080, 1200, 1600, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Allowlist only the hosts we actually load from. A wildcard '**' turns
+    // /_next/image into an open proxy that will fetch any https URL an attacker
+    // supplies (SSRF + bandwidth/DoS amplification), so it is intentionally omitted.
     remotePatterns: [
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'cdn.pixabay.com' },
       { protocol: 'https', hostname: '**.googleusercontent.com' },
-      { protocol: 'https', hostname: '**' },
     ],
   },
   async headers() {

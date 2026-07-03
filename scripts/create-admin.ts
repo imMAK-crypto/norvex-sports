@@ -4,14 +4,20 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = 'norvex@9191';
-  const password = 'norvex@9191';
+  // Credentials come from the environment — never hardcode them, this file ships
+  // in the repo. Run: ADMIN_EMAIL=... ADMIN_PASSWORD=... npx tsx scripts/create-admin.ts
+  const email = (process.env.ADMIN_EMAIL ?? '').toLowerCase().trim();
+  const password = process.env.ADMIN_PASSWORD ?? '';
+  if (!email || password.length < 10) {
+    console.error('Set ADMIN_EMAIL and a strong ADMIN_PASSWORD (min 10 chars) in the environment before running.');
+    process.exit(1);
+  }
 
   const hash = await bcrypt.hash(password, 12);
   const user = await prisma.adminUser.upsert({
     where: { email },
-    update: { passwordHash: hash, name: 'Norvex Admin (9191)' },
-    create: { email, passwordHash: hash, name: 'Norvex Admin (9191)' },
+    update: { passwordHash: hash, name: 'Norvex Admin' },
+    create: { email, passwordHash: hash, name: 'Norvex Admin' },
   });
   console.log('Admin user ready:', user.email, 'id:', user.id);
 

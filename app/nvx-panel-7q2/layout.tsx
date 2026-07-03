@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { Space_Grotesk, Space_Mono } from 'next/font/google';
 import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
@@ -28,8 +30,15 @@ export const dynamic = 'force-dynamic';
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
 
-  // Login screen (and any unauthenticated state) renders bare inside the CMS theme.
+  // Defense-in-depth: the middleware already gates admin routes, but if it is
+  // ever bypassed we must not render a data-bearing admin page unauthenticated.
+  // Only the login screen is allowed to render without a session.
+  const pathname = headers().get('x-nvx-pathname') ?? '';
+  const onLogin = pathname.endsWith('/nvx-panel-7q2/login');
+
   if (!session) {
+    if (!onLogin) redirect('/nvx-panel-7q2/login');
+    // Login screen renders bare inside the CMS theme.
     return (
       <div className={`cms ${grotesk.variable} ${mono.variable}`} style={{ minHeight: '100vh' }}>
         {children}
