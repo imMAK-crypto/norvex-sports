@@ -90,11 +90,21 @@ export function pageMeta(opts: {
       ...(description ? { description } : {}),
       url: canonicalPath,
       type,
+      siteName: 'Norvex Sports',
+      locale: 'en_IN',
       ...(images && images.length ? { images } : {}),
     },
-    ...(images && images.length
-      ? { twitter: { card: 'summary_large_image', images } }
-      : {}),
+    // Always carry the @NORVEXSPORTS handle so X/Twitter cards attribute to the
+    // brand on every page — Next.js replaces (does not deep-merge) the parent
+    // `twitter` object when a route sets its own, so the handle must be repeated.
+    twitter: {
+      card: 'summary_large_image',
+      site: '@NORVEXSPORTS',
+      creator: '@NORVEXSPORTS',
+      ...(title ? { title } : {}),
+      ...(description ? { description } : {}),
+      ...(images && images.length ? { images } : {}),
+    },
   };
 }
 
