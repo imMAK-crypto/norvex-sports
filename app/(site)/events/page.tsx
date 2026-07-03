@@ -6,7 +6,9 @@ import { prisma, safeQuery, type EventModel } from '@/lib/prisma';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { pageMeta } from '@/lib/seo';
+import { JsonLd } from '@/components/JsonLd';
+import { pageMeta, webPageLd } from '@/lib/seo';
+import { siteUrl } from '@/lib/settings';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 export const metadata: Metadata = pageMeta({
@@ -14,6 +16,13 @@ export const metadata: Metadata = pageMeta({
   description:
     'Norvex Youth League, development clinics, talent trials, friendly matches, seasonal tournaments and football-themed birthday parties.',
   path: '/events',
+  keywords: [
+    'football events Hyderabad',
+    'football tournament Hyderabad',
+    'football trials Hyderabad',
+    'Norvex Youth League',
+    'football league Hyderabad',
+  ],
 });
 
 export const revalidate = 60;
@@ -33,8 +42,32 @@ export default async function EventsPage() {
     [],
   );
 
+  const pageLd = webPageLd({
+    path: '/events',
+    type: 'CollectionPage',
+    name: 'Events & Programs — Norvex Sports',
+    description:
+      'Norvex Youth League, development clinics, talent trials, friendly matches, seasonal tournaments and football-themed birthday parties in Hyderabad.',
+  });
+  const base = siteUrl();
+  const eventsItemList = events.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Norvex Sports — Events & Programs',
+        numberOfItems: events.length,
+        itemListElement: events.map((e, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: `${base}/events/${e.slug}`,
+          name: e.title,
+        })),
+      }
+    : null;
+
   return (
     <>
+      <JsonLd data={eventsItemList ? [pageLd, eventsItemList] : pageLd} />
       <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Events', path: '/events' }]} />
       <PageHeader
         eyebrow="Events & programs"
@@ -43,7 +76,7 @@ export default async function EventsPage() {
       />
 
       {/* Sticky banner */}
-      <div className="sticky top-16 md:top-20 z-30 border-b border-brand-600/40 bg-brand-600/15 backdrop-blur-sm">
+      <div className="sticky top-20 md:top-20 z-30 border-b border-brand-600/40 bg-brand-600/15 backdrop-blur-sm">
         <div className="container-x py-3 flex items-center justify-center gap-2 text-center">
           <span className="font-sans text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">
             ✦ Stay tuned for upcoming events and registrations
