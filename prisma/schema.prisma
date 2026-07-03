@@ -178,6 +178,24 @@ model GalleryCategory {
   @@index([order])
 }
 
+/// Training venues shown on the Location page — one primary academy + extras.
+/// `mapUrl` is the raw Google Maps share link (used for "Get Directions");
+/// `embedUrl` is the iframe src auto-built from it on save.
+model Venue {
+  id        String   @id @default(cuid())
+  name      String
+  address   String?  @db.Text
+  mapUrl    String   @db.Text
+  embedUrl  String?  @db.Text
+  isPrimary Boolean  @default(false)
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, order])
+}
+
 /// Video reel entries for the Gallery page (replaces "coming soon")
 model GalleryVideo {
   id        String   @id @default(cuid())
