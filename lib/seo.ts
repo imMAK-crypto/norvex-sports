@@ -11,12 +11,21 @@ import { siteUrl, type SiteContent } from './settings';
 /** Verified location from the Google Business / Maps listing. */
 export const GEO = { latitude: 17.498302, longitude: 78.3443668 } as const;
 
-/** Public Google Maps short link (the "updated map"). */
-export const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/72MA26SkbDdSHnPd8';
+/** Public Google Maps short link for the main academy (Madinaguda). */
+export const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/9LNEixfVF1aYStFG7';
 
 /** Canonical place URL (resolved from the short link). */
 export const GOOGLE_MAPS_PLACE_URL =
-  'https://www.google.com/maps/place/Norvex+sports/@17.498302,78.3443668,17z';
+  'https://www.google.com/maps/place/Norvex+sports+Football+Academy/@17.498302,78.3443668,17z';
+
+/** Verified street address of the main academy — single source of truth. */
+export const MAIN_ADDRESS = {
+  streetAddress: 'Madinaguda, Shanti Nagar Colony, Deepthisri Nagar',
+  addressLocality: 'Hyderabad',
+  addressRegion: 'Telangana',
+  postalCode: '500049',
+  addressCountry: 'IN',
+} as const;
 
 export const FOUNDING_DATE = '2026';
 export const LOCALE = 'en_IN';
@@ -301,9 +310,7 @@ export function siteGraph(
 
   const address = {
     '@type': 'PostalAddress',
-    addressLocality: 'Hyderabad',
-    addressRegion: 'Telangana',
-    addressCountry: 'IN',
+    ...MAIN_ADDRESS,
   };
 
   const logo = {
@@ -422,9 +429,7 @@ export function siteGraph(
 /** PostalAddress reused across event/job structured data. */
 const POSTAL_ADDRESS = {
   '@type': 'PostalAddress',
-  addressLocality: 'Hyderabad',
-  addressRegion: 'Telangana',
-  addressCountry: 'IN',
+  ...MAIN_ADDRESS,
 } as const;
 
 const AREA_SERVED = [
