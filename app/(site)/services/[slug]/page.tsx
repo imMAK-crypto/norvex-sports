@@ -11,7 +11,7 @@ import { siteUrl } from '@/lib/settings';
 import { serviceLd, courseLd, webPageLd, ORG_KEYWORDS } from '@/lib/seo';
 import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
-type Params = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
@@ -23,7 +23,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const s = await prisma.service.findUnique({ where: { slug: params.slug } });
+  const s = await prisma.service.findUnique({ where: { slug: (await params).slug } });
   if (!s) return { title: 'Not found' };
   return {
     title: s.metaTitle ?? s.title,
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function ServiceDetail({ params }: Params) {
-  const service = await prisma.service.findUnique({ where: { slug: params.slug } });
+  const service = await prisma.service.findUnique({ where: { slug: (await params).slug } });
   if (!service || !service.isActive) return notFound();
   const s = service;
 

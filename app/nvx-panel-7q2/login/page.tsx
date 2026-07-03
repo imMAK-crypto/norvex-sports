@@ -4,7 +4,8 @@ import { LoginForm } from './LoginForm';
 
 export const metadata: Metadata = { title: 'Admin Sign In', robots: { index: false, follow: false } };
 
-export default function AdminLogin({ searchParams }: { searchParams?: { next?: string; error?: string } }) {
+export default async function AdminLogin({ searchParams }: { searchParams?: Promise<{ next?: string; error?: string }> }) {
+  const sp = await searchParams;
   return (
     <main
       style={{
@@ -28,7 +29,7 @@ export default function AdminLogin({ searchParams }: { searchParams?: { next?: s
           <span style={{ fontSize: 22, fontWeight: 600, color: 'var(--t1)' }}>Sign in</span>
           <span style={{ fontSize: 13, color: 'var(--t4)' }}>Manage every page, image &amp; enquiry.</span>
         </div>
-        <LoginForm next={searchParams?.next} initialError={searchParams?.error} />
+        <LoginForm next={sp?.next} initialError={sp?.error} />
         <span className="mono" style={{ fontSize: 11, color: 'var(--t5)', textAlign: 'center' }}>JWT session · bcrypt · rate-limited</span>
       </div>
     </main>

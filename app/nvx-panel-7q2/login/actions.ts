@@ -6,7 +6,7 @@ import { setSessionCookie, signSession, validateLogin } from '@/lib/auth';
 import { clientKey, rateLimit } from '@/lib/rate-limit';
 
 export async function loginAction(formData: FormData) {
-  const rl = rateLimit(clientKey({ headers: headers() }, 'login'), { max: 8, windowMs: 15 * 60 * 1000 });
+  const rl = rateLimit(clientKey({ headers: await headers() }, 'login'), { max: 8, windowMs: 15 * 60 * 1000 });
   if (!rl.ok) {
     return { ok: false as const, message: `Too many attempts. Try again in ${rl.retryAfterSec}s.` };
   }

@@ -10,7 +10,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
 import { eventLd } from '@/lib/seo';
 
-type Params = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
@@ -22,7 +22,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const e = await prisma.event.findUnique({ where: { slug: params.slug } });
+  const e = await prisma.event.findUnique({ where: { slug: (await params).slug } });
   if (!e) return { title: 'Not found' };
   return {
     title: e.metaTitle ?? e.title,
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function EventDetail({ params }: Params) {
-  const event = await prisma.event.findUnique({ where: { slug: params.slug } });
+  const event = await prisma.event.findUnique({ where: { slug: (await params).slug } });
   if (!event || !event.isActive) return notFound();
   const e = event;
 

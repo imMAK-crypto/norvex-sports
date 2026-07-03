@@ -4,8 +4,9 @@ import { AdminFormShell } from '../../_components/AdminListShell';
 import { VenueForm } from '../VenueForm';
 import { updateVenue } from '../actions';
 
-export default async function EditVenuePage({ params }: { params: { id: string } }) {
-  const v = await prisma.venue.findUnique({ where: { id: params.id } });
+export default async function EditVenuePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const v = await prisma.venue.findUnique({ where: { id } });
   if (!v) notFound();
   const action = updateVenue.bind(null, v.id);
   return (

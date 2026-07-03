@@ -21,7 +21,6 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
-  swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
@@ -70,11 +69,13 @@ const nextConfig = {
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
       {
-        source: '/_next/image:path*',
+        source: '/_next/image',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
       {
-        source: '/:all*(svg|jpg|jpeg|png|webp|avif|gif|ico|woff|woff2|ttf|otf)',
+        // Long-cache static assets served from /public (path-to-regexp v8 syntax:
+        // a single named param carrying the full extension regex).
+        source: '/:all(.*\\.(?:svg|jpg|jpeg|png|webp|avif|gif|ico|woff|woff2|ttf|otf))',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
     ];

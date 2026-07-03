@@ -33,7 +33,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // Defense-in-depth: the middleware already gates admin routes, but if it is
   // ever bypassed we must not render a data-bearing admin page unauthenticated.
   // Only the login screen is allowed to render without a session.
-  const pathname = headers().get('x-nvx-pathname') ?? '';
+  const pathname = (await headers()).get('x-nvx-pathname') ?? '';
   const onLogin = pathname.endsWith('/nvx-panel-7q2/login');
 
   if (!session) {

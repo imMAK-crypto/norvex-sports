@@ -4,8 +4,9 @@ import { AdminFormShell } from '../../_components/AdminListShell';
 import { TeamForm } from '../TeamForm';
 import { updateTeam } from '../actions';
 
-export default async function EditTeamPage({ params }: { params: { id: string } }) {
-  const m = await prisma.teamMember.findUnique({ where: { id: params.id } });
+export default async function EditTeamPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const m = await prisma.teamMember.findUnique({ where: { id } });
   if (!m) notFound();
   const action = updateTeam.bind(null, m.id);
   return (

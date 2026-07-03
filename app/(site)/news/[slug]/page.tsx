@@ -9,7 +9,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { siteUrl } from '@/lib/settings';
 
-type Params = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
@@ -21,7 +21,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const p = await prisma.newsPost.findUnique({ where: { slug: params.slug } });
+  const p = await prisma.newsPost.findUnique({ where: { slug: (await params).slug } });
   if (!p) return { title: 'Not found' };
   return {
     title: p.metaTitle ?? p.title,
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function NewsDetail({ params }: Params) {
-  const found = await prisma.newsPost.findUnique({ where: { slug: params.slug } });
+  const found = await prisma.newsPost.findUnique({ where: { slug: (await params).slug } });
   if (!found || !found.isPublished) return notFound();
   const post = found;
 

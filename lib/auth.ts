@@ -47,7 +47,7 @@ export async function verifySession(token: string): Promise<SessionPayload | nul
 }
 
 export async function getSession(): Promise<SessionPayload | null> {
-  const token = cookies().get(COOKIE_NAME)?.value;
+  const token = (await cookies()).get(COOKIE_NAME)?.value;
   if (!token) return null;
   return verifySession(token);
 }
@@ -59,7 +59,7 @@ export async function requireAdmin(): Promise<SessionPayload> {
 }
 
 export async function setSessionCookie(token: string) {
-  cookies().set(COOKIE_NAME, token, {
+  (await cookies()).set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -69,7 +69,7 @@ export async function setSessionCookie(token: string) {
 }
 
 export async function clearSessionCookie() {
-  cookies().set(COOKIE_NAME, '', { path: '/', maxAge: 0 });
+  (await cookies()).set(COOKIE_NAME, '', { path: '/', maxAge: 0 });
 }
 
 export async function validateLogin(identifier: string, password: string) {

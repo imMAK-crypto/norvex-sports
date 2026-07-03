@@ -29,8 +29,8 @@ const ALL_CATEGORIES = [
   'Celebrations',
 ];
 
-export default async function GalleryPage({ searchParams }: { searchParams?: { cat?: string } }) {
-  const cat = searchParams?.cat;
+export default async function GalleryPage({ searchParams }: { searchParams?: Promise<{ cat?: string }> }) {
+  const cat = (await searchParams)?.cat;
   const items = await safeQuery<GalleryItemModel[]>(
     () =>
       prisma.galleryItem.findMany({
