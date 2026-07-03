@@ -21,6 +21,7 @@ const GROUPS: NavItem[][] = [
     { href: '/nvx-panel-7q2/pages/careers', letter: 'C', label: 'Careers' },
     { href: '/nvx-panel-7q2/pages/contact', letter: 'O', label: 'Contact' },
     { href: '/nvx-panel-7q2/pages/location', letter: 'L', label: 'Location' },
+    { href: '/nvx-panel-7q2/venues', letter: '◉', label: 'Venues' },
   ],
   [
     { href: '/nvx-panel-7q2/services', letter: 'S', label: 'Services' },
@@ -44,6 +45,7 @@ const TITLES: Array<[string, string]> = [
   ['/nvx-panel-7q2/pages/careers', 'Careers Page'],
   ['/nvx-panel-7q2/pages/contact', 'Contact Page'],
   ['/nvx-panel-7q2/pages/location', 'Location Page'],
+  ['/nvx-panel-7q2/venues', 'Venues'],
   ['/nvx-panel-7q2/services', 'Services'],
   ['/nvx-panel-7q2/events', 'Events'],
   ['/nvx-panel-7q2/news', 'News'],

@@ -1,10 +1,13 @@
 'use client';
 
+import { useMemo, useState } from 'react';
+
 type Data = {
   id?: string;
   name?: string;
   address?: string | null;
   mapUrl?: string;
+  embedUrl?: string | null;
   lat?: number | null;
   lng?: number | null;
   isPrimary?: boolean;
@@ -12,12 +15,47 @@ type Data = {
   isActive?: boolean;
 };
 
+/** Key-free Google Maps embed for a free-text query or "lat,lng" pair. */
+function embedFor(query: string): string {
+  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed&z=16`;
+}
+
+/**
+ * Venue editor with a live map preview so placement can be verified before
+ * saving. Preview source priority: exact coordinates → typed address → the
+ * already-saved embed (edit mode). The authoritative embed is still built
+ * server-side from the Google Maps share link on save (see actions.ts).
+ */
 export function VenueForm({ action, initial }: { action: (fd: FormData) => Promise<void>; initial?: Data }) {
+  const [address, setAddress] = useState(initial?.address ?? '');
+  const [lat, setLat] = useState(initial?.lat != null ? String(initial.lat) : '');
+  const [lng, setLng] = useState(initial?.lng != null ? String(initial.lng) : '');
+
+  // Pasting a whole "17.4983, 78.3443" pair into either field fills both.
+  const onCoord = (value: string, which: 'lat' | 'lng') => {
+    const pair = value.match(/(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
+    if (pair) {
+      setLat(pair[1]);
+      setLng(pair[2]);
+      return;
+    }
+    (which === 'lat' ? setLat : setLng)(value);
+  };
+
+  const previewSrc = useMemo(() => {
+    const la = Number(lat), ln = Number(lng);
+    if (lat && lng && Number.isFinite(la) && Number.isFinite(ln) && Math.abs(la) <= 90 && Math.abs(ln) <= 180) {
+      return embedFor(`${la},${ln}`);
+    }
+    if (address.trim().length > 5) return embedFor(address.trim());
+    return initial?.embedUrl ?? null;
+  }, [lat, lng, address, initial?.embedUrl]);
+
   return (
     <form action={action} className="space-y-5">
       <div>
         <label className="label" htmlFor="name">Venue name *</label>
-        <input id="name" name="name" required defaultValue={initial?.name ?? ''} className="input" placeholder="e.g. Main Academy — Kollur" />
+        <input id="name" name="name" required defaultValue={initial?.name ?? ''} className="input" placeholder="e.g. Norvex Sports Academy — Madinaguda" />
       </div>
 
       <div>
@@ -32,28 +70,61 @@ export function VenueForm({ action, initial }: { action: (fd: FormData) => Promi
           placeholder="https://maps.app.goo.gl/…"
         />
         <p className="mt-1 text-xs text-silver-100/50">
-          Paste the &quot;Share&quot; link from Google Maps. We&apos;ll automatically build the embedded map and fill the address on save.
+          Paste the &quot;Share&quot; link from Google Maps. The embedded map, address and pin are built from it automatically on save.
         </p>
       </div>
 
       <div>
         <label className="label" htmlFor="address">Address <span className="text-silver-100/40">(optional — auto-filled if blank)</span></label>
-        <textarea id="address" name="address" rows={2} defaultValue={initial?.address ?? ''} className="input" placeholder="Leave blank to auto-detect from the map link" />
+        <textarea
+          id="address"
+          name="address"
+          rows={2}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          className="input"
+          placeholder="Leave blank to auto-detect from the map link"
+        />
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
         <div>
           <label className="label" htmlFor="lat">Latitude <span className="text-silver-100/40">(optional)</span></label>
-          <input id="lat" name="lat" defaultValue={initial?.lat ?? ''} className="input" placeholder="e.g. 17.4735" />
+          <input id="lat" name="lat" value={lat} onChange={(e) => onCoord(e.target.value, 'lat')} className="input" placeholder="e.g. 17.4983 — or paste “17.4983, 78.3443”" />
         </div>
         <div>
           <label className="label" htmlFor="lng">Longitude <span className="text-silver-100/40">(optional)</span></label>
-          <input id="lng" name="lng" defaultValue={initial?.lng ?? ''} className="input" placeholder="e.g. 78.2934" />
+          <input id="lng" name="lng" value={lng} onChange={(e) => onCoord(e.target.value, 'lng')} className="input" placeholder="e.g. 78.3443" />
         </div>
       </div>
       <p className="-mt-2 text-xs text-silver-100/50">
-        Coordinates sharpen the map pin &amp; local SEO. Tip: open the venue on Google Maps in a browser — the URL shows <code className="text-brand-400">@17.47…,78.29…</code>; paste those two numbers here. Auto-detected from full desktop links.
+        Coordinates give the sharpest pin (and best local SEO). On Google Maps: right-click the exact spot → the first
+        menu row shows the numbers — click to copy, then paste the pair into either box above.
       </p>
+
+      {/* Live placement preview — updates as coordinates / address change */}
+      <div>
+        <span className="label">Map placement preview</span>
+        {previewSrc ? (
+          <div className="overflow-hidden rounded-lg border border-ink-500">
+            <iframe
+              title="Venue map preview"
+              src={previewSrc}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-64 w-full"
+            />
+          </div>
+        ) : (
+          <div className="grid h-32 place-items-center rounded-lg border border-dashed border-ink-500 text-xs text-silver-100/40">
+            Enter coordinates or an address to preview the pin position
+          </div>
+        )}
+        <p className="mt-1 text-xs text-silver-100/50">
+          Check the pin lands on the right spot. If it&apos;s off, paste exact coordinates — they always win over the
+          auto-detected position. The final public map is rebuilt from the share link + these fields when you save.
+        </p>
+      </div>
 
       <div className="grid gap-5 md:grid-cols-2">
         <div>
