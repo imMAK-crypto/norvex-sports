@@ -18,6 +18,7 @@ const NAV = [
   { href: '/news', label: 'News' },
   { href: '/careers', label: 'Careers' },
   { href: '/contact', label: 'Contact' },
+  { href: '/location', label: 'Our Location' },
 ];
 
 export function SiteHeader() {
