@@ -337,7 +337,7 @@ export function siteGraph(
       '@type': 'Organization',
       '@id': `${url}/#organization`,
       name: 'Norvex Sports',
-      alternateName: ['Norvex', 'Norvex Sports Academy', 'Norvex Football Academy'],
+      alternateName: ['Norvex', 'Norvex Sports Football Academy', 'Norvex Sports Academy', 'Norvex Football Academy'],
       url,
       logo,
       image: { '@id': `${url}/#logo` },
