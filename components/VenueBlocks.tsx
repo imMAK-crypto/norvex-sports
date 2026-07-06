@@ -6,11 +6,17 @@ import { centerGridClass, centerCardSpan, centerLastRow } from '@/lib/grid';
 
 /**
  * "Our Locations" preview — admin-managed venues rendered as clickable blocks.
- * Every block links to /location, and because the list comes straight from
- * getVenues(), any venue added in the admin panel shows up here automatically.
- * Renders nothing when no venues exist yet.
+ * Every block opens the venue's Google Maps link in a new tab, and because the
+ * list comes straight from getVenues(), any venue added in the admin panel
+ * shows up here automatically. Renders nothing when no venues exist yet.
  */
-export async function VenueBlocks({ className = '' }: { className?: string }) {
+export async function VenueBlocks({
+  className = '',
+  showExplore = true,
+}: {
+  className?: string;
+  showExplore?: boolean;
+}) {
   const venues = await getVenues();
   if (venues.length === 0) return null;
 
@@ -18,9 +24,11 @@ export async function VenueBlocks({ className = '' }: { className?: string }) {
     <Section eyebrow="Where we train" title="Our Locations" align="center" className={className}>
       <div className={`grid gap-5 md:grid-cols-2 ${centerGridClass('lg')}`}>
         {venues.map((v, i) => (
-          <Link
+          <a
             key={v.id}
-            href="/location"
+            href={v.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.address ?? v.name)}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`card-accent group flex flex-col ${centerCardSpan('lg')} ${centerLastRow('lg', i, venues.length)}`}
           >
             <div className="mb-3 flex items-start justify-between gap-3">
@@ -38,12 +46,14 @@ export async function VenueBlocks({ className = '' }: { className?: string }) {
             <span className="mt-auto pt-4 inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-brand-600 group-hover:text-brand-500">
               View Location <ArrowRight className="h-3 w-3" />
             </span>
-          </Link>
+          </a>
         ))}
       </div>
-      <div className="mt-10 text-center">
-        <Link href="/location" className="btn-outline">Explore Our Locations →</Link>
-      </div>
+      {showExplore && (
+        <div className="mt-10 text-center">
+          <Link href="/location" className="btn-outline">Explore Our Locations →</Link>
+        </div>
+      )}
     </Section>
   );
 }

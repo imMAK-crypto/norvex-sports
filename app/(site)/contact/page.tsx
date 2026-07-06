@@ -134,9 +134,6 @@ export default async function ContactPage() {
       {/* OUR LOCATIONS */}
       <VenueBlocks className="bg-ink-900 border-y border-ink-500" />
 
-      {/* OUR LOCATIONS */}
-      <VenueBlocks className="bg-ink-900 border-y border-ink-500" />
-
       {/* CTA strip */}
       <section className="bg-brand-600">
         <div className="container-x py-10 md:py-12 text-center">

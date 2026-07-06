@@ -12,13 +12,13 @@ const NAV = [
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/events', label: 'Events' },
+  { href: '/location', label: 'Our Location' },
   { href: '/the-norvex-project', label: 'The Norvex Project' },
   { href: '/team', label: 'Team' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/news', label: 'News' },
   { href: '/careers', label: 'Careers' },
   { href: '/contact', label: 'Contact' },
-  { href: '/location', label: 'Our Location' },
 ];
 
 export function SiteHeader() {

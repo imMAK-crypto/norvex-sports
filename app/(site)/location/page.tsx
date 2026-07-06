@@ -8,6 +8,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 import { EmailLink } from '@/components/EmailLink';
+import { VenueBlocks } from '@/components/VenueBlocks';
 
 export const metadata: Metadata = pageMeta({
   title: 'Our Location',
@@ -28,7 +29,6 @@ export default async function LocationPage() {
   ]);
 
   const primary = venues.find((v) => v.isPrimary) ?? venues[0] ?? null;
-  const others = venues.filter((v) => v.id !== primary?.id);
   // Map shown in the hero slot: the primary venue, else the legacy single embed.
   const heroEmbed = primary?.embedUrl ?? s['location.mapEmbed'];
 
@@ -103,39 +103,8 @@ export default async function LocationPage() {
         </div>
       </Section>
 
-      {others.length > 0 && (
-        <Section eyebrow="Where we train" title="Our Venues" className="bg-ink-900 border-y border-ink-500">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {others.map((v) => (
-              <div key={v.id} className="flex flex-col overflow-hidden rounded-xl border border-ink-500 bg-ink-800">
-                {v.embedUrl && (
-                  <div className="aspect-[16/10] w-full border-b border-ink-500">
-                    <iframe
-                      title={v.name}
-                      src={v.embedUrl}
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="h-full w-full"
-                    />
-                  </div>
-                )}
-                <div className="flex flex-1 flex-col p-5">
-                  <h3 className="font-display text-lg uppercase text-silver-100">{v.name}</h3>
-                  {v.address && <p className="mt-1 text-sm text-silver-400">{v.address}</p>}
-                  <a
-                    href={v.mapUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-auto pt-4 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-brand-500 hover:text-brand-400"
-                  >
-                    <Navigation className="h-4 w-4" /> Get Directions
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Section>
-      )}
+      {/* OUR LOCATIONS — clickable blocks, each opens the venue on Google Maps */}
+      <VenueBlocks showExplore={false} className="bg-ink-900 border-y border-ink-500" />
 
       <Section eyebrow="What's next" title={s['location.outroTitle']} className="bg-ink-900 border-y border-ink-500" align="center">
         <div className="mx-auto max-w-2xl text-center text-silver-300">
