@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
-import { MapPin, Phone, Mail, Navigation } from 'lucide-react';
-import { getSiteContent, getSettings } from '@/lib/settings';
+import { getSettings } from '@/lib/settings';
 import { getVenues } from '@/lib/venue';
 import { pageMeta, webPageLd, venuesLd } from '@/lib/seo';
 import { Section } from '@/components/Section';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
-import { EmailLink } from '@/components/EmailLink';
 import { VenueBlocks } from '@/components/VenueBlocks';
 
 export const metadata: Metadata = pageMeta({
@@ -19,18 +17,13 @@ export const metadata: Metadata = pageMeta({
 });
 
 export default async function LocationPage() {
-  const [c, s, venues] = await Promise.all([
-    getSiteContent(),
+  const [s, venues] = await Promise.all([
     getSettings([
       'location.eyebrow', 'location.title', 'location.intro',
-      'location.mapEmbed', 'location.outroTitle', 'location.outro',
+      'location.outroTitle', 'location.outro',
     ]),
     getVenues(),
   ]);
-
-  const primary = venues.find((v) => v.isPrimary) ?? venues[0] ?? null;
-  // Map shown in the hero slot: the primary venue, else the legacy single embed.
-  const heroEmbed = primary?.embedUrl ?? s['location.mapEmbed'];
 
   const pageLd = webPageLd({
     path: '/location',
@@ -50,58 +43,6 @@ export default async function LocationPage() {
         title={s['location.title']}
         intro={s['location.intro']}
       />
-
-      <Section>
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr]">
-          <div className="space-y-4">
-            <div className="rounded-xl border border-ink-500 bg-ink-800 p-6">
-              <div className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600 mb-4">
-                <MapPin className="h-5 w-5" />
-              </div>
-              <h3 className="font-display text-xl uppercase text-silver-100">
-                {primary?.name ?? c.contact.location}
-              </h3>
-              <p className="mt-2 text-sm text-silver-300">
-                {primary?.address ??
-                  'We serve players across different areas of the city, making quality football training accessible.'}
-              </p>
-              {primary && (
-                <a
-                  href={primary.mapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-brand-500 hover:text-brand-400"
-                >
-                  <Navigation className="h-4 w-4" /> Get Directions
-                </a>
-              )}
-            </div>
-            <a href={`tel:${c.contact.phone.replace(/\s/g, '')}`} className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
-              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Phone className="h-5 w-5" /></span>
-              <div>
-                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Phone</p>
-                <p className="font-display text-lg text-silver-100">{c.contact.phone}</p>
-              </div>
-            </a>
-            <EmailLink email={c.contact.email} className="flex items-center gap-4 rounded-xl border border-ink-500 bg-ink-800 p-5 transition hover:border-brand-600">
-              <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600/10 text-brand-600"><Mail className="h-5 w-5" /></span>
-              <div>
-                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-silver-500">Email</p>
-                <p className="font-display text-lg break-all text-silver-100">{c.contact.email}</p>
-              </div>
-            </EmailLink>
-          </div>
-          <div className="overflow-hidden rounded-xl border border-ink-500 min-h-[400px]">
-            <iframe
-              title={primary?.name ?? 'Norvex Sports — Hyderabad'}
-              src={heroEmbed}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="h-full w-full"
-            />
-          </div>
-        </div>
-      </Section>
 
       {/* OUR LOCATIONS — clickable blocks, each opens the venue on Google Maps */}
       <VenueBlocks showExplore={false} className="bg-ink-900 border-y border-ink-500" />
