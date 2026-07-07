@@ -65,7 +65,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden">
         {/* Content is in normal flow so the hero grows to fit it — min-height keeps
             the cinematic 88vh on tall screens but prevents clipping the eyebrow on short ones. */}
-        <div className="relative flex items-end md:items-center min-h-[max(58vh,540px)] md:min-h-[max(88vh,600px)] py-12 md:py-16">
+        <div className="relative flex items-end md:items-center min-h-[max(52vh,470px)] md:min-h-[max(88vh,600px)] py-8 md:py-16">
           <Image
             src={h.hero.image}
             alt={h.hero.imageAlt}
@@ -76,7 +76,7 @@ export default async function HomePage() {
             placeholder="blur"
             blurDataURL={HERO_BLUR}
             quality={100}
-            className="object-cover object-[80%_center] md:object-center"
+            className="object-cover object-[78%_center] md:object-center"
           />
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
           <div className="container-x relative z-10">
