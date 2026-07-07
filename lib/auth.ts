@@ -22,7 +22,6 @@ function resolveSecret(): Uint8Array {
 const SECRET = resolveSecret();
 
 const COOKIE_NAME = 'norvex_session';
-const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 export type SessionPayload = { sub: string; email: string };
 
@@ -30,7 +29,7 @@ export async function signSession(payload: SessionPayload): Promise<string> {
   return await new SignJWT(payload as unknown as Record<string, unknown>)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('7d')
+    .setExpirationTime('1h')
     .sign(SECRET);
 }
 
@@ -59,12 +58,15 @@ export async function requireAdmin(): Promise<SessionPayload> {
 }
 
 export async function setSessionCookie(token: string) {
+  // No maxAge: this is a browser-session cookie only, cleared when the
+  // browser fully closes. Combined with the 1h token expiry above and the
+  // pagehide-triggered logout in AdminShell, a visit days apart (or even a
+  // page reload) always lands back on the login screen.
   (await cookies()).set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: MAX_AGE,
   });
 }
 

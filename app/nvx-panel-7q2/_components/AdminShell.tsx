@@ -120,6 +120,14 @@ export function AdminShell({
 
   // Close menus/sheets on route change or Escape.
   useEffect(() => { setMenuOpen(false); setSheetOpen(false); }, [path]);
+  // End the session the moment the panel is actually left: closing the tab,
+  // closing the browser, or reloading all fire pagehide. In-app Link clicks
+  // don't unload the document, so normal navigation inside the CMS is unaffected.
+  useEffect(() => {
+    const endSession = () => { navigator.sendBeacon('/api/admin/logout'); };
+    window.addEventListener('pagehide', endSession);
+    return () => window.removeEventListener('pagehide', endSession);
+  }, []);
   useEffect(() => {
     if (!menuOpen && !sheetOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setMenuOpen(false); setSheetOpen(false); } };
