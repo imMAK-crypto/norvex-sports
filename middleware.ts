@@ -18,9 +18,6 @@ const SECRET = resolveSecret();
 
 const COOKIE = 'norvex_session';
 
-/** Canonical production host — every other host consolidates onto this. */
-const CANONICAL_HOST = 'norvexsports.in';
-
 async function isValid(token?: string): Promise<boolean> {
   if (!token) return false;
   try {
@@ -33,23 +30,11 @@ async function isValid(token?: string): Promise<boolean> {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const host = (req.headers.get('host') ?? '').toLowerCase().split(':')[0];
 
-  // ── Host canonicalization (production only) ────────────────────────────
-  // www → apex is always safe: a www request only reaches Vercel once DNS
-  // points here. The *.vercel.app alias redirect is gated behind
-  // CANONICAL_DNS_LIVE so we never bounce visitors to the apex before its
-  // DNS cuts over to Vercel.
-  if (process.env.VERCEL_ENV === 'production' && host && host !== CANONICAL_HOST) {
-    const dnsLive = process.env.CANONICAL_DNS_LIVE === '1';
-    if (host === `www.${CANONICAL_HOST}` || (dnsLive && host.endsWith('.vercel.app'))) {
-      const url = req.nextUrl.clone();
-      url.protocol = 'https:';
-      url.host = CANONICAL_HOST;
-      url.port = '';
-      return NextResponse.redirect(url, 308);
-    }
-  }
+  // Host/protocol canonicalization (root → www, http → https) is handled
+  // entirely by Vercel at the platform level. The app must never redirect
+  // based on hostname — doing so here previously fought Vercel's own
+  // root→www redirect and caused an infinite redirect loop.
 
   // Preview deployments must never be indexed.
   if (process.env.VERCEL_ENV === 'preview') {
@@ -81,8 +66,8 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // Everything except Next internals — host canonicalization must cover all
-  // public paths (including robots.txt / sitemap.xml); the admin guard
+  // Everything except Next internals — the preview noindex header must cover
+  // all public paths (including robots.txt / sitemap.xml); the admin guard
   // filters by pathname inside the handler.
   matcher: ['/((?!_next/).*)'],
 };
