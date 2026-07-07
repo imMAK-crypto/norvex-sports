@@ -81,20 +81,21 @@ export default async function HomePage() {
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
           <div className="container-x relative z-10">
               <div className="max-w-2xl [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:[text-shadow:none]">
-                <div className="font-sans text-[13px] sm:text-base md:text-lg font-bold uppercase tracking-[0.18em] sm:tracking-[0.28em] md:tracking-[0.35em] text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                <div className="font-sans text-[10px] sm:text-base md:text-lg font-bold uppercase tracking-[0.25em] sm:tracking-[0.28em] md:tracking-[0.35em] text-brand-500 sm:text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                   {h.hero.eyebrow}
                 </div>
-                <h1 className="headline mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-silver-100 leading-[0.95]">
+                <h1 className="headline mt-3 sm:mt-4 text-[40px] sm:text-6xl md:text-7xl lg:text-8xl text-silver-100 leading-[0.95]">
                   {renderHeadline(h.hero.headline)}
                 </h1>
-                <p className="mt-6 max-w-xl text-base md:text-lg text-silver-200 leading-relaxed">
+                <div className="mt-4 h-[3px] w-12 bg-brand-600 sm:hidden" />
+                <p className="mt-4 sm:mt-6 max-w-[14rem] sm:max-w-xl text-[13px] sm:text-base md:text-lg text-silver-200 leading-relaxed">
                   {h.hero.sub}
                 </p>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href={h.hero.primaryCtaHref} className="btn-primary">
+                <div className="mt-6 sm:mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
+                  <Link href={h.hero.primaryCtaHref} className="btn-primary max-sm:px-5 max-sm:py-2.5 max-sm:text-xs">
                     {h.hero.primaryCtaLabel} <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
-                  <Link href={h.hero.secondaryCtaHref} className="btn-silver">
+                  <Link href={h.hero.secondaryCtaHref} className="btn-silver max-sm:px-5 max-sm:py-2.5 max-sm:text-xs">
                     {h.hero.secondaryCtaLabel} →
                   </Link>
                 </div>
