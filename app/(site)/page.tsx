@@ -81,7 +81,7 @@ export default async function HomePage() {
           <div className="absolute inset-0 hero-overlay-mobile md:hero-overlay" />
           <div className="container-x relative z-10">
               <div className="max-w-2xl [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:[text-shadow:none]">
-                <div className="font-sans max-w-[62%] sm:max-w-none text-[10px] sm:text-base md:text-lg font-bold uppercase leading-[1.5] tracking-[0.22em] sm:tracking-[0.28em] md:tracking-[0.35em] text-brand-500 sm:text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                <div className="font-sans max-w-[62%] sm:max-w-none text-[10px] sm:text-base md:text-lg font-extrabold sm:font-bold uppercase leading-[1.5] tracking-[0.22em] sm:tracking-[0.28em] md:tracking-[0.35em] text-white sm:text-silver-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                   {h.hero.eyebrow}
                 </div>
                 <h1 className="headline mt-3 sm:mt-4 text-[38px] sm:text-6xl md:text-7xl lg:text-8xl text-silver-100 leading-[0.95]">
