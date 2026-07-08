@@ -42,7 +42,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       prisma.newsPost.findMany({ where: { isPublished: true }, select: { slug: true, updatedAt: true, imageUrl: true } }),
     ]);
 
-    const withImages = (img: string | null | undefined) => (img ? { images: [img] } : {});
+    // Sitemap spec requires absolute image URLs, and Next's serializer does not
+    // XML-escape them — a raw "&" in a query string makes the whole sitemap
+    // invalid XML, which Google's parser rejects.
+    const withImages = (img: string | null | undefined) => {
+      if (!img) return {};
+      const abs = img.startsWith('http') ? img : `${url}${img}`;
+      return { images: [abs.replace(/&(?!(?:amp|lt|gt|quot|apos);)/g, '&amp;')] };
+    };
 
     return [
       ...staticPages,
