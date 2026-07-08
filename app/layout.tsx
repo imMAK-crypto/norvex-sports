@@ -73,7 +73,10 @@ export const metadata: Metadata = {
     ? { google: process.env.GOOGLE_SITE_VERIFICATION }
     : undefined,
   icons: {
-    icon: [{ url: '/favicon.svg?v=2', type: 'image/svg+xml' }],
+    icon: [
+      { url: '/favicon.ico?v=3', sizes: '48x48 32x32', type: 'image/x-icon' },
+      { url: '/favicon.png?v=3', sizes: '192x192', type: 'image/png' },
+    ],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   manifest: '/site.webmanifest',
